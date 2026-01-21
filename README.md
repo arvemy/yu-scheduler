@@ -1,6 +1,6 @@
-# Yu Scheduler
+# YuScheduler
 
-A modern, client-side course scheduling tool designed for York University students. Yu Scheduler helps students plan their semesters by generating conflict-free schedules based on their selected courses and personal time constraints.
+A modern, client-side course scheduling tool designed for Yaşar University students. YuScheduler helps students plan their semesters by generating conflict-free schedules based on their selected courses and personal time constraints.
 
 ## Features
 
