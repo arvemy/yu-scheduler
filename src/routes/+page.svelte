@@ -86,22 +86,30 @@
 		activeScheduleIndex = 0;
 		
 		const termKey = currentTerm || 'none';
-		// Avoid huge synchronous localStorage writes by only persisting the active schedule.
-		// Full results are still kept in-memory for the current session.
-		const activeSchedule = data.schedules?.[0];
-		const persistedScheduleData: ScheduleData = {
-			...data,
-			schedules: activeSchedule ? [activeSchedule] : []
-		};
+		
 		const payload = {
 			term: termKey,
 			selectedCourses: courses,
-			scheduleData: persistedScheduleData,
+			scheduleData: data,
 			blockedHours,
 			activeScheduleIndex,
 			savedAt: Date.now()
 		};
-		storeJson(getLastGeneratedKey(termKey), payload);
+
+		// Try to persist all generated schedules so they remain after refresh.
+		if (!storeJson(getLastGeneratedKey(termKey), payload)) {
+			// Fallback: save only the active schedule if full save fails (e.g. quota exceeded)
+			const activeSchedule = data.schedules?.[0];
+			const persistedScheduleData: ScheduleData = {
+				...data,
+				schedules: activeSchedule ? [activeSchedule] : []
+			};
+			const fallbackPayload = {
+				...payload,
+				scheduleData: persistedScheduleData
+			};
+			storeJson(getLastGeneratedKey(termKey), fallbackPayload);
+		}
 	};
 
 	const handleLoadSavedSchedule = (saved: SavedSchedule) => {
