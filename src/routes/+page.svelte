@@ -9,7 +9,7 @@
 	import { getLatestTerm } from '$lib/utils/term';
 	import { devWarn } from '$lib/utils/logger';
 	import { parseStoredJson, storeJson, validateLastGenerated } from '$lib/utils/storage';
-	import { STORAGE_KEYS, getTermKey, getLastGeneratedKey } from '$lib/storage/keys';
+	import { getTermKey, getLastGeneratedKey } from '$lib/storage/keys';
 	import { watch } from 'runed';
 	import { onMount } from 'svelte';
 
@@ -43,20 +43,8 @@
 			const data = await listTerms();
 			terms = data;
 			if (data.length > 0) {
-				let restored: string | null = null;
-				try {
-					const saved = localStorage.getItem(STORAGE_KEYS.LAST_SELECTED_TERM);
-					if (saved && data.includes(saved)) restored = saved;
-				} catch (err) {
-					devWarn('Failed to restore last selected term', err);
-				}
 				const latest = getLatestTerm(data) ?? data[0];
-				currentTerm = restored ?? latest;
-				try {
-					if (currentTerm) localStorage.setItem(STORAGE_KEYS.LAST_SELECTED_TERM, currentTerm);
-				} catch (err) {
-					devWarn('Failed to save last selected term', err);
-				}
+				currentTerm = latest;
 			}
 		} catch (err) {
 			devWarn('Failed to load terms', err);
@@ -73,11 +61,6 @@
 
 	const handleChangeTerm = (term: string) => {
 		currentTerm = term;
-		try {
-			localStorage.setItem(STORAGE_KEYS.LAST_SELECTED_TERM, term);
-		} catch (err) {
-			devWarn('Failed to save selected term', err);
-		}
 	};
 
 	const handleSchedule = (data: ScheduleData, courses: string[]) => {

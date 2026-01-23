@@ -215,7 +215,7 @@ const messages = {
 				},
 				addedOn: 'Added on: Friday, Jan 23'
 			},
-			importantNotice: 'Please verify your course schedule from https://oim.yasar.edu.tr/ders-kayitlari',
+			importantNotice: 'Please verify your schedule at <a href="https://oim.yasar.edu.tr/ders-kayitlari" target="_blank" rel="noopener noreferrer">oim.yasar.edu.tr/ders-kayitlari</a> for the most accurate information.',
 			disclaimer: 'This tool is designed to help students plan their schedules more effectively and is not affiliated with Yaşar University.',
 			privacyNote: 'All data is stored and processed locally in your browser; nothing is transmitted to external servers.',
 			dontShowAgain: "Don't show this again",
@@ -441,7 +441,7 @@ const messages = {
 				},
 				addedOn: 'Eklendi: 23 Ocak Cuma'
 			},
-			importantNotice: 'Lütfen ders programınızı https://oim.yasar.edu.tr/ders-kayitlari sitesinden doğrulayın.',
+			importantNotice: 'En doğru bilgi için lütfen ders programınızı <a href="https://oim.yasar.edu.tr/ders-kayitlari" target="_blank" rel="noopener noreferrer">oim.yasar.edu.tr/ders-kayitlari</a> adresinden kontrol ediniz.',
 			disclaimer: 'Bu araç, öğrencilerin ders programlarını daha hızlı bir şekilde oluşturmalarına yardımcı olmak için tasarlanmıştır ve Yaşar Üniversitesi ile bağlantılı değildir.',
 			privacyNote: 'Tüm veriler tarayıcınızda yerel olarak saklanır ve işlenir; harici sunuculara hiçbir şey gönderilmez.',
 			dontShowAgain: 'Bir Daha Gösterme',

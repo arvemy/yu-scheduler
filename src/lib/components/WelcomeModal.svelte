@@ -97,6 +97,7 @@
 					</svg>
 				</div>
 				<div class="notice-content">
+					<p class="notice-text" style="font-weight: 600;">{@html $t('welcome.importantNotice')}</p>
 					<p class="notice-text">{$t('welcome.disclaimer')}</p>
 					<p class="notice-subtext">{$t('welcome.privacyNote')}</p>
 				</div>
