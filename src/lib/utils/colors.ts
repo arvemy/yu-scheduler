@@ -2,13 +2,15 @@
 // The previous fixed palette caused frequent collisions (multiple courses sharing the same color)
 // when many courses are displayed.
 
+// FNV-1a hash function for better avalanche effect on short, similar strings
 const hashString = (value: string): number => {
-	let hash = 0;
+	let hash = 2166136261;
 	for (let i = 0; i < value.length; i += 1) {
-		hash = (hash << 5) - hash + value.charCodeAt(i);
-		hash |= 0;
+		hash ^= value.charCodeAt(i);
+		// 32-bit FNV prime: 16777619
+		hash = Math.imul(hash, 16777619);
 	}
-	return Math.abs(hash);
+	return hash >>> 0;
 };
 
 export const colorForCourse = (course: string): string => {
