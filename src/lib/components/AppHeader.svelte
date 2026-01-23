@@ -435,7 +435,7 @@
 		max-height: 55vh;
 		max-height: 55dvh;
 		overflow-y: auto;
-		z-index: 100;
+		z-index: 1001;
 	}
 
 	:global(.menu-item) {
