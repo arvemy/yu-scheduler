@@ -209,11 +209,11 @@ const messages = {
 			feature4: 'Save and manage multiple schedule options',
 			updates: {
 				title: 'Latest Updates',
-				term: '2025–2026 Fall',
+				term: '2025–2026 Spring',
 				items: {
-					fallTermAdded: 'Fall term courses have been added to the system'
+					springTermAdded: 'Spring term courses have been added to the system'
 				},
-				addedOn: 'Added on: Saturday, Sep 22'
+				addedOn: 'Added on: Friday, Jan 23'
 			},
 			importantNotice: 'Please verify your course schedule from https://oim.yasar.edu.tr/ders-kayitlari',
 			disclaimer: 'This tool is designed to help students plan their schedules more effectively and is not affiliated with Yaşar University.',
@@ -435,11 +435,11 @@ const messages = {
 			feature4: 'Birden fazla programı kaydedin ve yönetin',
 			updates: {
 				title: 'Son Güncellemeler',
-				term: '2025–2026 Güz',
+				term: '2025–2026 Bahar',
 				items: {
-					fallTermAdded: 'Güz dönemi dersleri sisteme eklenmiştir'
+					springTermAdded: 'Bahar dönemi dersleri sisteme eklenmiştir'
 				},
-				addedOn: 'Eklendi: 22 Eylül Pazar'
+				addedOn: 'Eklendi: 23 Ocak Cuma'
 			},
 			importantNotice: 'Lütfen ders programınızı https://oim.yasar.edu.tr/ders-kayitlari sitesinden doğrulayın.',
 			disclaimer: 'Bu araç, öğrencilerin ders programlarını daha hızlı bir şekilde oluşturmalarına yardımcı olmak için tasarlanmıştır ve Yaşar Üniversitesi ile bağlantılı değildir.',
