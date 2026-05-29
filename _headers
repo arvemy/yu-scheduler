@@ -1,2 +1,14 @@
+# Security headers for static-asset responses served by Cloudflare's ASSETS
+# binding. Worker-served responses (the SPA document, routes) get the same set
+# via src/hooks.server.ts. The Content-Security-Policy is emitted separately by
+# SvelteKit on the document response — see `kit.csp` in svelte.config.js.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Cross-Origin-Opener-Policy: same-origin
+  Permissions-Policy: accelerometer=(), autoplay=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
+  Strict-Transport-Security: max-age=31536000
+
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable

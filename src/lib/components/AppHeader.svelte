@@ -126,7 +126,7 @@
 			>
 				<Select.Trigger
 					class="btn btn-icon lang-trigger"
-					aria-label={$t('language.switchLanguage')}
+					aria-label={`${$t('language.switchLanguage')} (${$locale === 'en' ? 'EN' : 'TR'})`}
 				>
 					<Languages size={18} />
 					<span class="lang-code">{$locale === 'en' ? 'EN' : 'TR'}</span>
@@ -422,12 +422,12 @@
 
 	:global(.select-item[data-highlighted]) {
 		background: rgba(25, 118, 210, 0.08);
-		color: var(--primary);
+		color: var(--primary-dark);
 	}
 
 	:global(.select-item[data-selected]) {
 		background: rgba(25, 118, 210, 0.12);
-		color: var(--primary);
+		color: var(--primary-dark);
 		font-weight: 600;
 	}
 
@@ -461,7 +461,7 @@
 
 	:global(.menu-item[data-highlighted]) {
 		background: rgba(25, 118, 210, 0.08);
-		color: var(--primary);
+		color: var(--primary-dark);
 	}
 
 	:global(.menu-item.selected) {

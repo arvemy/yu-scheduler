@@ -1,7 +1,6 @@
 <script lang="ts">
 	import AppHeader from '$lib/components/AppHeader.svelte';
 	import CourseSelector from '$lib/components/CourseSelector.svelte';
-	import WelcomeModal from '$lib/components/WelcomeModal.svelte';
 	import { t } from '$lib/i18n';
 	import { listTerms } from '$lib';
 	import type { BlockedHour, ScheduleData, SavedSchedule } from '$lib/types';
@@ -175,9 +174,15 @@
 	</section>
 </div>
 
-<WelcomeModal
-	open={showWelcomeModal}
-	dontShowAgain={dontShowWelcomeAgain}
-	onDontShowAgainChange={(value) => (dontShowWelcomeAgain = value)}
-	onClose={handleWelcomeClose}
-/>
+<!-- Lazy-loaded: the welcome modal isn't needed for first paint (and never loads
+     for returning visitors who dismissed it), keeping it out of the entry bundle. -->
+{#if showWelcomeModal}
+	{#await import('$lib/components/WelcomeModal.svelte') then { default: WelcomeModal }}
+		<WelcomeModal
+			open={showWelcomeModal}
+			dontShowAgain={dontShowWelcomeAgain}
+			onDontShowAgainChange={(value) => (dontShowWelcomeAgain = value)}
+			onClose={handleWelcomeClose}
+		/>
+	{/await}
+{/if}

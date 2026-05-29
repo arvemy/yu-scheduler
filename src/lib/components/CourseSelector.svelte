@@ -20,8 +20,6 @@
 	import { DAYS_OF_WEEK, TIME_SLOTS, generateSchedule, getCourses, getSections } from '$lib';
 	import type { BlockedHour, CourseEntry, SavedSchedule, ScheduleData } from '$lib/types';
 	import Timetable from '$lib/components/Timetable.svelte';
-	import SaveScheduleDialog from '$lib/components/SaveScheduleDialog.svelte';
-	import SavedSchedulesDialog from '$lib/components/SavedSchedulesDialog.svelte';
 	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
 	import { downloadScheduleAsImage } from '$lib/utils/downloadSchedule';
 	import { onDestroy, onMount, tick } from 'svelte';
@@ -849,8 +847,11 @@
 				<div class="search-field">
 					<Search class="pointer-events-none absolute left-3 text-ink-muted" size={20} />
 					<input
+						id="course-search"
+						name="course-search"
 						type="text"
 						placeholder={$t('courseSelector.typeToSearch')}
+						aria-label={$t('courseSelector.typeToSearch')}
 						bind:value={searchInput}
 						role="combobox"
 						aria-autocomplete="list"
@@ -1012,6 +1013,7 @@
 										{#if hasMultipleSections}
 											<select
 												class="chip-section-select"
+												name={`section-${course}`}
 												aria-label={$t('courseSelector.sectionSelectAriaLabel', { course })}
 												value={sectionChoices[course] ?? ''}
 												onchange={(event) => {
@@ -1267,37 +1269,45 @@
 		</div>
 	{/if}
 
-	{#if scheduleData}
-		<SaveScheduleDialog
-			open={saveDialogOpen}
-			onClose={() => (saveDialogOpen = false)}
-			onSaved={(saved) => {
-				actionMessage = $t('savedSchedules.scheduleWasSaved', {
-					name: saved.name
-				});
-				actionTone = 'success';
-			}}
-			term={term || ''}
-			{selectedCourses}
-			{scheduleData}
-			{blockedHours}
-			{activeScheduleIndex}
-			{orConnections}
-		/>
+	<!-- Dialogs are lazy-loaded (and mounted only while open) so their code stays
+	     out of the entry bundle until the user actually opens one. -->
+	{#if scheduleData && saveDialogOpen}
+		{#await import('$lib/components/SaveScheduleDialog.svelte') then { default: SaveScheduleDialog }}
+			<SaveScheduleDialog
+				open={saveDialogOpen}
+				onClose={() => (saveDialogOpen = false)}
+				onSaved={(saved) => {
+					actionMessage = $t('savedSchedules.scheduleWasSaved', {
+						name: saved.name
+					});
+					actionTone = 'success';
+				}}
+				term={term || ''}
+				{selectedCourses}
+				{scheduleData}
+				{blockedHours}
+				{activeScheduleIndex}
+				{orConnections}
+			/>
+		{/await}
 	{/if}
 
-	<SavedSchedulesDialog
-		open={loadDialogOpen}
-		onClose={() => (loadDialogOpen = false)}
-		onLoadSchedule={(saved) => {
-			handleLoadSchedule(saved);
-			actionMessage = $t('savedSchedules.scheduleWasLoaded', {
-				name: saved.name
-			});
-			actionTone = 'success';
-		}}
-		currentTerm={term}
-	/>
+	{#if loadDialogOpen}
+		{#await import('$lib/components/SavedSchedulesDialog.svelte') then { default: SavedSchedulesDialog }}
+			<SavedSchedulesDialog
+				open={loadDialogOpen}
+				onClose={() => (loadDialogOpen = false)}
+				onLoadSchedule={(saved) => {
+					handleLoadSchedule(saved);
+					actionMessage = $t('savedSchedules.scheduleWasLoaded', {
+						name: saved.name
+					});
+					actionTone = 'success';
+				}}
+				currentTerm={term}
+			/>
+		{/await}
+	{/if}
 
 	<!-- Mobile Bottom Action Bar -->
 	<BottomActionBar
@@ -1438,7 +1448,7 @@
 	.search-result:hover:not(:disabled),
 	.search-result.active:not(:disabled) {
 		background: var(--primary-soft);
-		color: var(--primary);
+		color: var(--primary-dark);
 	}
 
 	.search-result:disabled {
@@ -1493,6 +1503,17 @@
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-md);
+		/* Reserve the loaded accordion's height while the skeleton shows, so the
+		 * timetable below doesn't shift down when ~100 group chips replace the
+		 * skeleton (prevents the dominant CLS on first load). Mirrors the
+		 * .groups-accordion max-height below. */
+		min-height: min(60dvh, 520px);
+	}
+
+	@media (max-width: 640px) {
+		.loading-state {
+			min-height: min(55dvh, 520px);
+		}
 	}
 
 	.skeleton-grid {
@@ -1621,7 +1642,8 @@
 		border: 1.5px solid var(--primary);
 		border-radius: var(--radius-md);
 		background: rgba(25, 118, 210, 0.08);
-		color: var(--primary);
+		/* primary-dark for AA contrast (4.5:1) of the chip label on the tint. */
+		color: var(--primary-dark);
 		font-size: 13px;
 		font-weight: 600;
 		cursor: default;
@@ -1698,7 +1720,7 @@
 
 	.connector-toggle:hover {
 		border-color: var(--primary);
-		color: var(--primary);
+		color: var(--primary-dark);
 		background: var(--primary-soft);
 	}
 

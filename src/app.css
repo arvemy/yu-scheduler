@@ -258,7 +258,9 @@
 	}
 
 	.btn-outlined {
-		@apply border-2 border-primary bg-white/60 text-primary;
+		/* text-primary-dark (not text-primary) so the label clears WCAG AA (4.5:1)
+		 * against the translucent white fill over the bluish page background. */
+		@apply border-2 border-primary bg-white/60 text-primary-dark;
 		backdrop-filter: blur(4px);
 	}
 
@@ -276,7 +278,8 @@
 	}
 
 	.btn-soft {
-		@apply bg-primary-soft text-primary;
+		/* primary-dark (not primary) for AA contrast on the soft-blue fill. */
+		@apply bg-primary-soft text-primary-dark;
 	}
 
 	.btn-soft:hover:not(:disabled) {

@@ -303,6 +303,15 @@
 		line-height: 1.5;
 	}
 
+	/* The link inside the notice is injected via {@html}, so it inherits the
+	 * global anchor styles (primary color, no underline). Override here so it is
+	 * distinguished from the surrounding text by more than color (underline) and
+	 * meets WCAG AA contrast (4.5:1) against the warning-soft panel background. */
+	.notice-text :global(a) {
+		color: var(--primary-dark);
+		text-decoration: underline;
+	}
+
 	.notice-subtext {
 		margin: 0;
 		font-size: 12px;

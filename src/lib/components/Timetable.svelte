@@ -194,6 +194,36 @@
 		);
 	};
 
+	/**
+	 * Screen-reader summary of the sessions in a populated desktop grid cell.
+	 * The cell carries an aria-label (which overrides its visible spans, and
+	 * those spans are aria-hidden), so the otherwise-hidden details — section,
+	 * the session's own time range, classroom, and any grouped alternatives — are
+	 * mirrored here for parity with sighted users. The session range is stated
+	 * explicitly rather than relying on the block/unblock slot label, because a
+	 * class can span multiple slots (the grid places it in every overlapping
+	 * cell), so its real time differs from a given cell's slot. Begins with the
+	 * same course code shown in the cell so the accessible name still contains the
+	 * visible label (WCAG 2.5.3).
+	 */
+	const describeCellSessions = (groups: GroupedSession[]): string =>
+		groups
+			.map((g) => {
+				const time = `${g.start}-${g.end}`;
+				if (g.count > 1) {
+					const options = g.items
+						.map((s) => [s.section, s.Classroom].filter(Boolean).join(' '))
+						.filter(Boolean)
+						.join(', ');
+					const optionsLabel = `${g.count} ${$t('timetable.sectionOptions', { count: g.count })}`;
+					return `${g.course} (*), ${time}, ${optionsLabel}${options ? `: ${options}` : ''}`;
+				}
+				const section = g.sections[0] ?? '';
+				const room = g.classrooms[0] ? `, ${g.classrooms[0]}` : '';
+				return `${g.course} (${section}), ${time}${room}`;
+			})
+			.join('; ');
+
 	const isBlocked = (day: string, slot: string) => blockedSet.has(makeKey(day, slot));
 	const isDayBlocked = (day: string) => timeSlots.every((slot) => isBlocked(day, slot));
 	const isSlotBlocked = (slot: string) => daysOfWeek.every((day) => isBlocked(day, slot));
@@ -311,6 +341,11 @@
 								{@const cellExpanded = isAnyExpandedInCell(day, slot)}
 								{@const blocked = isBlocked(day, slot)}
 								{@const groups = groupSessions(day, slot, grid[day][slot])}
+								{@const cellSummary = describeCellSessions(groups)}
+								{@const blockCellLabel = $t('courseSelector.blockUnblockCell', {
+									day: $t(`timetable.days.${day}`),
+									slot
+								})}
 								<td
 									class="cell"
 									class:blocked
@@ -319,10 +354,7 @@
 									onkeydown={(event) => onActivate(event, () => toggleCell(day, slot))}
 									role="button"
 									tabindex="0"
-									aria-label={$t('courseSelector.blockUnblockCell', {
-										day: $t(`timetable.days.${day}`),
-										slot
-									})}
+									aria-label={cellSummary ? `${cellSummary}. ${blockCellLabel}` : blockCellLabel}
 									aria-pressed={blocked}
 								>
 									<div class="cell-content" class:blocked>
@@ -378,17 +410,20 @@
 														</button>
 													{/if}
 												</div>
-												<span class="time-range">{g.start} - {g.end}</span>
+												<!-- Detail spans are aria-hidden: their info is folded into the
+												     cell's aria-label, so the cell's accessible name matches its
+												     visible course text (WCAG 2.5.3). -->
+												<span class="time-range" aria-hidden="true">{g.start} - {g.end}</span>
 												{#if !isGrouped && g.classrooms[0]}
-													<span class="classroom">{g.classrooms[0]}</span>
+													<span class="classroom" aria-hidden="true">{g.classrooms[0]}</span>
 												{/if}
 												{#if isGrouped}
-													<span class="section-count"
+													<span class="section-count" aria-hidden="true"
 														>{g.count} {$t('timetable.sectionOptions', { count: g.count })}</span
 													>
 												{/if}
 												{#if isGrouped && expanded}
-													<div class="expanded-sections">
+													<div class="expanded-sections" aria-hidden="true">
 														{#each g.items as s, i (`${g.key}-${i}`)}
 															<span class="section-detail">{s.section} - {s.Classroom || '-'}</span>
 														{/each}
@@ -428,12 +463,14 @@
 						>
 							<ChevronLeft size={20} aria-hidden="true" />
 						</button>
+						<!-- No aria-label: the accessible name is the visible content
+						     (day + position + "Block/Unblock all"), so it matches what a
+						     speech-input user says (WCAG 2.5.3); aria-pressed conveys state. -->
 						<button
 							class="day-nav-center"
 							type="button"
 							onclick={() => toggleDay(activeDay)}
 							aria-pressed={isDayBlocked(activeDay)}
-							aria-label={$t('tooltips.blockUnblockDay')}
 						>
 							<span class="day-nav-title">{$t(`timetable.days.${activeDay}`)}</span>
 							<span class="day-nav-meta">
@@ -752,25 +789,25 @@
 		background: rgba(255, 255, 255, 0.2);
 	}
 
+	/* Detail text stays full-opacity white (hierarchy via size, not opacity) so it
+	 * keeps AA contrast on the course-chip color. */
 	.time-range {
 		font-size: 11px;
-		opacity: 0.9;
 	}
 
 	.classroom {
 		font-size: 10px;
-		opacity: 0.85;
 	}
 
 	.section-count {
 		font-size: 10px;
-		opacity: 0.85;
 	}
 
 	.expanded-sections {
 		margin-top: 4px;
 		padding: 6px;
-		background: rgba(255, 255, 255, 0.15);
+		/* Dark (not light) overlay so the white section text keeps AA contrast. */
+		background: rgba(0, 0, 0, 0.18);
 		border-radius: 4px;
 		display: flex;
 		flex-direction: column;
@@ -874,13 +911,13 @@
 		gap: 10px;
 		font-size: 12px;
 		font-weight: 600;
-		opacity: 0.92;
+		/* Full-opacity white: on the primary bar, dimmed white dropped below AA
+		 * contrast. Hierarchy vs the title comes from size/weight instead. */
 		line-height: 1.1;
 	}
 
 	.day-nav-count {
 		font-variant-numeric: tabular-nums;
-		opacity: 0.85;
 	}
 
 	.day-action {
@@ -966,7 +1003,8 @@
 	}
 
 	.chip-classroom {
-		opacity: 0.85;
+		/* Lighter weight (not lower opacity) for hierarchy, so the room text keeps
+		 * AA contrast against the course-chip color. */
 		font-weight: 400;
 	}
 
