@@ -11,7 +11,7 @@ import {
 
 export interface DownloadOptions {
 	/**
-	 * Overrides the default html2canvas scale.
+	 * Overrides the default modern-screenshot scale (device-pixel multiplier).
 	 * Lower values render faster; higher values increase sharpness.
 	 */
 	scale?: number;
@@ -35,8 +35,8 @@ export const downloadScheduleAsImage = async (
 	let captureHost: HTMLDivElement | null = null;
 
 	try {
-		// Dynamically import html2canvas only when needed
-		const { default: html2canvas } = await import('html2canvas');
+		// Dynamically import modern-screenshot only when needed
+		const { domToCanvas } = await import('modern-screenshot');
 
 		// Clone offscreen to avoid distorting the on-screen UI while capturing
 		captureHost = document.createElement('div');
@@ -52,7 +52,7 @@ export const downloadScheduleAsImage = async (
 		captureHost.appendChild(targetEl);
 
 		// Remove any native title tooltips from the cloned subtree
-		// (Tooltips are not captured by html2canvas, but removing them avoids flicker)
+		// (Tooltips are not part of the rendered output, but removing them avoids flicker)
 		targetEl.querySelectorAll('[title]').forEach((el) => el.removeAttribute('title'));
 
 		// Try to size capture to the full timetable width
@@ -77,10 +77,7 @@ export const downloadScheduleAsImage = async (
 		// Allow layout to settle
 		await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
 
-		const canvas = await html2canvas(targetEl, {
-			useCORS: true,
-			logging: false,
-			allowTaint: true,
+		const canvas = await domToCanvas(targetEl, {
 			width: captureWidth,
 			height: targetEl.scrollHeight || targetEl.clientHeight || DOWNLOAD_CANVAS_HEIGHT_FALLBACK,
 			scale: options.scale ?? DOWNLOAD_CANVAS_SCALE,

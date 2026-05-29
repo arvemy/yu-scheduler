@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button, Dialog } from 'bits-ui';
-	import { watch } from 'runed';
+	import { watch } from '$lib/utils/reactivity.svelte';
 	import { t } from '$lib/i18n';
 	import type { SavedSchedule } from '$lib/types';
 	import {

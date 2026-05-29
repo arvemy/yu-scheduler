@@ -1,0 +1,9 @@
+# pnpm settings for this single-package repo.
+# `allowBuilds` allowlists packages permitted to run install (postinstall)
+# scripts. esbuild needs it to fetch its native binary (used by Vite) and
+# workerd is used by wrangler for Cloudflare local emulation. sharp is not
+# needed by this project, so its build script stays disabled.
+allowBuilds:
+  esbuild: true
+  sharp: false
+  workerd: true

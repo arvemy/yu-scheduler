@@ -45,6 +45,8 @@
 	--primary-soft: #e3f2fd;
 	--primary-soft-hover: #bbdefb;
 	--info: #0288d1;
+	/* Secondary accent (e.g. the mobile "Save" action) */
+	--secondary: #00897b;
 
 	/* Background Colors */
 	--bg: #f2f5fa;

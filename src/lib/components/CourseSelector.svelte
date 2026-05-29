@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Button, Popover } from "bits-ui";
-  import { watch, useDebounce } from "runed";
+  import { watch, useDebounce } from "$lib/utils/reactivity.svelte";
   import { t } from "$lib/i18n";
   import { DAYS_OF_WEEK, TIME_SLOTS, generateSchedule, getCourses, getSections } from "$lib";
   import type {
@@ -148,6 +148,7 @@
   onDestroy(() => {
     generationEpoch += 1;
     cancelActiveGeneration();
+    triggerScheduleGeneration.cancel();
   });
 
   onMount(() => {
@@ -2183,190 +2184,6 @@
     pointer-events: none;
     width: min(1200px, 100vw);
     background: var(--bg);
-  }
-
-  /* OR Groups Section */
-  .or-groups-section {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-    margin-top: var(--space-md);
-    padding-top: var(--space-md);
-    border-top: 1px solid var(--border-light);
-  }
-
-  .or-groups-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-sm);
-  }
-
-  .or-groups-description {
-    margin: 0;
-    font-size: 12px;
-    color: var(--ink-muted);
-    line-height: 1.4;
-  }
-
-  .add-group-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 6px 10px;
-    border: 1px dashed var(--primary);
-    border-radius: var(--radius-md);
-    background: transparent;
-    color: var(--primary);
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition-fast);
-  }
-
-  .add-group-btn:hover {
-    background: var(--primary-soft);
-    border-style: solid;
-  }
-
-  .add-group-btn:focus-visible {
-    outline: none;
-    box-shadow: var(--shadow-focus);
-  }
-
-  .or-groups-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-  }
-
-  .or-group-card {
-    padding: var(--space-md);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    background: var(--bg);
-  }
-
-  .or-group-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-sm);
-  }
-
-  .or-group-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--ink-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .or-group-remove {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px;
-    border: none;
-    background: transparent;
-    color: var(--ink-muted);
-    cursor: pointer;
-    border-radius: var(--radius-sm);
-    transition: var(--transition-fast);
-  }
-
-  .or-group-remove:hover {
-    background: var(--error-light);
-    color: var(--error);
-  }
-
-  .or-group-courses {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-  }
-
-  .or-course-row {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-  }
-
-  .or-separator {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--ink-muted);
-    text-transform: uppercase;
-    min-width: 32px;
-  }
-
-  .or-course-select {
-    flex: 1;
-    min-width: 0;
-    padding: 8px 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    background: var(--surface);
-    color: var(--ink);
-    font-size: 13px;
-    cursor: pointer;
-    transition: var(--transition-fast);
-  }
-
-  .or-course-select:hover {
-    border-color: var(--primary);
-  }
-
-  .or-course-select:focus-visible {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: var(--shadow-focus);
-  }
-
-  .or-course-remove {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px;
-    border: none;
-    background: transparent;
-    color: var(--ink-muted);
-    cursor: pointer;
-    border-radius: var(--radius-sm);
-    transition: var(--transition-fast);
-  }
-
-  .or-course-remove:hover {
-    background: var(--error-light);
-    color: var(--error);
-  }
-
-  .add-alternative-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 6px 10px;
-    border: none;
-    background: transparent;
-    color: var(--primary);
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition-fast);
-    align-self: flex-start;
-    margin-left: 32px;
-  }
-
-  .add-alternative-btn:hover {
-    background: var(--primary-soft);
-    border-radius: var(--radius-sm);
-  }
-
-  .or-group-warning {
-    margin: var(--space-xs) 0 0;
-    font-size: 11px;
-    color: var(--warning-text);
   }
 
   /* Add padding at bottom for mobile action bar */

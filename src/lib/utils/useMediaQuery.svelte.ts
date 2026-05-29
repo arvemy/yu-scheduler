@@ -5,7 +5,7 @@ import { BREAKPOINTS, type BreakpointKey } from './breakpoints';
  * Uses $state and $effect runes for reactive updates.
  *
  * @param breakpoint - The breakpoint key or pixel value to check against
- * @returns Object with reactive `isMobile` getter
+ * @returns Object with a reactive `matches` getter
  *
  * @example
  * ```svelte

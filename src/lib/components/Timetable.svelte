@@ -390,6 +390,8 @@
 		<!-- Mobile: single-day view + swipe navigation -->
 		<div
 			class="mobile-view"
+			role="group"
+			aria-label={$t('courseSelector.schedule')}
 			ontouchstart={onDayTouchStart}
 			ontouchmove={onDayTouchMove}
 			ontouchend={onDayTouchEnd}

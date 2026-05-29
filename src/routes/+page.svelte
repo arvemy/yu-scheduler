@@ -10,7 +10,7 @@
 	import { devWarn } from '$lib/utils/logger';
 	import { parseStoredJson, storeJson, validateLastGenerated } from '$lib/utils/storage';
 	import { getTermKey, getLastGeneratedKey } from '$lib/storage/keys';
-	import { watch } from 'runed';
+	import { watch } from '$lib/utils/reactivity.svelte';
 	import { onMount } from 'svelte';
 
 	let terms = $state<string[]>([]);
