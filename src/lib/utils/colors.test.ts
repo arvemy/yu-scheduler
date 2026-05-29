@@ -15,7 +15,7 @@ describe('colorForCourse', () => {
 		// They should be significantly different (e.g., > 10 degrees)
 		const diff = Math.abs(hue1 - hue2);
 		const circularDiff = Math.min(diff, 360 - diff);
-		
+
 		expect(circularDiff).toBeGreaterThan(10);
 	});
 

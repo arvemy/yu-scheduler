@@ -66,7 +66,8 @@ export const tr = {
 		unblockDay: 'Engeli Kaldır',
 		clearAll: 'Tümünü Temizle',
 		retry: 'Tekrar Dene',
-		sectionsPartialWarning: 'Bazı şube detayları yüklenemedi. Yine de program oluşturabilir veya şubeleri yeniden yüklemeyi deneyebilirsiniz.',
+		sectionsPartialWarning:
+			'Bazı şube detayları yüklenemedi. Yine de program oluşturabilir veya şubeleri yeniden yüklemeyi deneyebilirsiniz.',
 		generateScheduleFirst: 'Kaydetmek için önce bir program oluşturun',
 		blockedAdded: '{{count}} engel eklendi ({{target}})',
 		blockedAdded_one: '1 engel eklendi ({{target}})',
@@ -76,9 +77,12 @@ export const tr = {
 		blocksCleared_other: '{{count}} engel kaldırıldı ({{target}})',
 		blockingTip: {
 			title: 'Zaman Dilimlerini Engelle',
-			description: 'Programınızdan kaldırmak istediğiniz zaman dilimlerine tıklayın. Bu sayede dersler o saatlerde planlanmaz.',
-			desktop: '• Tüm günü engellemek için gün başlıklarına tıklayın\n• Zamanı tüm günlerde engellemek için saat başlıklarına tıklayın\n• Belirli zaman dilimlerini engellemek için hücrelere tıklayın',
-			mobile: '• Tüm günü engellemek için gün başlıklarına dokunun\n• Belirli zaman dilimlerini engellemek için hücrelere dokunun',
+			description:
+				'Programınızdan kaldırmak istediğiniz zaman dilimlerine tıklayın. Bu sayede dersler o saatlerde planlanmaz.',
+			desktop:
+				'• Tüm günü engellemek için gün başlıklarına tıklayın\n• Zamanı tüm günlerde engellemek için saat başlıklarına tıklayın\n• Belirli zaman dilimlerini engellemek için hücrelere tıklayın',
+			mobile:
+				'• Tüm günü engellemek için gün başlıklarına dokunun\n• Belirli zaman dilimlerini engellemek için hücrelere dokunun',
 			gotIt: 'Anladım!'
 		},
 		actions: 'Program işlemleri',
@@ -184,23 +188,28 @@ export const tr = {
 		clearFailed: 'Programlar temizlenemedi',
 		noSavedSchedules: 'Kayıtlı Program Yok',
 		noSavedSchedulesDesc: 'Favori programlarınızı kaydederek daha sonra hızlıca erişebilirsiniz.',
-		showingCurrentTerm: '{{term}} dönemi için {{count}} program gösteriliyor. Diğer dönemlerden {{hidden}} program gizli.',
-		showingCurrentTerm_one: '{{term}} dönemi için 1 program gösteriliyor. Diğer dönemlerden {{hidden}} program gizli.',
-		showingCurrentTerm_other: '{{term}} dönemi için {{count}} program gösteriliyor. Diğer dönemlerden {{hidden}} program gizli.',
+		showingCurrentTerm:
+			'{{term}} dönemi için {{count}} program gösteriliyor. Diğer dönemlerden {{hidden}} program gizli.',
+		showingCurrentTerm_one:
+			'{{term}} dönemi için 1 program gösteriliyor. Diğer dönemlerden {{hidden}} program gizli.',
+		showingCurrentTerm_other:
+			'{{term}} dönemi için {{count}} program gösteriliyor. Diğer dönemlerden {{hidden}} program gizli.',
 		savedOn: 'Kaydedilme Tarihi',
 		loadSchedule: 'Programı Yükle',
 		renameSchedule: 'Programı Yeniden Adlandır',
 		deleteSchedule: 'Programı Sil',
 		storageUsage: 'Depolama Kullanımı',
 		clearAll: 'Tümünü Temizle',
-		clearAllConfirm: 'Tüm kayıtlı programları silmek istediğinize emin misiniz? Bu işlem geri alınamaz.',
+		clearAllConfirm:
+			'Tüm kayıtlı programları silmek istediğinize emin misiniz? Bu işlem geri alınamaz.',
 		schedule: 'Program',
 		scheduleWasSaved: '"{{name}}" programı başarıyla kaydedildi!',
 		scheduleWasLoaded: '"{{name}}" programı başarıyla yüklendi!'
 	},
 	welcome: {
 		title: "YU Scheduler'a Hoş Geldiniz!",
-		description: 'YU Scheduler, Yaşar Üniversitesi öğrencileri için kapsamlı bir ders planlama aracıdır. Kolay kullanımlı arayüzüyle ders programlarınızı oluşturun ve yönetin.',
+		description:
+			'YU Scheduler, Yaşar Üniversitesi öğrencileri için kapsamlı bir ders planlama aracıdır. Kolay kullanımlı arayüzüyle ders programlarınızı oluşturun ve yönetin.',
 		features: 'Yapabilecekleriniz:',
 		feature1: 'Tüm mevcut dersleri arayın ve seçin',
 		feature2: 'Otomatik olarak optimize edilmiş programlar oluşturun',
@@ -214,9 +223,12 @@ export const tr = {
 			},
 			addedOn: 'Eklendi: 23 Ocak Cuma'
 		},
-		importantNotice: 'En doğru bilgi için lütfen ders programınızı <a href="https://oim.yasar.edu.tr/ders-kayitlari" target="_blank" rel="noopener noreferrer">oim.yasar.edu.tr/ders-kayitlari</a> adresinden kontrol ediniz.',
-		disclaimer: 'Bu araç, öğrencilerin ders programlarını daha hızlı bir şekilde oluşturmalarına yardımcı olmak için tasarlanmıştır ve Yaşar Üniversitesi ile bağlantılı değildir.',
-		privacyNote: 'Tüm veriler tarayıcınızda yerel olarak saklanır ve işlenir; harici sunuculara hiçbir şey gönderilmez.',
+		importantNotice:
+			'En doğru bilgi için lütfen ders programınızı <a href="https://oim.yasar.edu.tr/ders-kayitlari" target="_blank" rel="noopener noreferrer">oim.yasar.edu.tr/ders-kayitlari</a> adresinden kontrol ediniz.',
+		disclaimer:
+			'Bu araç, öğrencilerin ders programlarını daha hızlı bir şekilde oluşturmalarına yardımcı olmak için tasarlanmıştır ve Yaşar Üniversitesi ile bağlantılı değildir.',
+		privacyNote:
+			'Tüm veriler tarayıcınızda yerel olarak saklanır ve işlenir; harici sunuculara hiçbir şey gönderilmez.',
 		dontShowAgain: 'Bir Daha Gösterme',
 		getStarted: 'Başlayın'
 	},

@@ -100,7 +100,10 @@ export const checkStorageAvailability = (): { available: boolean; error?: string
 		if (error instanceof Error) {
 			return {
 				available: false,
-				error: error.name === 'QuotaExceededError' ? 'errors.storageQuotaExceeded' : 'errors.storageNotAvailable'
+				error:
+					error.name === 'QuotaExceededError'
+						? 'errors.storageQuotaExceeded'
+						: 'errors.storageNotAvailable'
 			};
 		}
 		return { available: false, error: 'errors.unknownStorageError' };

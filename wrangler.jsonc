@@ -1,0 +1,25 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "yu-scheduler",
+	"main": ".svelte-kit/cloudflare/_worker.js",
+	// Recent compatibility date enables nodejs_compat_v2 (requires >= 2024-09-23)
+	// and the latest Workers runtime bug fixes.
+	"compatibility_date": "2025-11-01",
+	// Lets the SvelteKit server bundle use the supported subset of Node.js APIs.
+	"compatibility_flags": ["nodejs_compat"],
+	// Static assets (client build + prerendered pages) served by the Worker via
+	// the ASSETS binding. @sveltejs/adapter-cloudflare emits both into this dir.
+	"assets": {
+		"directory": ".svelte-kit/cloudflare",
+		"binding": "ASSETS"
+	},
+	// Production custom domains are routed directly to this Worker.
+	"routes": [
+		{ "pattern": "yuscheduler.com/*", "zone_name": "yuscheduler.com" },
+		{ "pattern": "www.yuscheduler.com/*", "zone_name": "yuscheduler.com" }
+	],
+	// Workers Logs for production observability.
+	"observability": {
+		"enabled": true
+	}
+}

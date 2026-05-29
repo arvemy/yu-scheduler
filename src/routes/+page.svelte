@@ -9,7 +9,7 @@
 	import { getLatestTerm } from '$lib/utils/term';
 	import { devWarn } from '$lib/utils/logger';
 	import { parseStoredJson, storeJson, validateLastGenerated } from '$lib/utils/storage';
-	import { getTermKey, getLastGeneratedKey } from '$lib/storage/keys';
+	import { getLastGeneratedKey } from '$lib/storage/keys';
 	import { watch } from '$lib/utils/reactivity.svelte';
 	import { onMount } from 'svelte';
 
@@ -67,9 +67,9 @@
 		scheduleData = data;
 		hasGenerated = true;
 		activeScheduleIndex = 0;
-		
+
 		const termKey = currentTerm || 'none';
-		
+
 		const payload = {
 			term: termKey,
 			selectedCourses: courses,
@@ -104,27 +104,6 @@
 		blockedHours = Array.isArray(saved.blockedHours) ? saved.blockedHours : [];
 		hasGenerated = Boolean(saved.scheduleData?.schedules?.length);
 		activeScheduleIndex = saved.activeScheduleIndex ?? 0;
-	};
-
-	const handleClearAll = () => {
-		scheduleData = null;
-		selectedCourses = [];
-		blockedHours = [];
-		hasGenerated = false;
-		activeScheduleIndex = 0;
-
-		if (currentTerm) {
-			try {
-				localStorage.removeItem(getTermKey(currentTerm, 'selectedCourses'));
-				localStorage.removeItem(getTermKey(currentTerm, 'courseOptionGroups'));
-				localStorage.removeItem(getTermKey(currentTerm, 'blockedHours'));
-				localStorage.removeItem(getTermKey(currentTerm, 'sectionChoices'));
-				localStorage.removeItem(getLastGeneratedKey(currentTerm));
-				localStorage.removeItem(getTermKey(currentTerm, 'activeTab'));
-			} catch (err) {
-				devWarn('Failed to clear localStorage', err);
-			}
-		}
 	};
 
 	watch(
@@ -168,30 +147,29 @@
 	};
 </script>
 
-<div class="app-shell">
-	<section class="main-paper surface">
+<div class="mx-auto max-w-[1200px] px-4 py-6 max-[720px]:px-2 max-[720px]:py-4">
+	<section class="rounded-lg bg-surface p-6 shadow-md max-[720px]:p-4">
 		<AppHeader
-			terms={terms}
-			currentTerm={currentTerm}
-			termsLoading={termsLoading}
-			termsError={termsError}
+			{terms}
+			{currentTerm}
+			{termsLoading}
+			{termsError}
 			onChangeTerm={handleChangeTerm}
 			onOpenWelcome={() => (showWelcomeModal = true)}
 		/>
-		
-		<div class="divider"></div>
 
-		<main>
+		<div class="my-6 h-px bg-border max-[720px]:my-4"></div>
+
+		<main class="flex flex-col gap-6">
 			<CourseSelector
 				term={currentTerm}
 				bind:selectedCourses
 				bind:blockedHours
-				scheduleData={scheduleData}
-				hasGenerated={hasGenerated}
+				{scheduleData}
+				{hasGenerated}
 				bind:activeScheduleIndex
 				onSchedule={handleSchedule}
 				onLoadSavedSchedule={handleLoadSavedSchedule}
-				onClearAll={handleClearAll}
 			/>
 		</main>
 	</section>
@@ -203,31 +181,3 @@
 	onDontShowAgainChange={(value) => (dontShowWelcomeAgain = value)}
 	onClose={handleWelcomeClose}
 />
-
-<style>
-	.main-paper {
-		padding: var(--space-lg);
-	}
-
-	.divider {
-		height: 1px;
-		background: var(--border);
-		margin: var(--space-lg) 0;
-	}
-
-	main {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-lg);
-	}
-
-	@media (max-width: 720px) {
-		.main-paper {
-			padding: var(--space-md);
-		}
-
-		.divider {
-			margin: var(--space-md) 0;
-		}
-	}
-</style>

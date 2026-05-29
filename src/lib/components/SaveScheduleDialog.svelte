@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Button, Dialog } from 'bits-ui';
+	import { CircleAlert, Info, Save, X } from '@lucide/svelte';
 	import { watch } from '$lib/utils/reactivity.svelte';
 	import { t } from '$lib/i18n';
 	import type { BlockedHour, ScheduleData } from '$lib/types';
@@ -55,11 +56,11 @@
 			// Convert orConnections to courseOptionGroups format for storage
 			const courseOptionGroups: string[][] = [];
 			let currentGroup: string[] = [];
-			
+
 			for (let i = 0; i < selectedCourses.length; i++) {
 				const course = selectedCourses[i];
 				currentGroup.push(course);
-				
+
 				// If this course is NOT OR-connected to the next, close the group
 				if (!orConnections[course] || i === selectedCourses.length - 1) {
 					if (currentGroup.length >= 2) {
@@ -88,29 +89,23 @@
 	};
 </script>
 
-<Dialog.Root open={open} onOpenChange={(value) => (!value ? onClose?.() : null)}>
+<Dialog.Root {open} onOpenChange={(value) => (!value ? onClose?.() : null)}>
 	<Dialog.Portal>
 		<Dialog.Overlay class="overlay" />
 		<Dialog.Content class="dialog">
 			<div class="dialog-header">
 				<Dialog.Title class="dialog-title">
-					<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-						<path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
-					</svg>
+					<Save class="text-primary" size={24} />
 					{$t('savedSchedules.saveSchedule')}
 				</Dialog.Title>
 				<Dialog.Close class="close-btn" aria-label={$t('common.close')}>
-					<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-						<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-					</svg>
+					<X size={24} />
 				</Dialog.Close>
 			</div>
 
 			{#if storageError}
 				<div class="alert error">
-					<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-						<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-					</svg>
+					<CircleAlert size={20} />
 					<span>{$t('savedSchedules.storageError')}: {storageError}</span>
 				</div>
 			{/if}
@@ -122,9 +117,7 @@
 
 			<div class="details-card">
 				<h4>
-					<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-						<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-					</svg>
+					<Info class="text-primary" size={18} />
 					{$t('savedSchedules.scheduleDetails')}
 				</h4>
 				<div class="details-grid">
@@ -134,7 +127,9 @@
 					</div>
 					<div class="detail-item">
 						<span class="detail-label">{$t('savedSchedules.courses')}</span>
-						<span class="detail-value">{selectedCourses.length} {$t('savedSchedules.coursesSelected')}</span>
+						<span class="detail-value"
+							>{selectedCourses.length} {$t('savedSchedules.coursesSelected')}</span
+						>
 					</div>
 					<div class="detail-item">
 						<span class="detail-label">{$t('courseSelector.schedule')}</span>
@@ -145,9 +140,7 @@
 
 			{#if error}
 				<div class="alert error">
-					<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-						<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-					</svg>
+					<CircleAlert size={20} />
 					<span>{error}</span>
 				</div>
 			{/if}
@@ -155,9 +148,7 @@
 			<div class="dialog-actions">
 				<Button.Root class="btn btn-ghost" onclick={onClose}>{$t('common.cancel')}</Button.Root>
 				<Button.Root class="btn btn-primary" disabled={saving} onclick={handleSave}>
-					<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-						<path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
-					</svg>
+					<Save size={18} />
 					{saving ? $t('savedSchedules.saving') : $t('savedSchedules.save')}
 				</Button.Root>
 			</div>
@@ -209,10 +200,6 @@
 		font-weight: 700;
 		margin: 0;
 		color: var(--ink);
-	}
-
-	:global(.dialog-title) svg {
-		color: var(--primary);
 	}
 
 	:global(.close-btn) {
@@ -292,10 +279,6 @@
 		color: var(--ink-muted);
 	}
 
-	.details-card h4 svg {
-		color: var(--primary);
-	}
-
 	.details-grid {
 		display: grid;
 		gap: var(--space-sm);
@@ -327,8 +310,12 @@
 	}
 
 	@keyframes fadeIn {
-		from { opacity: 0; }
-		to { opacity: 1; }
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
 	}
 
 	@keyframes slideIn {

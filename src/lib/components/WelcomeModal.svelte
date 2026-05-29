@@ -1,5 +1,15 @@
 <script lang="ts">
 	import { Button, Checkbox, Dialog } from 'bits-ui';
+	import {
+		Check,
+		ChevronRight,
+		CircleCheck,
+		GraduationCap,
+		Info,
+		Lightbulb,
+		TriangleAlert,
+		X
+	} from '@lucide/svelte';
 	import { t } from '$lib/i18n';
 
 	let {
@@ -15,75 +25,57 @@
 	} = $props();
 </script>
 
-<Dialog.Root open={open} onOpenChange={(value) => (!value ? onClose?.() : null)}>
+<Dialog.Root {open} onOpenChange={(value) => (!value ? onClose?.() : null)}>
 	<Dialog.Portal>
 		<Dialog.Overlay class="overlay" />
 		<Dialog.Content class="dialog">
 			<div class="dialog-header">
 				<Dialog.Title class="dialog-title">
-					<svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-						<path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
-					</svg>
+					<GraduationCap class="size-7 text-primary max-[600px]:size-6" />
 					{$t('welcome.title')}
 				</Dialog.Title>
 				<Dialog.Close class="close-btn" aria-label={$t('common.close')}>
-					<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-						<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-					</svg>
+					<X size={24} />
 				</Dialog.Close>
 			</div>
 
 			<p class="lead">{$t('welcome.description')}</p>
 
-		<div class="features-section">
-			<h2 class="section-heading">
-				<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-					<path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6A4.997 4.997 0 017 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/>
-				</svg>
-				{$t('welcome.features')}
-			</h2>
+			<div class="features-section">
+				<h2 class="section-heading">
+					<Lightbulb class="text-primary" size={20} />
+					{$t('welcome.features')}
+				</h2>
 				<ul>
 					<li>
-						<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-							<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-						</svg>
+						<Check class="shrink-0 text-success" size={16} />
 						{$t('welcome.feature1')}
 					</li>
 					<li>
-						<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-							<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-						</svg>
+						<Check class="shrink-0 text-success" size={16} />
 						{$t('welcome.feature2')}
 					</li>
 					<li>
-						<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-							<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-						</svg>
+						<Check class="shrink-0 text-success" size={16} />
 						{$t('welcome.feature3')}
 					</li>
 					<li>
-						<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-							<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-						</svg>
+						<Check class="shrink-0 text-success" size={16} />
 						{$t('welcome.feature4')}
 					</li>
 				</ul>
 			</div>
 
-		<!-- Latest Updates Section -->
-		<div class="updates-section">
-			<h2 class="section-heading">
-				<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-					<path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-				</svg>
-				{$t('welcome.updates.title')}
-			</h2>
+			<!-- Latest Updates Section -->
+			<div class="updates-section">
+				<h2 class="section-heading">
+					<Info class="text-primary" size={20} />
+					{$t('welcome.updates.title')}
+				</h2>
 				<p class="updates-term">{$t('welcome.updates.term')}</p>
 				<ul>
 					<li>
-						<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-							<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-						</svg>
+						<CircleCheck class="shrink-0 text-success" size={14} />
 						{$t('welcome.updates.items.springTermAdded')}
 					</li>
 				</ul>
@@ -92,41 +84,40 @@
 
 			<div class="notice-panel">
 				<div class="notice-icon">
-					<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-						<path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
-					</svg>
+					<TriangleAlert size={24} />
 				</div>
 				<div class="notice-content">
-					<p class="notice-text" style="font-weight: 600;">{@html $t('welcome.importantNotice')}</p>
+					<!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted, developer-authored i18n string -->
+					<p class="notice-text font-semibold">{@html $t('welcome.importantNotice')}</p>
 					<p class="notice-text">{$t('welcome.disclaimer')}</p>
 					<p class="notice-subtext">{$t('welcome.privacyNote')}</p>
 				</div>
 			</div>
 
 			<label class="checkbox-label">
-				<Checkbox.Root checked={dontShowAgain} onCheckedChange={onDontShowAgainChange} class="checkbox-root">
+				<Checkbox.Root
+					checked={dontShowAgain}
+					onCheckedChange={onDontShowAgainChange}
+					class="checkbox-root"
+				>
 					{#snippet children({ checked })}
-						<span class="checkbox-box" class:checked={checked}>
+						<span class="checkbox-box" class:checked>
 							{#if checked}
-								<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-									<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-								</svg>
+								<Check size={16} />
 							{/if}
 						</span>
 					{/snippet}
 				</Checkbox.Root>
 				<span>{$t('welcome.dontShowAgain')}</span>
 			</label>
-			
+
 			<div class="modal-footer">
 				<div class="creator-credit">
 					Created by <span class="creator-name">Arda Korkmaz</span>
 				</div>
 				<div class="dialog-actions">
 					<Button.Root class="btn btn-primary" onclick={onClose}>
-						<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-							<path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-						</svg>
+						<ChevronRight size={18} />
 						{$t('welcome.getStarted')}
 					</Button.Root>
 				</div>
@@ -181,10 +172,6 @@
 		color: var(--ink);
 	}
 
-	:global(.dialog-title) svg {
-		color: var(--primary);
-	}
-
 	:global(.close-btn) {
 		display: flex;
 		align-items: center;
@@ -228,10 +215,6 @@
 		color: var(--ink);
 	}
 
-	.features-section .section-heading svg {
-		color: var(--primary);
-	}
-
 	.features-section ul {
 		margin: 0;
 		padding: 0;
@@ -245,11 +228,6 @@
 		padding: var(--space-xs) 0;
 		color: var(--ink-secondary);
 		font-size: 14px;
-	}
-
-	.features-section li svg {
-		color: var(--success);
-		flex-shrink: 0;
 	}
 
 	/* Latest Updates Section */
@@ -268,10 +246,6 @@
 		font-size: 14px;
 		font-weight: 800;
 		color: var(--ink);
-	}
-
-	.updates-section .section-heading svg {
-		color: var(--primary);
 	}
 
 	.updates-term {
@@ -294,11 +268,6 @@
 		padding: var(--space-xs) 0;
 		color: var(--ink-secondary);
 		font-size: 13px;
-	}
-
-	.updates-section li svg {
-		color: var(--success);
-		flex-shrink: 0;
 	}
 
 	.updates-date {
@@ -408,8 +377,12 @@
 	}
 
 	@keyframes fadeIn {
-		from { opacity: 0; }
-		to { opacity: 1; }
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
 	}
 
 	@keyframes slideIn {
@@ -430,11 +403,6 @@
 
 		:global(.dialog-title) {
 			font-size: 1.25rem;
-		}
-
-		:global(.dialog-title) svg {
-			width: 24px;
-			height: 24px;
 		}
 
 		.lead {

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { SvelteMap } from 'svelte/reactivity';
+	import { ChevronDown, ChevronLeft, ChevronRight, Clock, Lock } from '@lucide/svelte';
 	import type { BlockedHour, Schedule, SessionData } from '$lib/types';
 	import { t } from '$lib/i18n';
 	import { SWIPE_THRESHOLD_PX } from '$lib/config/ui';
@@ -28,7 +29,7 @@
 
 	// Track if component has mounted (to prevent hydration mismatch)
 	let mounted = $state(false);
-	
+
 	// Mobile detection using shared composable (md breakpoint: < 768px)
 	const mobile = useMobile();
 	const isMobile = $derived(mobile.isMobile);
@@ -267,9 +268,7 @@
 				<thead>
 					<tr>
 						<th class="time-header">
-							<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-								<path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
-							</svg>
+							<Clock class="mx-auto mb-1 block" size={18} />
 							<span>{$t('timetable.time')}</span>
 						</th>
 						{#each daysOfWeek as day (day)}
@@ -320,15 +319,16 @@
 									onkeydown={(event) => onActivate(event, () => toggleCell(day, slot))}
 									role="button"
 									tabindex="0"
-									aria-label={$t('courseSelector.blockUnblockCell', { day: $t(`timetable.days.${day}`), slot })}
+									aria-label={$t('courseSelector.blockUnblockCell', {
+										day: $t(`timetable.days.${day}`),
+										slot
+									})}
 									aria-pressed={blocked}
 								>
 									<div class="cell-content" class:blocked>
 										{#if blocked && groups.length === 0}
 											<div class="blocked-indicator">
-												<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-													<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-												</svg>
+												<Lock size={20} />
 											</div>
 										{/if}
 										{#each groups as g (g.key)}
@@ -339,25 +339,42 @@
 												class="session-card"
 												class:clickable={isGrouped}
 												style="background-color: {colorForCourse(g.course)}"
-												onclick={(e) => { if (isGrouped) { e.stopPropagation(); toggleGroup(g.key); } }}
+												onclick={(e) => {
+													if (isGrouped) {
+														e.stopPropagation();
+														toggleGroup(g.key);
+													}
+												}}
 												role={isGrouped ? 'button' : undefined}
 												tabindex={isGrouped ? 0 : -1}
-												onkeydown={(e) => { if (isGrouped && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); e.stopPropagation(); toggleGroup(g.key); } }}
+												onkeydown={(e) => {
+													if (isGrouped && (e.key === 'Enter' || e.key === ' ')) {
+														e.preventDefault();
+														e.stopPropagation();
+														toggleGroup(g.key);
+													}
+												}}
 											>
 												<div class="session-header">
 													<span class="course-code">
-														{g.course} {isGrouped ? '(*)' : `(${g.sections[0] ?? ''})`}
+														{g.course}
+														{isGrouped ? '(*)' : `(${g.sections[0] ?? ''})`}
 													</span>
 													{#if isGrouped}
 														<button
 															class="expand-btn"
-															onclick={(e) => { e.stopPropagation(); toggleGroup(g.key); }}
+															onclick={(e) => {
+																e.stopPropagation();
+																toggleGroup(g.key);
+															}}
 															aria-expanded={expanded}
 															aria-label={expanded ? $t('common.collapse') : $t('common.expand')}
 														>
-															<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" class:rotated={expanded} aria-hidden="true">
-																<path d="M7 10l5 5 5-5z"/>
-															</svg>
+															<ChevronDown
+																size={16}
+																class="transition-transform {expanded ? 'rotate-180' : ''}"
+																aria-hidden="true"
+															/>
 														</button>
 													{/if}
 												</div>
@@ -366,7 +383,9 @@
 													<span class="classroom">{g.classrooms[0]}</span>
 												{/if}
 												{#if isGrouped}
-													<span class="section-count">{g.count} {$t('timetable.sectionOptions', { count: g.count })}</span>
+													<span class="section-count"
+														>{g.count} {$t('timetable.sectionOptions', { count: g.count })}</span
+													>
 												{/if}
 												{#if isGrouped && expanded}
 													<div class="expanded-sections">
@@ -381,11 +400,10 @@
 								</td>
 							{/each}
 						</tr>
-				{/each}
-			</tbody>
-		</table>
-	</div>
-
+					{/each}
+				</tbody>
+			</table>
+		</div>
 	{:else}
 		<!-- Mobile: single-day view + swipe navigation -->
 		<div
@@ -408,10 +426,8 @@
 							onclick={prevDay}
 							aria-label={$t('pagination.previous')}
 						>
-								<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-									<path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-								</svg>
-							</button>
+							<ChevronLeft size={20} aria-hidden="true" />
+						</button>
 						<button
 							class="day-nav-center"
 							type="button"
@@ -436,32 +452,28 @@
 							onclick={nextDay}
 							aria-label={$t('pagination.next')}
 						>
-								<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
-									<path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
-								</svg>
-							</button>
-						</div>
-						<div class="day-slots">
-							{#each timeSlots as slot (slot)}
-								{@const blocked = isBlocked(activeDay, slot)}
-								{@const groups = groupSessions(activeDay, slot, grid[activeDay][slot])}
-								<button
-									class="slot-row"
-									class:blocked
-									onclick={() => toggleCell(activeDay, slot)}
-									aria-pressed={blocked}
-								>
-									<div class="slot-time-mobile">
-										<span>{slot.split('-')[0]}</span>
-										<span>{slot.split('-')[1]}</span>
-									</div>
-									<div class="slot-content">
-										{#if groups.length === 0}
-											{#if blocked}
-												<span class="empty-blocked">
-													<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-														<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
-												</svg>
+							<ChevronRight size={20} aria-hidden="true" />
+						</button>
+					</div>
+					<div class="day-slots">
+						{#each timeSlots as slot (slot)}
+							{@const blocked = isBlocked(activeDay, slot)}
+							{@const groups = groupSessions(activeDay, slot, grid[activeDay][slot])}
+							<button
+								class="slot-row"
+								class:blocked
+								onclick={() => toggleCell(activeDay, slot)}
+								aria-pressed={blocked}
+							>
+								<div class="slot-time-mobile">
+									<span>{slot.split('-')[0]}</span>
+									<span>{slot.split('-')[1]}</span>
+								</div>
+								<div class="slot-content">
+									{#if groups.length === 0}
+										{#if blocked}
+											<span class="empty-blocked">
+												<Lock size={16} />
 											</span>
 										{:else}
 											<span class="empty-slot">-</span>
@@ -470,7 +482,10 @@
 										<div class="chips-container">
 											{#each groups as g (g.key)}
 												{@const isGrouped = g.count > 1}
-												<span class="course-chip" style="background-color: {colorForCourse(g.course)}">
+												<span
+													class="course-chip"
+													style="background-color: {colorForCourse(g.course)}"
+												>
 													{isGrouped ? `${g.course} (*)` : `${g.course} (${g.sections[0] ?? ''})`}
 													{#if g.classrooms[0] && !isGrouped}
 														<span class="chip-classroom">{g.classrooms[0]}</span>
@@ -482,9 +497,7 @@
 								</div>
 								{#if blocked && groups.length > 0}
 									<div class="blocked-badge">
-										<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-											<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
-										</svg>
+										<Lock size={16} />
 									</div>
 								{/if}
 							</button>
@@ -515,8 +528,12 @@
 	}
 
 	@keyframes shimmer {
-		0% { background-position: 200% 0; }
-		100% { background-position: -200% 0; }
+		0% {
+			background-position: 200% 0;
+		}
+		100% {
+			background-position: -200% 0;
+		}
 	}
 
 	/* Desktop Table Styles */
@@ -534,7 +551,8 @@
 		background: var(--surface);
 	}
 
-	th, td {
+	th,
+	td {
 		border: 1px solid var(--border);
 		padding: 0;
 		text-align: center;
@@ -551,11 +569,6 @@
 		letter-spacing: 0.5px;
 		color: var(--ink-secondary);
 		line-height: 1.2;
-	}
-
-	.time-header svg {
-		display: block;
-		margin: 0 auto 4px;
 	}
 
 	.day-header {
@@ -737,14 +750,6 @@
 
 	.expand-btn:hover {
 		background: rgba(255, 255, 255, 0.2);
-	}
-
-	.expand-btn svg {
-		transition: transform 0.2s ease;
-	}
-
-	.expand-btn svg.rotated {
-		transform: rotate(180deg);
 	}
 
 	.time-range {

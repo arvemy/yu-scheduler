@@ -138,7 +138,10 @@ export const translateWarnings = (
 				continue;
 			}
 
-			if (warning.code === 'TIME_CONFLICTS' && warningCodes.some((w) => specificCodes.includes(w.code))) {
+			if (
+				warning.code === 'TIME_CONFLICTS' &&
+				warningCodes.some((w) => specificCodes.includes(w.code))
+			) {
 				continue;
 			}
 

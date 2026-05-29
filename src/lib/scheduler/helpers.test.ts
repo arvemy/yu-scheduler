@@ -53,10 +53,10 @@ describe('Scheduler Helpers', () => {
 	describe('buildEligibleSections', () => {
 		it('groups sessions by course and section', () => {
 			const result = buildEligibleSections(mockCourseData);
-			
+
 			expect(result['MATH101']).toBeDefined();
 			expect(result['MATH101'].length).toBe(2); // 01 and 02
-			
+
 			const section01 = result['MATH101'].find(([sec]) => sec === '01');
 			expect(section01).toBeDefined();
 			expect(section01![1].length).toBe(2); // Mon, Wed
@@ -64,7 +64,7 @@ describe('Scheduler Helpers', () => {
 
 		it('excludes incomplete sessions', () => {
 			const badData = {
-				'BAD101': [
+				BAD101: [
 					createSession('Monday', '', '10:00'), // Missing start
 					createSession('Wednesday', '10:00', '') // Missing end
 				]
@@ -125,7 +125,7 @@ describe('Scheduler Helpers', () => {
 		it('returns all valid sections when no conflicts', () => {
 			const selection: CourseEntry[] = [{ course: 'MATH101' }];
 			const result = filterEligibleCourses(selection, eligible, blocked);
-			
+
 			expect(result.validCourses).toContain('MATH101');
 			expect(result.filteredSections['MATH101'].length).toBe(2);
 		});
@@ -133,9 +133,9 @@ describe('Scheduler Helpers', () => {
 		it('filters out sections conflicting with blocked hours', () => {
 			const blockedMon = new Set(['Monday|09:40-10:30']);
 			const selection: CourseEntry[] = [{ course: 'MATH101' }];
-			
+
 			const result = filterEligibleCourses(selection, eligible, blockedMon);
-			
+
 			// MATH101-01 is Mon 09:40, so it should be filtered out.
 			// MATH101-02 is Tue/Thu, so it should remain.
 			expect(result.filteredSections['MATH101'].length).toBe(1);
@@ -143,14 +143,11 @@ describe('Scheduler Helpers', () => {
 		});
 
 		it('moves course to excluded if all sections blocked', () => {
-			const blockedAll = new Set([
-				'Monday|09:40-10:30',
-				'Tuesday|14:40-15:30'
-			]);
+			const blockedAll = new Set(['Monday|09:40-10:30', 'Tuesday|14:40-15:30']);
 			const selection: CourseEntry[] = [{ course: 'MATH101' }];
-			
+
 			const result = filterEligibleCourses(selection, eligible, blockedAll);
-			
+
 			expect(result.validCourses).not.toContain('MATH101');
 			expect(result.excludedCourses).toContain('MATH101');
 		});
@@ -158,7 +155,7 @@ describe('Scheduler Helpers', () => {
 		it('respects specific section selection', () => {
 			const selection: CourseEntry[] = [{ course: 'MATH101', section: '02' }];
 			const result = filterEligibleCourses(selection, eligible, blocked);
-			
+
 			expect(result.filteredSections['MATH101'].length).toBe(1);
 			expect(result.filteredSections['MATH101'][0][0]).toBe('02');
 		});
@@ -172,7 +169,7 @@ describe('Scheduler Helpers', () => {
 			const courses = ['MATH101', 'HIST101'];
 			// Re-filter to get the structure needed for generateValidSchedules
 			const { filteredSections } = filterEligibleCourses(
-				courses.map(c => ({ course: c })),
+				courses.map((c) => ({ course: c })),
 				eligible,
 				new Set()
 			);
@@ -184,22 +181,22 @@ describe('Scheduler Helpers', () => {
 		it('prunes conflicting combinations', () => {
 			// MATH101-01 (Mon 9-10) conflicts with PHYS101-01 (Mon 9-10)
 			// MATH101-02 (Tue 14) and PHYS101-02 (Mon 14) do not conflict
-			
+
 			const courses = ['MATH101', 'PHYS101'];
 			const { filteredSections } = filterEligibleCourses(
-				courses.map(c => ({ course: c })),
+				courses.map((c) => ({ course: c })),
 				eligible,
 				new Set()
 			);
 
 			const { validSchedules, conflictPairs } = generateValidSchedules(courses, filteredSections);
-			
+
 			// Expected combinations:
 			// MATH-01 + PHYS-01 -> Conflict
 			// MATH-01 + PHYS-02 -> Valid (Mon 9 + Mon 14)
 			// MATH-02 + PHYS-01 -> Valid (Tue 14 + Mon 9)
 			// MATH-02 + PHYS-02 -> Valid (Tue 14 + Mon 14)
-			
+
 			expect(validSchedules.length).toBe(3);
 			expect(conflictPairs.length).toBeGreaterThan(0);
 		});
@@ -207,13 +204,13 @@ describe('Scheduler Helpers', () => {
 		it('returns empty if no valid combination exists', () => {
 			// Create artificially conflicting data
 			const conflictData = {
-				'A': [createSession('Monday', '10:00', '11:00')],
-				'B': [createSession('Monday', '10:00', '11:00')]
+				A: [createSession('Monday', '10:00', '11:00')],
+				B: [createSession('Monday', '10:00', '11:00')]
 			};
 			const eligibleConflict = buildEligibleSections(conflictData);
 			const courses = ['A', 'B'];
 			const { filteredSections } = filterEligibleCourses(
-				courses.map(c => ({ course: c })),
+				courses.map((c) => ({ course: c })),
 				eligibleConflict,
 				new Set()
 			);

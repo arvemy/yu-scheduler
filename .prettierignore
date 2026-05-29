@@ -1,0 +1,12 @@
+# Package manager
+pnpm-lock.yaml
+
+# Build output / generated
+.svelte-kit
+.wrangler
+build
+dist
+coverage
+
+# Static assets
+static

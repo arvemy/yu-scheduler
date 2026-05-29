@@ -109,23 +109,24 @@ export const downloadScheduleAsImage = async (
 				ctx.fillText(leftText, padding, canvas.height + footerHeight / 2);
 				if (rightText) {
 					const rtWidth = ctx.measureText(rightText).width;
-					ctx.fillText(rightText, padded.width - padding - rtWidth, canvas.height + footerHeight / 2);
+					ctx.fillText(
+						rightText,
+						padded.width - padding - rtWidth,
+						canvas.height + footerHeight / 2
+					);
 				}
 			}
 			finalCanvas = padded;
 		}
 
 		const blob: Blob = await new Promise((resolve, reject) => {
-			finalCanvas.toBlob(
-				(b) => {
-					if (!b) {
-						reject(new Error('Failed to generate image blob'));
-						return;
-					}
-					resolve(b);
-				},
-				'image/png'
-			);
+			finalCanvas.toBlob((b) => {
+				if (!b) {
+					reject(new Error('Failed to generate image blob'));
+					return;
+				}
+				resolve(b);
+			}, 'image/png');
 		});
 
 		const url = URL.createObjectURL(blob);
@@ -138,7 +139,9 @@ export const downloadScheduleAsImage = async (
 			setTimeout(() => URL.revokeObjectURL(url), 1000);
 		}
 	} catch (error) {
-		onError(error instanceof Error ? error.message : 'Failed to download schedule. Please try again.');
+		onError(
+			error instanceof Error ? error.message : 'Failed to download schedule. Please try again.'
+		);
 	} finally {
 		captureHost?.remove();
 	}

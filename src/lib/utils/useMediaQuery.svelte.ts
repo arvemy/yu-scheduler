@@ -25,35 +25,35 @@ import { BREAKPOINTS, type BreakpointKey } from './breakpoints';
  * ```
  */
 export function useMediaQuery(breakpoint: BreakpointKey | number = 'md') {
-  const maxWidth = typeof breakpoint === 'number' ? breakpoint : BREAKPOINTS[breakpoint];
+	const maxWidth = typeof breakpoint === 'number' ? breakpoint : BREAKPOINTS[breakpoint];
 
-  let matches = $state(false);
+	let matches = $state(false);
 
-  $effect(() => {
-    if (typeof window === 'undefined') return;
+	$effect(() => {
+		if (typeof window === 'undefined') return;
 
-    const mediaQuery = window.matchMedia(`(max-width: ${maxWidth - 1}px)`);
+		const mediaQuery = window.matchMedia(`(max-width: ${maxWidth - 1}px)`);
 
-    const updateMatch = () => {
-      matches = mediaQuery.matches;
-    };
+		const updateMatch = () => {
+			matches = mediaQuery.matches;
+		};
 
-    // Set initial value
-    updateMatch();
+		// Set initial value
+		updateMatch();
 
-    // Listen for changes
-    mediaQuery.addEventListener('change', updateMatch);
+		// Listen for changes
+		mediaQuery.addEventListener('change', updateMatch);
 
-    return () => {
-      mediaQuery.removeEventListener('change', updateMatch);
-    };
-  });
+		return () => {
+			mediaQuery.removeEventListener('change', updateMatch);
+		};
+	});
 
-  return {
-    get matches() {
-      return matches;
-    }
-  };
+	return {
+		get matches() {
+			return matches;
+		}
+	};
 }
 
 /**
@@ -79,13 +79,13 @@ export function useMediaQuery(breakpoint: BreakpointKey | number = 'md') {
  * ```
  */
 export function useMobile(breakpoint: BreakpointKey | number = 'md') {
-  const query = useMediaQuery(breakpoint);
+	const query = useMediaQuery(breakpoint);
 
-  return {
-    get isMobile() {
-      return query.matches;
-    }
-  };
+	return {
+		get isMobile() {
+			return query.matches;
+		}
+	};
 }
 
 /**
@@ -93,5 +93,5 @@ export function useMobile(breakpoint: BreakpointKey | number = 'md') {
  * Returns true when viewport is below the small breakpoint (600px).
  */
 export function useSmallMobile() {
-  return useMobile('sm');
+	return useMobile('sm');
 }

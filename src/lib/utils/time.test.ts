@@ -10,27 +10,27 @@ describe('time utils', () => {
 
 	describe('rangesOverlap', () => {
 		it('returns true for partially overlapping ranges', () => {
-			expect(rangesOverlap({ start: '09:00', end: '10:00' }, { start: '09:30', end: '10:30' })).toBe(
-				true
-			);
+			expect(
+				rangesOverlap({ start: '09:00', end: '10:00' }, { start: '09:30', end: '10:30' })
+			).toBe(true);
 		});
 
 		it('returns true when one range contains the other', () => {
-			expect(rangesOverlap({ start: '09:00', end: '12:00' }, { start: '10:00', end: '11:00' })).toBe(
-				true
-			);
+			expect(
+				rangesOverlap({ start: '09:00', end: '12:00' }, { start: '10:00', end: '11:00' })
+			).toBe(true);
 		});
 
 		it('returns false for ranges that only touch at the edge', () => {
-			expect(rangesOverlap({ start: '09:00', end: '10:00' }, { start: '10:00', end: '11:00' })).toBe(
-				false
-			);
+			expect(
+				rangesOverlap({ start: '09:00', end: '10:00' }, { start: '10:00', end: '11:00' })
+			).toBe(false);
 		});
 
 		it('returns false for disjoint ranges', () => {
-			expect(rangesOverlap({ start: '09:00', end: '10:00' }, { start: '11:00', end: '12:00' })).toBe(
-				false
-			);
+			expect(
+				rangesOverlap({ start: '09:00', end: '10:00' }, { start: '11:00', end: '12:00' })
+			).toBe(false);
 		});
 
 		it('is symmetric in its arguments', () => {

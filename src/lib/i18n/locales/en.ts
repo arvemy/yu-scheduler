@@ -66,7 +66,8 @@ export const en = {
 		unblockDay: 'Unblock all',
 		clearAll: 'Clear All',
 		retry: 'Retry',
-		sectionsPartialWarning: 'Some section details failed to load. You can still generate schedules, or retry loading sections.',
+		sectionsPartialWarning:
+			'Some section details failed to load. You can still generate schedules, or retry loading sections.',
 		generateScheduleFirst: 'Generate a schedule first to save',
 		blockedAdded: '{{count}} block added ({{target}})',
 		blockedAdded_one: '1 block added ({{target}})',
@@ -76,9 +77,12 @@ export const en = {
 		blocksCleared_other: '{{count}} blocks removed ({{target}})',
 		blockingTip: {
 			title: 'Block Time Slots',
-			description: "Click on time slots to block them from your schedule. This prevents courses from being scheduled at those times.",
-			desktop: '• Click day headers to block entire days\n• Click time headers to block time across all days\n• Click individual cells to block specific time slots',
-			mobile: '• Tap day headers to block entire days\n• Tap time slots to block specific time slots',
+			description:
+				'Click on time slots to block them from your schedule. This prevents courses from being scheduled at those times.',
+			desktop:
+				'• Click day headers to block entire days\n• Click time headers to block time across all days\n• Click individual cells to block specific time slots',
+			mobile:
+				'• Tap day headers to block entire days\n• Tap time slots to block specific time slots',
 			gotIt: 'Got it!'
 		},
 		actions: 'Schedule actions',
@@ -184,23 +188,28 @@ export const en = {
 		clearFailed: 'Failed to clear schedules',
 		noSavedSchedules: 'No Saved Schedules',
 		noSavedSchedulesDesc: 'Save your favorite schedules to quickly access them later.',
-		showingCurrentTerm: 'Showing {{count}} schedule for {{term}}. {{hidden}} from other terms are hidden.',
-		showingCurrentTerm_one: 'Showing 1 schedule for {{term}}. {{hidden}} from other terms are hidden.',
-		showingCurrentTerm_other: 'Showing {{count}} schedules for {{term}}. {{hidden}} from other terms are hidden.',
+		showingCurrentTerm:
+			'Showing {{count}} schedule for {{term}}. {{hidden}} from other terms are hidden.',
+		showingCurrentTerm_one:
+			'Showing 1 schedule for {{term}}. {{hidden}} from other terms are hidden.',
+		showingCurrentTerm_other:
+			'Showing {{count}} schedules for {{term}}. {{hidden}} from other terms are hidden.',
 		savedOn: 'Saved on',
 		loadSchedule: 'Load Schedule',
 		renameSchedule: 'Rename Schedule',
 		deleteSchedule: 'Delete Schedule',
 		storageUsage: 'Storage Usage',
 		clearAll: 'Clear All',
-		clearAllConfirm: 'Are you sure you want to delete all saved schedules? This action cannot be undone.',
+		clearAllConfirm:
+			'Are you sure you want to delete all saved schedules? This action cannot be undone.',
 		schedule: 'Schedule',
 		scheduleWasSaved: 'Schedule "{{name}}" has been saved successfully!',
 		scheduleWasLoaded: 'Schedule "{{name}}" has been loaded successfully!'
 	},
 	welcome: {
 		title: 'Welcome to YU Scheduler!',
-		description: 'YU Scheduler is your comprehensive course planning tool for Yaşar University. Easily create and manage your class schedules with our intuitive interface.',
+		description:
+			'YU Scheduler is your comprehensive course planning tool for Yaşar University. Easily create and manage your class schedules with our intuitive interface.',
 		features: "Here's what you can do:",
 		feature1: 'Search and select courses from all available options',
 		feature2: 'Generate optimized schedules automatically',
@@ -214,9 +223,12 @@ export const en = {
 			},
 			addedOn: 'Added on: Friday, Jan 23'
 		},
-		importantNotice: 'Please verify your schedule at <a href="https://oim.yasar.edu.tr/ders-kayitlari" target="_blank" rel="noopener noreferrer">oim.yasar.edu.tr/ders-kayitlari</a> for the most accurate information.',
-		disclaimer: 'This tool is designed to help students plan their schedules more effectively and is not affiliated with Yaşar University.',
-		privacyNote: 'All data is stored and processed locally in your browser; nothing is transmitted to external servers.',
+		importantNotice:
+			'Please verify your schedule at <a href="https://oim.yasar.edu.tr/ders-kayitlari" target="_blank" rel="noopener noreferrer">oim.yasar.edu.tr/ders-kayitlari</a> for the most accurate information.',
+		disclaimer:
+			'This tool is designed to help students plan their schedules more effectively and is not affiliated with Yaşar University.',
+		privacyNote:
+			'All data is stored and processed locally in your browser; nothing is transmitted to external servers.',
 		dontShowAgain: "Don't show this again",
 		getStarted: 'Get Started'
 	},

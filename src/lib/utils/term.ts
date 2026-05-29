@@ -4,17 +4,21 @@ export const translateTerm = (term: string, t: Translator): string => {
 	if (!term) return '';
 
 	const mSeasonYear = term.match(/^(Fall|Spring|Summer|G[üu]z|Bahar|Yaz)\s+(\d{4})$/i);
-	const mYearRangeSeason = term.match(/^(\d{4})(?:-(\d{4}))?\s+(Fall|Spring|Summer|G[üu]z|Bahar|Yaz)$/i);
+	const mYearRangeSeason = term.match(
+		/^(\d{4})(?:-(\d{4}))?\s+(Fall|Spring|Summer|G[üu]z|Bahar|Yaz)$/i
+	);
 
-	let seasonRaw: string | null = null;
-	let yearText: string | null = null;
+	let seasonRaw: string;
+	let yearText: string;
 
 	if (mSeasonYear) {
 		seasonRaw = mSeasonYear[1].toLowerCase();
 		yearText = mSeasonYear[2];
 	} else if (mYearRangeSeason) {
 		seasonRaw = mYearRangeSeason[3].toLowerCase();
-		yearText = mYearRangeSeason[2] ? `${mYearRangeSeason[1]}-${mYearRangeSeason[2]}` : mYearRangeSeason[1];
+		yearText = mYearRangeSeason[2]
+			? `${mYearRangeSeason[1]}-${mYearRangeSeason[2]}`
+			: mYearRangeSeason[1];
 	} else {
 		return term;
 	}
@@ -40,9 +44,7 @@ export const translateTerm = (term: string, t: Translator): string => {
 
 	const locale = t('locale.code');
 	const seasonTranslated = t(seasonKey);
-	return locale === 'tr'
-		? `${yearText} ${seasonTranslated}`
-		: `${seasonTranslated} ${yearText}`;
+	return locale === 'tr' ? `${yearText} ${seasonTranslated}` : `${seasonTranslated} ${yearText}`;
 };
 
 export const getLatestTerm = (list: string[]): string | null => {

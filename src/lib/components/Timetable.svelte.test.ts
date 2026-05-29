@@ -9,7 +9,13 @@ const schedule: Schedule = {
 			course: 'MATH 101',
 			section: '01',
 			sessions: [
-				{ Day: 'Monday', 'Start Time': '09:40', 'End Time': '10:30', Section: '01', Classroom: 'A1' }
+				{
+					Day: 'Monday',
+					'Start Time': '09:40',
+					'End Time': '10:30',
+					Section: '01',
+					Classroom: 'A1'
+				}
 			]
 		}
 	]

@@ -1,8 +1,0 @@
-name = "yu-svelte"
-pages_build_output_dir = "./build"
-# Recent compatibility date enables nodejs_compat_v2 (requires >= 2024-09-23)
-# and the latest Workers runtime bug fixes.
-compatibility_date = "2025-11-01"
-# Recommended for SvelteKit on Cloudflare so the server bundle can use the
-# supported subset of Node.js APIs when needed.
-compatibility_flags = ["nodejs_compat"]
