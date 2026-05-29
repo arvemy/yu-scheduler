@@ -1,0 +1,7 @@
+# Security contact for YuScheduler
+Contact: mailto:22ardakorkmaz@gmail.com
+Contact: https://github.com/arvemy/yu-scheduler/security/advisories/new
+Preferred-Languages: en, tr
+Canonical: https://yuscheduler.com/.well-known/security.txt
+Canonical: https://www.yuscheduler.com/.well-known/security.txt
+Expires: 2027-05-01T00:00:00Z
