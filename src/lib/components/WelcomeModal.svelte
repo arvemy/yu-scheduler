@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, Checkbox, Dialog } from 'bits-ui';
+	import { Button, Checkbox, Dialog, Tooltip } from 'bits-ui';
 	import {
 		Check,
 		ChevronRight,
@@ -11,6 +11,7 @@
 		X
 	} from '@lucide/svelte';
 	import { t } from '$lib/i18n';
+	import TooltipContent from '$lib/components/ui/TooltipContent.svelte';
 
 	let {
 		open = false,
@@ -25,106 +26,115 @@
 	} = $props();
 </script>
 
-<Dialog.Root {open} onOpenChange={(value) => (!value ? onClose?.() : null)}>
-	<Dialog.Portal>
-		<Dialog.Overlay class="overlay" />
-		<Dialog.Content class="dialog">
-			<div class="dialog-header">
-				<Dialog.Title class="dialog-title">
-					<GraduationCap class="size-7 text-primary max-[600px]:size-6" />
-					{$t('welcome.title')}
-				</Dialog.Title>
-				<Dialog.Close class="close-btn" aria-label={$t('common.close')}>
-					<X size={24} />
-				</Dialog.Close>
-			</div>
-
-			<p class="lead">{$t('welcome.description')}</p>
-
-			<div class="features-section">
-				<h2 class="section-heading">
-					<Lightbulb class="text-primary" size={20} />
-					{$t('welcome.features')}
-				</h2>
-				<ul>
-					<li>
-						<Check class="shrink-0 text-success" size={16} />
-						{$t('welcome.feature1')}
-					</li>
-					<li>
-						<Check class="shrink-0 text-success" size={16} />
-						{$t('welcome.feature2')}
-					</li>
-					<li>
-						<Check class="shrink-0 text-success" size={16} />
-						{$t('welcome.feature3')}
-					</li>
-					<li>
-						<Check class="shrink-0 text-success" size={16} />
-						{$t('welcome.feature4')}
-					</li>
-				</ul>
-			</div>
-
-			<!-- Latest Updates Section -->
-			<div class="updates-section">
-				<h2 class="section-heading">
-					<Info class="text-primary" size={20} />
-					{$t('welcome.updates.title')}
-				</h2>
-				<p class="updates-term">{$t('welcome.updates.term')}</p>
-				<ul>
-					<li>
-						<CircleCheck class="shrink-0 text-success" size={14} />
-						{$t('welcome.updates.items.springTermAdded')}
-					</li>
-				</ul>
-				<p class="updates-date">{$t('welcome.updates.addedOn')}</p>
-			</div>
-
-			<div class="notice-panel">
-				<div class="notice-icon">
-					<TriangleAlert size={24} />
+<Tooltip.Provider delayDuration={350} skipDelayDuration={100}>
+	<Dialog.Root {open} onOpenChange={(value) => (!value ? onClose?.() : null)}>
+		<Dialog.Portal>
+			<Dialog.Overlay class="overlay" />
+			<Dialog.Content class="dialog">
+				<div class="dialog-header">
+					<Dialog.Title class="dialog-title">
+						<GraduationCap class="size-7 text-primary max-[600px]:size-6" />
+						{$t('welcome.title')}
+					</Dialog.Title>
+					<Tooltip.Root>
+						<Dialog.Close>
+							{#snippet child({ props })}
+								<Tooltip.Trigger {...props} class="close-btn" aria-label={$t('common.close')}>
+									<X size={24} />
+								</Tooltip.Trigger>
+							{/snippet}
+						</Dialog.Close>
+						<TooltipContent label={$t('common.close')} />
+					</Tooltip.Root>
 				</div>
-				<div class="notice-content">
-					<!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted, developer-authored i18n string -->
-					<p class="notice-text font-semibold">{@html $t('welcome.importantNotice')}</p>
-					<p class="notice-text">{$t('welcome.disclaimer')}</p>
-					<p class="notice-subtext">{$t('welcome.privacyNote')}</p>
-				</div>
-			</div>
 
-			<label class="checkbox-label">
-				<Checkbox.Root
-					checked={dontShowAgain}
-					onCheckedChange={onDontShowAgainChange}
-					class="checkbox-root"
-				>
-					{#snippet children({ checked })}
-						<span class="checkbox-box" class:checked>
-							{#if checked}
-								<Check size={16} />
-							{/if}
-						</span>
-					{/snippet}
-				</Checkbox.Root>
-				<span>{$t('welcome.dontShowAgain')}</span>
-			</label>
+				<p class="lead">{$t('welcome.description')}</p>
 
-			<div class="modal-footer">
-				<div class="creator-credit">
-					Created by <span class="creator-name">Arda Korkmaz</span>
+				<div class="features-section">
+					<h2 class="section-heading">
+						<Lightbulb class="text-primary" size={20} />
+						{$t('welcome.features')}
+					</h2>
+					<ul>
+						<li>
+							<Check class="shrink-0 text-success" size={16} />
+							{$t('welcome.feature1')}
+						</li>
+						<li>
+							<Check class="shrink-0 text-success" size={16} />
+							{$t('welcome.feature2')}
+						</li>
+						<li>
+							<Check class="shrink-0 text-success" size={16} />
+							{$t('welcome.feature3')}
+						</li>
+						<li>
+							<Check class="shrink-0 text-success" size={16} />
+							{$t('welcome.feature4')}
+						</li>
+					</ul>
 				</div>
-				<div class="dialog-actions">
-					<Button.Root class="btn btn-primary" onclick={onClose}>
-						<ChevronRight size={18} />
-						{$t('welcome.getStarted')}
-					</Button.Root>
+
+				<!-- Latest Updates Section -->
+				<div class="updates-section">
+					<h2 class="section-heading">
+						<Info class="text-primary" size={20} />
+						{$t('welcome.updates.title')}
+					</h2>
+					<p class="updates-term">{$t('welcome.updates.term')}</p>
+					<ul>
+						<li>
+							<CircleCheck class="shrink-0 text-success" size={14} />
+							{$t('welcome.updates.items.springTermAdded')}
+						</li>
+					</ul>
+					<p class="updates-date">{$t('welcome.updates.addedOn')}</p>
 				</div>
-			</div>
-		</Dialog.Content>
-	</Dialog.Portal>
-</Dialog.Root>
+
+				<div class="notice-panel">
+					<div class="notice-icon">
+						<TriangleAlert size={24} />
+					</div>
+					<div class="notice-content">
+						<!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted, developer-authored i18n string -->
+						<p class="notice-text font-semibold">{@html $t('welcome.importantNotice')}</p>
+						<p class="notice-text">{$t('welcome.disclaimer')}</p>
+						<p class="notice-subtext">{$t('welcome.privacyNote')}</p>
+					</div>
+				</div>
+
+				<label class="checkbox-label">
+					<Checkbox.Root
+						checked={dontShowAgain}
+						onCheckedChange={onDontShowAgainChange}
+						class="checkbox-root"
+					>
+						{#snippet children({ checked })}
+							<span class="checkbox-box" class:checked>
+								{#if checked}
+									<Check size={16} />
+								{/if}
+							</span>
+						{/snippet}
+					</Checkbox.Root>
+					<span>{$t('welcome.dontShowAgain')}</span>
+				</label>
+
+				<div class="modal-footer">
+					<div class="creator-credit">
+						Created by <span class="creator-name">Arda Korkmaz</span>
+					</div>
+					<div class="dialog-actions">
+						<Button.Root class="btn btn-primary" onclick={onClose}>
+							<ChevronRight size={18} />
+							{$t('welcome.getStarted')}
+						</Button.Root>
+					</div>
+				</div>
+			</Dialog.Content>
+		</Dialog.Portal>
+	</Dialog.Root>
+</Tooltip.Provider>
 
 <style>
 	:global(.overlay) {

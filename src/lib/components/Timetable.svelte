@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { SvelteMap } from 'svelte/reactivity';
+	import { Tooltip } from 'bits-ui';
 	import { ChevronDown, ChevronLeft, ChevronRight, Clock, Lock } from '@lucide/svelte';
 	import type { BlockedHour, Schedule, SessionData } from '$lib/types';
 	import { t } from '$lib/i18n';
@@ -8,6 +9,7 @@
 	import { rangesOverlap, slotStringToRange } from '$lib/utils/time';
 	import { colorForCourse } from '$lib/utils/colors';
 	import { useMobile } from '$lib/utils/useMediaQuery.svelte';
+	import TooltipContent from '$lib/components/ui/TooltipContent.svelte';
 
 	let {
 		schedule,
@@ -287,264 +289,293 @@
 	};
 </script>
 
-<div class="timetable-container">
-	{#if !mounted}
-		<!-- SSR/Loading skeleton - matches expected height to prevent CLS -->
-		<div class="timetable-skeleton"></div>
-	{:else if !isMobile || downloadMode}
-		<!-- Desktop: Table view -->
-		<div class="timetable-scroll" {@attach bindScrollRef}>
-			<table class="timetable">
-				<thead>
-					<tr>
-						<th class="time-header">
-							<Clock class="mx-auto mb-1 block" size={18} />
-							<span>{$t('timetable.time')}</span>
-						</th>
-						{#each daysOfWeek as day (day)}
-							<th
-								class="day-header"
-								class:blocked={isDayBlocked(day)}
-								onclick={() => toggleDay(day)}
-								onkeydown={(event) => onActivate(event, () => toggleDay(day))}
-								role="button"
-								tabindex="0"
-								aria-pressed={isDayBlocked(day)}
-								title={$t('tooltips.blockUnblockDay')}
-							>
-								{$t(`timetable.days.${day}`)}
-							</th>
-						{/each}
-					</tr>
-				</thead>
-				<tbody>
-					{#each timeSlots as slot (slot)}
-						{@const rowExpanded = isAnyExpandedInSlot(slot)}
+<Tooltip.Provider delayDuration={350} skipDelayDuration={100}>
+	<div class="timetable-container">
+		{#if !mounted}
+			<!-- SSR/Loading skeleton - matches expected height to prevent CLS -->
+			<div class="timetable-skeleton"></div>
+		{:else if !isMobile || downloadMode}
+			<!-- Desktop: Table view -->
+			<div class="timetable-scroll" {@attach bindScrollRef}>
+				<table class="timetable">
+					<thead>
 						<tr>
-							<th
-								class="slot-header"
-								class:blocked={isSlotBlocked(slot)}
-								class:expanded={rowExpanded}
-								onclick={() => toggleSlot(slot)}
-								onkeydown={(event) => onActivate(event, () => toggleSlot(slot))}
-								role="button"
-								tabindex="0"
-								aria-pressed={isSlotBlocked(slot)}
-								title={$t('courseSelector.blockUnblockHour')}
-							>
-								<div class="slot-time">
-									<span>{slot.split('-')[0]}</span>
-									<span>{slot.split('-')[1]}</span>
-								</div>
+							<th class="time-header">
+								<Clock class="mx-auto mb-1 block" size={18} />
+								<span>{$t('timetable.time')}</span>
 							</th>
 							{#each daysOfWeek as day (day)}
-								{@const cellExpanded = isAnyExpandedInCell(day, slot)}
-								{@const blocked = isBlocked(day, slot)}
-								{@const groups = groupSessions(day, slot, grid[day][slot])}
-								{@const cellSummary = describeCellSessions(groups)}
-								{@const blockCellLabel = $t('courseSelector.blockUnblockCell', {
-									day: $t(`timetable.days.${day}`),
-									slot
-								})}
-								<td
-									class="cell"
-									class:blocked
-									class:expanded={cellExpanded}
-									onclick={() => toggleCell(day, slot)}
-									onkeydown={(event) => onActivate(event, () => toggleCell(day, slot))}
-									role="button"
-									tabindex="0"
-									aria-label={cellSummary ? `${cellSummary}. ${blockCellLabel}` : blockCellLabel}
-									aria-pressed={blocked}
-								>
-									<div class="cell-content" class:blocked>
-										{#if blocked && groups.length === 0}
-											<div class="blocked-indicator">
-												<Lock size={20} />
-											</div>
-										{/if}
-										{#each groups as g (g.key)}
-											{@const expanded = !!expandedGroups[g.key]}
-											{@const isGrouped = g.count > 1}
-											<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-											<div
-												class="session-card"
-												class:clickable={isGrouped}
-												style="background-color: {colorForCourse(g.course)}"
-												onclick={(e) => {
-													if (isGrouped) {
-														e.stopPropagation();
-														toggleGroup(g.key);
-													}
-												}}
-												role={isGrouped ? 'button' : undefined}
-												tabindex={isGrouped ? 0 : -1}
-												onkeydown={(e) => {
-													if (isGrouped && (e.key === 'Enter' || e.key === ' ')) {
-														e.preventDefault();
-														e.stopPropagation();
-														toggleGroup(g.key);
-													}
-												}}
+								<Tooltip.Root>
+									<Tooltip.Trigger>
+										{#snippet child({ props })}
+											<th
+												{...props}
+												class="day-header"
+												class:blocked={isDayBlocked(day)}
+												onclick={() => toggleDay(day)}
+												onkeydown={(event) => onActivate(event, () => toggleDay(day))}
+												role="button"
+												tabindex="0"
+												aria-pressed={isDayBlocked(day)}
 											>
-												<div class="session-header">
-													<span class="course-code">
-														{g.course}
-														{isGrouped ? '(*)' : `(${g.sections[0] ?? ''})`}
-													</span>
-													{#if isGrouped}
-														<button
-															class="expand-btn"
-															onclick={(e) => {
-																e.stopPropagation();
-																toggleGroup(g.key);
-															}}
-															aria-expanded={expanded}
-															aria-label={expanded ? $t('common.collapse') : $t('common.expand')}
-														>
-															<ChevronDown
-																size={16}
-																class="transition-transform {expanded ? 'rotate-180' : ''}"
-																aria-hidden="true"
-															/>
-														</button>
-													{/if}
-												</div>
-												<!-- Detail spans are aria-hidden: their info is folded into the
-												     cell's aria-label, so the cell's accessible name matches its
-												     visible course text (WCAG 2.5.3). -->
-												<span class="time-range" aria-hidden="true">{g.start} - {g.end}</span>
-												{#if !isGrouped && g.classrooms[0]}
-													<span class="classroom" aria-hidden="true">{g.classrooms[0]}</span>
-												{/if}
-												{#if isGrouped}
-													<span class="section-count" aria-hidden="true"
-														>{g.count} {$t('timetable.sectionOptions', { count: g.count })}</span
-													>
-												{/if}
-												{#if isGrouped && expanded}
-													<div class="expanded-sections" aria-hidden="true">
-														{#each g.items as s, i (`${g.key}-${i}`)}
-															<span class="section-detail">{s.section} - {s.Classroom || '-'}</span>
-														{/each}
-													</div>
-												{/if}
-											</div>
-										{/each}
-									</div>
-								</td>
+												{$t(`timetable.days.${day}`)}
+											</th>
+										{/snippet}
+									</Tooltip.Trigger>
+									<TooltipContent label={$t('tooltips.blockUnblockDay')} />
+								</Tooltip.Root>
 							{/each}
 						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
-	{:else}
-		<!-- Mobile: single-day view + swipe navigation -->
-		<div
-			class="mobile-view"
-			role="group"
-			aria-label={$t('courseSelector.schedule')}
-			ontouchstart={onDayTouchStart}
-			ontouchmove={onDayTouchMove}
-			ontouchend={onDayTouchEnd}
-		>
-			{#if !activeDay}
-				<div class="mobile-empty">-</div>
-			{:else}
-				<div class="day-card">
-					<div class="day-nav-bar" class:blocked={isDayBlocked(activeDay)}>
-						<button
-							class="day-nav-btn"
-							type="button"
-							disabled={clampedDayIndex === 0}
-							onclick={prevDay}
-							aria-label={$t('pagination.previous')}
-						>
-							<ChevronLeft size={20} aria-hidden="true" />
-						</button>
-						<!-- No aria-label: the accessible name is the visible content
-						     (day + position + "Block/Unblock all"), so it matches what a
-						     speech-input user says (WCAG 2.5.3); aria-pressed conveys state. -->
-						<button
-							class="day-nav-center"
-							type="button"
-							onclick={() => toggleDay(activeDay)}
-							aria-pressed={isDayBlocked(activeDay)}
-						>
-							<span class="day-nav-title">{$t(`timetable.days.${activeDay}`)}</span>
-							<span class="day-nav-meta">
-								<span class="day-nav-count">{clampedDayIndex + 1} / {daysOfWeek.length}</span>
-								<span class="day-action">
-									{isDayBlocked(activeDay)
-										? $t('courseSelector.unblockDay')
-										: $t('courseSelector.blockDay')}
-								</span>
-							</span>
-						</button>
-						<button
-							class="day-nav-btn"
-							type="button"
-							disabled={clampedDayIndex >= daysOfWeek.length - 1}
-							onclick={nextDay}
-							aria-label={$t('pagination.next')}
-						>
-							<ChevronRight size={20} aria-hidden="true" />
-						</button>
-					</div>
-					<div class="day-slots">
+					</thead>
+					<tbody>
 						{#each timeSlots as slot (slot)}
-							{@const blocked = isBlocked(activeDay, slot)}
-							{@const groups = groupSessions(activeDay, slot, grid[activeDay][slot])}
-							<button
-								class="slot-row"
-								class:blocked
-								onclick={() => toggleCell(activeDay, slot)}
-								aria-pressed={blocked}
-							>
-								<div class="slot-time-mobile">
-									<span>{slot.split('-')[0]}</span>
-									<span>{slot.split('-')[1]}</span>
-								</div>
-								<div class="slot-content">
-									{#if groups.length === 0}
-										{#if blocked}
-											<span class="empty-blocked">
-												<Lock size={16} />
-											</span>
-										{:else}
-											<span class="empty-slot">-</span>
-										{/if}
-									{:else}
-										<div class="chips-container">
+							{@const rowExpanded = isAnyExpandedInSlot(slot)}
+							<tr>
+								<Tooltip.Root>
+									<Tooltip.Trigger>
+										{#snippet child({ props })}
+											<th
+												{...props}
+												class="slot-header"
+												class:blocked={isSlotBlocked(slot)}
+												class:expanded={rowExpanded}
+												onclick={() => toggleSlot(slot)}
+												onkeydown={(event) => onActivate(event, () => toggleSlot(slot))}
+												role="button"
+												tabindex="0"
+												aria-pressed={isSlotBlocked(slot)}
+											>
+												<div class="slot-time">
+													<span>{slot.split('-')[0]}</span>
+													<span>{slot.split('-')[1]}</span>
+												</div>
+											</th>
+										{/snippet}
+									</Tooltip.Trigger>
+									<TooltipContent label={$t('courseSelector.blockUnblockHour')} />
+								</Tooltip.Root>
+								{#each daysOfWeek as day (day)}
+									{@const cellExpanded = isAnyExpandedInCell(day, slot)}
+									{@const blocked = isBlocked(day, slot)}
+									{@const groups = groupSessions(day, slot, grid[day][slot])}
+									{@const cellSummary = describeCellSessions(groups)}
+									{@const blockCellLabel = $t('courseSelector.blockUnblockCell', {
+										day: $t(`timetable.days.${day}`),
+										slot
+									})}
+									<td
+										class="cell"
+										class:blocked
+										class:expanded={cellExpanded}
+										onclick={() => toggleCell(day, slot)}
+										onkeydown={(event) => onActivate(event, () => toggleCell(day, slot))}
+										role="button"
+										tabindex="0"
+										aria-label={cellSummary ? `${cellSummary}. ${blockCellLabel}` : blockCellLabel}
+										aria-pressed={blocked}
+									>
+										<div class="cell-content" class:blocked>
+											{#if blocked && groups.length === 0}
+												<div class="blocked-indicator">
+													<Lock size={20} />
+												</div>
+											{/if}
 											{#each groups as g (g.key)}
+												{@const expanded = !!expandedGroups[g.key]}
 												{@const isGrouped = g.count > 1}
-												<span
-													class="course-chip"
+												<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+												<div
+													class="session-card"
+													class:clickable={isGrouped}
 													style="background-color: {colorForCourse(g.course)}"
+													onclick={(e) => {
+														if (isGrouped) {
+															e.stopPropagation();
+															toggleGroup(g.key);
+														}
+													}}
+													role={isGrouped ? 'button' : undefined}
+													tabindex={isGrouped ? 0 : -1}
+													onkeydown={(e) => {
+														if (isGrouped && (e.key === 'Enter' || e.key === ' ')) {
+															e.preventDefault();
+															e.stopPropagation();
+															toggleGroup(g.key);
+														}
+													}}
 												>
-													{isGrouped ? `${g.course} (*)` : `${g.course} (${g.sections[0] ?? ''})`}
-													{#if g.classrooms[0] && !isGrouped}
-														<span class="chip-classroom">{g.classrooms[0]}</span>
+													<div class="session-header">
+														<span class="course-code">
+															{g.course}
+															{isGrouped ? '(*)' : `(${g.sections[0] ?? ''})`}
+														</span>
+														{#if isGrouped}
+															<Tooltip.Root>
+																<Tooltip.Trigger
+																	class="expand-btn"
+																	onclick={(e) => {
+																		e.stopPropagation();
+																		toggleGroup(g.key);
+																	}}
+																	aria-expanded={expanded}
+																	aria-label={expanded
+																		? $t('common.collapse')
+																		: $t('common.expand')}
+																>
+																	<ChevronDown
+																		size={16}
+																		class="transition-transform {expanded ? 'rotate-180' : ''}"
+																		aria-hidden="true"
+																	/>
+																</Tooltip.Trigger>
+																<TooltipContent
+																	label={expanded ? $t('common.collapse') : $t('common.expand')}
+																/>
+															</Tooltip.Root>
+														{/if}
+													</div>
+													<!-- Detail spans are aria-hidden: their info is folded into the
+												     cell's aria-label, so the cell's accessible name matches its
+												     visible course text (WCAG 2.5.3). -->
+													<span class="time-range" aria-hidden="true">{g.start} - {g.end}</span>
+													{#if !isGrouped && g.classrooms[0]}
+														<span class="classroom" aria-hidden="true">{g.classrooms[0]}</span>
 													{/if}
-												</span>
+													{#if isGrouped}
+														<span class="section-count" aria-hidden="true"
+															>{g.count} {$t('timetable.sectionOptions', { count: g.count })}</span
+														>
+													{/if}
+													{#if isGrouped && expanded}
+														<div class="expanded-sections" aria-hidden="true">
+															{#each g.items as s, i (`${g.key}-${i}`)}
+																<span class="section-detail"
+																	>{s.section} - {s.Classroom || '-'}</span
+																>
+															{/each}
+														</div>
+													{/if}
+												</div>
 											{/each}
 										</div>
-									{/if}
-								</div>
-								{#if blocked && groups.length > 0}
-									<div class="blocked-badge">
-										<Lock size={16} />
-									</div>
-								{/if}
-							</button>
+									</td>
+								{/each}
+							</tr>
 						{/each}
+					</tbody>
+				</table>
+			</div>
+		{:else}
+			<!-- Mobile: single-day view + swipe navigation -->
+			<div
+				class="mobile-view"
+				role="group"
+				aria-label={$t('courseSelector.schedule')}
+				ontouchstart={onDayTouchStart}
+				ontouchmove={onDayTouchMove}
+				ontouchend={onDayTouchEnd}
+			>
+				{#if !activeDay}
+					<div class="mobile-empty">-</div>
+				{:else}
+					<div class="day-card">
+						<div class="day-nav-bar" class:blocked={isDayBlocked(activeDay)}>
+							<Tooltip.Root>
+								<Tooltip.Trigger
+									class="day-nav-btn"
+									disabled={clampedDayIndex === 0}
+									onclick={prevDay}
+									aria-label={$t('pagination.previous')}
+								>
+									<ChevronLeft size={20} aria-hidden="true" />
+								</Tooltip.Trigger>
+								<TooltipContent label={$t('pagination.previous')} />
+							</Tooltip.Root>
+							<!-- No aria-label: the accessible name is the visible content
+						     (day + position + "Block/Unblock all"), so it matches what a
+						     speech-input user says (WCAG 2.5.3); aria-pressed conveys state. -->
+							<button
+								class="day-nav-center"
+								type="button"
+								onclick={() => toggleDay(activeDay)}
+								aria-pressed={isDayBlocked(activeDay)}
+							>
+								<span class="day-nav-title">{$t(`timetable.days.${activeDay}`)}</span>
+								<span class="day-nav-meta">
+									<span class="day-nav-count">{clampedDayIndex + 1} / {daysOfWeek.length}</span>
+									<span class="day-action">
+										{isDayBlocked(activeDay)
+											? $t('courseSelector.unblockDay')
+											: $t('courseSelector.blockDay')}
+									</span>
+								</span>
+							</button>
+							<Tooltip.Root>
+								<Tooltip.Trigger
+									class="day-nav-btn"
+									disabled={clampedDayIndex >= daysOfWeek.length - 1}
+									onclick={nextDay}
+									aria-label={$t('pagination.next')}
+								>
+									<ChevronRight size={20} aria-hidden="true" />
+								</Tooltip.Trigger>
+								<TooltipContent label={$t('pagination.next')} />
+							</Tooltip.Root>
+						</div>
+						<div class="day-slots">
+							{#each timeSlots as slot (slot)}
+								{@const blocked = isBlocked(activeDay, slot)}
+								{@const groups = groupSessions(activeDay, slot, grid[activeDay][slot])}
+								<button
+									class="slot-row"
+									class:blocked
+									onclick={() => toggleCell(activeDay, slot)}
+									aria-pressed={blocked}
+								>
+									<div class="slot-time-mobile">
+										<span>{slot.split('-')[0]}</span>
+										<span>{slot.split('-')[1]}</span>
+									</div>
+									<div class="slot-content">
+										{#if groups.length === 0}
+											{#if blocked}
+												<span class="empty-blocked">
+													<Lock size={16} />
+												</span>
+											{:else}
+												<span class="empty-slot">-</span>
+											{/if}
+										{:else}
+											<div class="chips-container">
+												{#each groups as g (g.key)}
+													{@const isGrouped = g.count > 1}
+													<span
+														class="course-chip"
+														style="background-color: {colorForCourse(g.course)}"
+													>
+														{isGrouped ? `${g.course} (*)` : `${g.course} (${g.sections[0] ?? ''})`}
+														{#if g.classrooms[0] && !isGrouped}
+															<span class="chip-classroom">{g.classrooms[0]}</span>
+														{/if}
+													</span>
+												{/each}
+											</div>
+										{/if}
+									</div>
+									{#if blocked && groups.length > 0}
+										<div class="blocked-badge">
+											<Lock size={16} />
+										</div>
+									{/if}
+								</button>
+							{/each}
+						</div>
 					</div>
-				</div>
-			{/if}
-		</div>
-	{/if}
-</div>
+				{/if}
+			</div>
+		{/if}
+	</div>
+</Tooltip.Provider>
 
 <style>
 	.timetable-container {
@@ -772,7 +803,7 @@
 		text-overflow: ellipsis;
 	}
 
-	.expand-btn {
+	:global(.expand-btn) {
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -785,7 +816,7 @@
 		transition: var(--transition-fast);
 	}
 
-	.expand-btn:hover {
+	:global(.expand-btn:hover) {
 		background: rgba(255, 255, 255, 0.2);
 	}
 
@@ -856,7 +887,7 @@
 		background: var(--neutral-800);
 	}
 
-	.day-nav-btn {
+	:global(.day-nav-btn) {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -871,11 +902,11 @@
 		flex-shrink: 0;
 	}
 
-	.day-nav-btn:hover:not(:disabled) {
+	:global(.day-nav-btn:hover:not(:disabled)) {
 		background: rgba(255, 255, 255, 0.22);
 	}
 
-	.day-nav-btn:disabled {
+	:global(.day-nav-btn:disabled) {
 		opacity: 0.45;
 		cursor: not-allowed;
 	}

@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { Button, Dialog } from 'bits-ui';
+	import { Button, Dialog, Tooltip } from 'bits-ui';
 	import { CircleAlert, Info, Save, X } from '@lucide/svelte';
 	import { watch } from '$lib/utils/reactivity.svelte';
 	import { t } from '$lib/i18n';
 	import type { BlockedHour, ScheduleData } from '$lib/types';
 	import { checkStorageAvailability, saveSchedule } from '$lib/storage/savedSchedules';
 	import { translateTerm } from '$lib/utils/term';
+	import TooltipContent from '$lib/components/ui/TooltipContent.svelte';
 
 	let {
 		open = false,
@@ -89,72 +90,81 @@
 	};
 </script>
 
-<Dialog.Root {open} onOpenChange={(value) => (!value ? onClose?.() : null)}>
-	<Dialog.Portal>
-		<Dialog.Overlay class="overlay" />
-		<Dialog.Content class="dialog">
-			<div class="dialog-header">
-				<Dialog.Title class="dialog-title">
-					<Save class="text-primary" size={24} />
-					{$t('savedSchedules.saveSchedule')}
-				</Dialog.Title>
-				<Dialog.Close class="close-btn" aria-label={$t('common.close')}>
-					<X size={24} />
-				</Dialog.Close>
-			</div>
-
-			{#if storageError}
-				<div class="alert error">
-					<CircleAlert size={20} />
-					<span>{$t('savedSchedules.storageError')}: {storageError}</span>
+<Tooltip.Provider delayDuration={350} skipDelayDuration={100}>
+	<Dialog.Root {open} onOpenChange={(value) => (!value ? onClose?.() : null)}>
+		<Dialog.Portal>
+			<Dialog.Overlay class="overlay" />
+			<Dialog.Content class="dialog">
+				<div class="dialog-header">
+					<Dialog.Title class="dialog-title">
+						<Save class="text-primary" size={24} />
+						{$t('savedSchedules.saveSchedule')}
+					</Dialog.Title>
+					<Tooltip.Root>
+						<Dialog.Close>
+							{#snippet child({ props })}
+								<Tooltip.Trigger {...props} class="close-btn" aria-label={$t('common.close')}>
+									<X size={24} />
+								</Tooltip.Trigger>
+							{/snippet}
+						</Dialog.Close>
+						<TooltipContent label={$t('common.close')} />
+					</Tooltip.Root>
 				</div>
-			{/if}
 
-			<label class="field">
-				<span class="field-label">{$t('savedSchedules.scheduleName')}</span>
-				<input type="text" bind:value={name} placeholder={$t('savedSchedules.scheduleName')} />
-			</label>
+				{#if storageError}
+					<div class="alert error">
+						<CircleAlert size={20} />
+						<span>{$t('savedSchedules.storageError')}: {storageError}</span>
+					</div>
+				{/if}
 
-			<div class="details-card">
-				<h4>
-					<Info class="text-primary" size={18} />
-					{$t('savedSchedules.scheduleDetails')}
-				</h4>
-				<div class="details-grid">
-					<div class="detail-item">
-						<span class="detail-label">{$t('savedSchedules.term')}</span>
-						<span class="detail-value">{translateTerm(term, $t)}</span>
-					</div>
-					<div class="detail-item">
-						<span class="detail-label">{$t('savedSchedules.courses')}</span>
-						<span class="detail-value"
-							>{selectedCourses.length} {$t('savedSchedules.coursesSelected')}</span
-						>
-					</div>
-					<div class="detail-item">
-						<span class="detail-label">{$t('courseSelector.schedule')}</span>
-						<span class="detail-value">#{activeScheduleIndex + 1}</span>
+				<label class="field">
+					<span class="field-label">{$t('savedSchedules.scheduleName')}</span>
+					<input type="text" bind:value={name} placeholder={$t('savedSchedules.scheduleName')} />
+				</label>
+
+				<div class="details-card">
+					<h4>
+						<Info class="text-primary" size={18} />
+						{$t('savedSchedules.scheduleDetails')}
+					</h4>
+					<div class="details-grid">
+						<div class="detail-item">
+							<span class="detail-label">{$t('savedSchedules.term')}</span>
+							<span class="detail-value">{translateTerm(term, $t)}</span>
+						</div>
+						<div class="detail-item">
+							<span class="detail-label">{$t('savedSchedules.courses')}</span>
+							<span class="detail-value"
+								>{selectedCourses.length} {$t('savedSchedules.coursesSelected')}</span
+							>
+						</div>
+						<div class="detail-item">
+							<span class="detail-label">{$t('courseSelector.schedule')}</span>
+							<span class="detail-value">#{activeScheduleIndex + 1}</span>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			{#if error}
-				<div class="alert error">
-					<CircleAlert size={20} />
-					<span>{error}</span>
+				{#if error}
+					<div class="alert error">
+						<CircleAlert size={20} />
+						<span>{error}</span>
+					</div>
+				{/if}
+
+				<div class="dialog-actions">
+					<Button.Root class="btn btn-ghost" onclick={onClose}>{$t('common.cancel')}</Button.Root>
+					<Button.Root class="btn btn-primary" disabled={saving} onclick={handleSave}>
+						<Save size={18} />
+						{saving ? $t('savedSchedules.saving') : $t('savedSchedules.save')}
+					</Button.Root>
 				</div>
-			{/if}
-
-			<div class="dialog-actions">
-				<Button.Root class="btn btn-ghost" onclick={onClose}>{$t('common.cancel')}</Button.Root>
-				<Button.Root class="btn btn-primary" disabled={saving} onclick={handleSave}>
-					<Save size={18} />
-					{saving ? $t('savedSchedules.saving') : $t('savedSchedules.save')}
-				</Button.Root>
-			</div>
-		</Dialog.Content>
-	</Dialog.Portal>
-</Dialog.Root>
+			</Dialog.Content>
+		</Dialog.Portal>
+	</Dialog.Root>
+</Tooltip.Provider>
 
 <style>
 	:global(.overlay) {

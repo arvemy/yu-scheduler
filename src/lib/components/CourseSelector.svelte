@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, Popover } from 'bits-ui';
+	import { Button, Popover, Tooltip } from 'bits-ui';
 	import {
 		ChevronDown,
 		ChevronLeft,
@@ -28,6 +28,7 @@
 	import { devWarn } from '$lib/utils/logger';
 	import { translateWarnings } from '$lib/utils/warnings';
 	import { SWIPE_THRESHOLD_PX } from '$lib/config/ui';
+	import TooltipContent from '$lib/components/ui/TooltipContent.svelte';
 	import {
 		parseStoredJson,
 		storeJson,
@@ -808,519 +809,532 @@
 	);
 </script>
 
-<section class="course-selector">
-	{#if isMobile}
-		<div class="mobile-tab-switcher" role="tablist" aria-label="Course selector">
-			<button
-				id="mobile-tab-courses"
-				type="button"
-				class="mobile-tab"
-				role="tab"
-				aria-selected={mobileTab === 'courses'}
-				tabindex={mobileTab === 'courses' ? 0 : -1}
-				onclick={() => setMobileTab('courses')}
-			>
-				{$t('savedSchedules.courses')}
-			</button>
-			<button
-				id="mobile-tab-schedule"
-				type="button"
-				class="mobile-tab"
-				role="tab"
-				aria-selected={mobileTab === 'schedule'}
-				tabindex={mobileTab === 'schedule' ? 0 : -1}
-				onclick={() => setMobileTab('schedule')}
-			>
-				{$t('courseSelector.schedule')}
-			</button>
-		</div>
-	{/if}
-
-	{#if !isMobile || mobileTab === 'courses'}
-		<div
-			class="course-form"
-			role={isMobile ? 'tabpanel' : undefined}
-			aria-labelledby={isMobile ? 'mobile-tab-courses' : undefined}
-		>
-			<!-- Search Field -->
-			<div class="search-box" {@attach searchBoxAttachment}>
-				<div class="search-field">
-					<Search class="pointer-events-none absolute left-3 text-ink-muted" size={20} />
-					<input
-						id="course-search"
-						name="course-search"
-						type="text"
-						placeholder={$t('courseSelector.typeToSearch')}
-						aria-label={$t('courseSelector.typeToSearch')}
-						bind:value={searchInput}
-						role="combobox"
-						aria-autocomplete="list"
-						aria-haspopup="listbox"
-						aria-controls="course-search-listbox"
-						aria-expanded={searchDropdownOpen && searchInput.trim().length > 0}
-						aria-activedescendant={searchHighlightIndex >= 0
-							? `course-search-option-${searchHighlightIndex}`
-							: undefined}
-						onfocus={() => {
-							searchDropdownOpen = searchInput.trim().length > 0;
-						}}
-						oninput={(event) => {
-							searchHighlightIndex = -1;
-							const value = (event.currentTarget as HTMLInputElement).value;
-							searchDropdownOpen = value.trim().length > 0;
-						}}
-						onkeydown={onSearchKeyDown}
-					/>
-				</div>
-
-				{#if searchDropdownOpen && searchInput.trim().length > 0}
-					<div class="search-results" role="listbox" id="course-search-listbox">
-						{#if searchResults.length === 0}
-							<div class="search-empty">{$t('courseSelector.noResults')}</div>
-						{:else}
-							{#each searchResults as result, index (`${result.course}|${result.group}`)}
-								{@const isSelected = selectedCourses.includes(result.course)}
-								<button
-									type="button"
-									class="search-result {index === searchHighlightIndex ? 'active' : ''}"
-									role="option"
-									aria-selected={index === searchHighlightIndex}
-									disabled={isSelected}
-									id={`course-search-option-${index}`}
-									onclick={() => selectCourseFromSearch(result.course)}
-								>
-									<span class="result-course">{result.course}</span>
-									<span class="result-meta">{result.group}</span>
-								</button>
-							{/each}
-						{/if}
-					</div>
-				{/if}
+<Tooltip.Provider delayDuration={350} skipDelayDuration={100}>
+	<section class="course-selector">
+		{#if isMobile}
+			<div class="mobile-tab-switcher" role="tablist" aria-label="Course selector">
+				<button
+					id="mobile-tab-courses"
+					type="button"
+					class="mobile-tab"
+					role="tab"
+					aria-selected={mobileTab === 'courses'}
+					tabindex={mobileTab === 'courses' ? 0 : -1}
+					onclick={() => setMobileTab('courses')}
+				>
+					{$t('savedSchedules.courses')}
+				</button>
+				<button
+					id="mobile-tab-schedule"
+					type="button"
+					class="mobile-tab"
+					role="tab"
+					aria-selected={mobileTab === 'schedule'}
+					tabindex={mobileTab === 'schedule' ? 0 : -1}
+					onclick={() => setMobileTab('schedule')}
+				>
+					{$t('courseSelector.schedule')}
+				</button>
 			</div>
+		{/if}
 
-			{#if actionMessage}
-				<div class="alert {actionTone}">
-					{#if actionTone === 'error'}
-						<CircleAlert size={20} />
-					{:else}
-						<CircleCheck size={20} />
-					{/if}
-					<span>{actionMessage}</span>
-				</div>
-			{/if}
-
-			<!-- Course Groups + Selected Courses -->
-			<div class="course-groups-container">
-				{#if coursesError}
-					<div class="alert error">
-						<CircleAlert size={20} />
-						<span>{coursesError}</span>
+		{#if !isMobile || mobileTab === 'courses'}
+			<div
+				class="course-form"
+				role={isMobile ? 'tabpanel' : undefined}
+				aria-labelledby={isMobile ? 'mobile-tab-courses' : undefined}
+			>
+				<!-- Search Field -->
+				<div class="search-box" {@attach searchBoxAttachment}>
+					<div class="search-field">
+						<Search class="pointer-events-none absolute left-3 text-ink-muted" size={20} />
+						<input
+							id="course-search"
+							name="course-search"
+							type="text"
+							placeholder={$t('courseSelector.typeToSearch')}
+							aria-label={$t('courseSelector.typeToSearch')}
+							bind:value={searchInput}
+							role="combobox"
+							aria-autocomplete="list"
+							aria-haspopup="listbox"
+							aria-controls="course-search-listbox"
+							aria-expanded={searchDropdownOpen && searchInput.trim().length > 0}
+							aria-activedescendant={searchHighlightIndex >= 0
+								? `course-search-option-${searchHighlightIndex}`
+								: undefined}
+							onfocus={() => {
+								searchDropdownOpen = searchInput.trim().length > 0;
+							}}
+							oninput={(event) => {
+								searchHighlightIndex = -1;
+								const value = (event.currentTarget as HTMLInputElement).value;
+								searchDropdownOpen = value.trim().length > 0;
+							}}
+							onkeydown={onSearchKeyDown}
+						/>
 					</div>
-				{:else}
-					<div class="groups-toolbar">
-						<div class="groups-toolbar-header">
-							<h2 class="section-label">{$t('courseSelector.courseGroups')}</h2>
-						</div>
-					</div>
 
-					{#if groupsExpanded}
-						<div class="groups-accordion" id="course-groups-accordion">
-							{#if loading}
-								<div class="loading-state">
-									<div class="skeleton-grid">
-										{#each Array(10) as _, i (i)}
-											<div class="skeleton chip"></div>
-										{/each}
-									</div>
-								</div>
+					{#if searchDropdownOpen && searchInput.trim().length > 0}
+						<div class="search-results" role="listbox" id="course-search-listbox">
+							{#if searchResults.length === 0}
+								<div class="search-empty">{$t('courseSelector.noResults')}</div>
 							{:else}
-								<div class="group-chips">
-									{#each filteredGroups as group (group.group)}
-										{@const isOpen = openGroup === group.group}
-										<Popover.Root
-											open={isOpen}
-											onOpenChange={(open) => {
-												openGroup = open ? group.group : null;
-											}}
-										>
-											<Popover.Trigger
-												class="group-chip {isOpen ? 'active' : ''}"
-												aria-label={$t('courseSelector.showCourses', {
-													group: group.group
-												})}
-												aria-expanded={isOpen}
-											>
-												<span class="group-name">{group.group}</span>
-												<ChevronRight
-													size={16}
-													class="transition-transform {isOpen ? 'rotate-90' : ''}"
-													aria-hidden="true"
-												/>
-											</Popover.Trigger>
-											<Popover.Portal>
-												<Popover.Content class="group-dropdown" sideOffset={4} align="start">
-													<div class="dropdown-list" role="listbox" aria-label={group.group}>
-														{#each group.courses as course (course)}
-															<button
-																type="button"
-																class="dropdown-item {selectedCourses.includes(course)
-																	? 'selected'
-																	: ''}"
-																onclick={() => toggleCourse(course)}
-																role="option"
-																aria-selected={selectedCourses.includes(course)}
-															>
-																{course}
-															</button>
-														{/each}
-													</div>
-												</Popover.Content>
-											</Popover.Portal>
-										</Popover.Root>
-									{/each}
-								</div>
+								{#each searchResults as result, index (`${result.course}|${result.group}`)}
+									{@const isSelected = selectedCourses.includes(result.course)}
+									<button
+										type="button"
+										class="search-result {index === searchHighlightIndex ? 'active' : ''}"
+										role="option"
+										aria-selected={index === searchHighlightIndex}
+										disabled={isSelected}
+										id={`course-search-option-${index}`}
+										onclick={() => selectCourseFromSearch(result.course)}
+									>
+										<span class="result-course">{result.course}</span>
+										<span class="result-meta">{result.group}</span>
+									</button>
+								{/each}
 							{/if}
 						</div>
 					{/if}
+				</div>
 
-					<!-- Selected Courses -->
-					{#if selectedCourses.length > 0}
-						<div class="selected-section">
-							<div class="selected-header">
-								<h2 class="section-label">
-									{$t('courseSelector.selectedCourses')} ({selectedCourses.length})
-								</h2>
-								<button
-									type="button"
-									class="clear-all-btn"
-									onclick={() => (selectedCourses = [])}
-									aria-label={$t('tooltips.clearAll')}
-									title={$t('tooltips.clearAll')}
-								>
-									<X size={16} />
-									{$t('courseSelector.clearAll')}
-								</button>
+				{#if actionMessage}
+					<div class="alert {actionTone}">
+						{#if actionTone === 'error'}
+							<CircleAlert size={20} />
+						{:else}
+							<CircleCheck size={20} />
+						{/if}
+						<span>{actionMessage}</span>
+					</div>
+				{/if}
+
+				<!-- Course Groups + Selected Courses -->
+				<div class="course-groups-container">
+					{#if coursesError}
+						<div class="alert error">
+							<CircleAlert size={20} />
+							<span>{coursesError}</span>
+						</div>
+					{:else}
+						<div class="groups-toolbar">
+							<div class="groups-toolbar-header">
+								<h2 class="section-label">{$t('courseSelector.courseGroups')}</h2>
 							</div>
-							<div class="selected-chips">
-								{#each selectedCourses as course, index (course)}
-									{@const courseSections = sections[course]}
-									{@const hasMultipleSections = (courseSections?.length ?? 0) > 1}
-									{@const isLastCourse = index === selectedCourses.length - 1}
-									{@const isOrConnected = orConnections[course] ?? false}
-									<div class="selected-chip">
-										<span class="chip-label">{course}</span>
+						</div>
 
-										{#if hasMultipleSections}
-											<select
-												class="chip-section-select"
-												name={`section-${course}`}
-												aria-label={$t('courseSelector.sectionSelectAriaLabel', { course })}
-												value={sectionChoices[course] ?? ''}
-												onchange={(event) => {
-													const value = (event.currentTarget as HTMLSelectElement).value;
-													// Reassign to ensure watchers see a new reference
-													// (the schedule generator watches `sectionChoices` as a whole)
-													if (!value) {
-														if (course in sectionChoices) {
-															const { [course]: _ignored, ...rest } = sectionChoices;
-															sectionChoices = rest;
-														}
-														return;
-													}
-
-													sectionChoices = {
-														...sectionChoices,
-														[course]: value
-													};
+						{#if groupsExpanded}
+							<div class="groups-accordion" id="course-groups-accordion">
+								{#if loading}
+									<div class="loading-state">
+										<div class="skeleton-grid">
+											{#each Array(10) as _, i (i)}
+												<div class="skeleton chip"></div>
+											{/each}
+										</div>
+									</div>
+								{:else}
+									<div class="group-chips">
+										{#each filteredGroups as group (group.group)}
+											{@const isOpen = openGroup === group.group}
+											<Popover.Root
+												open={isOpen}
+												onOpenChange={(open) => {
+													openGroup = open ? group.group : null;
 												}}
 											>
-												<option value="">{$t('courseSelector.any')}</option>
-												{#each courseSections as sectionId (sectionId)}
-													<option value={sectionId}>{sectionId}</option>
-												{/each}
-											</select>
-										{/if}
-
-										<button
-											type="button"
-											class="chip-remove group"
-											onclick={() => toggleCourse(course)}
-											aria-label={$t('courseSelector.removeCourse', { course })}
-											title={$t('courseSelector.removeCourse', { course })}
-										>
-											<X
-												class="shrink-0 opacity-70 transition-colors group-hover:text-error"
-												size={16}
-												aria-hidden="true"
-											/>
-										</button>
+												<Popover.Trigger
+													class="group-chip {isOpen ? 'active' : ''}"
+													aria-label={$t('courseSelector.showCourses', {
+														group: group.group
+													})}
+													aria-expanded={isOpen}
+												>
+													<span class="group-name">{group.group}</span>
+													<ChevronRight
+														size={16}
+														class="transition-transform {isOpen ? 'rotate-90' : ''}"
+														aria-hidden="true"
+													/>
+												</Popover.Trigger>
+												<Popover.Portal>
+													<Popover.Content class="group-dropdown" sideOffset={4} align="start">
+														<div class="dropdown-list" role="listbox" aria-label={group.group}>
+															{#each group.courses as course (course)}
+																<button
+																	type="button"
+																	class="dropdown-item {selectedCourses.includes(course)
+																		? 'selected'
+																		: ''}"
+																	onclick={() => toggleCourse(course)}
+																	role="option"
+																	aria-selected={selectedCourses.includes(course)}
+																>
+																	{course}
+																</button>
+															{/each}
+														</div>
+													</Popover.Content>
+												</Popover.Portal>
+											</Popover.Root>
+										{/each}
 									</div>
-
-									<!-- AND/OR Connector Toggle (between courses) -->
-									{#if !isLastCourse}
-										<button
-											type="button"
-											class="connector-toggle {isOrConnected ? 'or-active' : ''}"
-											onclick={() => {
-												if (isOrConnected) {
-													const { [course]: _, ...rest } = orConnections;
-													orConnections = rest;
-												} else {
-													orConnections = {
-														...orConnections,
-														[course]: true
-													};
-												}
-											}}
-											aria-label={isOrConnected
-												? $t('courseSelector.connector.or')
-												: $t('courseSelector.connector.and')}
-											title={isOrConnected
-												? $t('courseSelector.connector.or')
-												: $t('courseSelector.connector.and')}
-										>
-											{isOrConnected
-												? $t('courseSelector.connector.or')
-												: $t('courseSelector.connector.and')}
-										</button>
-									{/if}
-								{/each}
+								{/if}
 							</div>
+						{/if}
+
+						<!-- Selected Courses -->
+						{#if selectedCourses.length > 0}
+							<div class="selected-section">
+								<div class="selected-header">
+									<h2 class="section-label">
+										{$t('courseSelector.selectedCourses')} ({selectedCourses.length})
+									</h2>
+									<Tooltip.Root>
+										<Tooltip.Trigger
+											class="clear-all-btn"
+											onclick={() => (selectedCourses = [])}
+											aria-label={$t('tooltips.clearAll')}
+										>
+											<X size={16} />
+											{$t('courseSelector.clearAll')}
+										</Tooltip.Trigger>
+										<TooltipContent label={$t('tooltips.clearAll')} />
+									</Tooltip.Root>
+								</div>
+								<div class="selected-chips">
+									{#each selectedCourses as course, index (course)}
+										{@const courseSections = sections[course]}
+										{@const hasMultipleSections = (courseSections?.length ?? 0) > 1}
+										{@const isLastCourse = index === selectedCourses.length - 1}
+										{@const isOrConnected = orConnections[course] ?? false}
+										<div class="selected-chip">
+											<span class="chip-label">{course}</span>
+
+											{#if hasMultipleSections}
+												<select
+													class="chip-section-select"
+													name={`section-${course}`}
+													aria-label={$t('courseSelector.sectionSelectAriaLabel', { course })}
+													value={sectionChoices[course] ?? ''}
+													onchange={(event) => {
+														const value = (event.currentTarget as HTMLSelectElement).value;
+														// Reassign to ensure watchers see a new reference
+														// (the schedule generator watches `sectionChoices` as a whole)
+														if (!value) {
+															if (course in sectionChoices) {
+																const { [course]: _ignored, ...rest } = sectionChoices;
+																sectionChoices = rest;
+															}
+															return;
+														}
+
+														sectionChoices = {
+															...sectionChoices,
+															[course]: value
+														};
+													}}
+												>
+													<option value="">{$t('courseSelector.any')}</option>
+													{#each courseSections as sectionId (sectionId)}
+														<option value={sectionId}>{sectionId}</option>
+													{/each}
+												</select>
+											{/if}
+
+											<Tooltip.Root>
+												<Tooltip.Trigger
+													class="chip-remove group"
+													onclick={() => toggleCourse(course)}
+													aria-label={$t('courseSelector.removeCourse', { course })}
+												>
+													<X
+														class="shrink-0 opacity-70 transition-colors group-hover:text-error"
+														size={16}
+														aria-hidden="true"
+													/>
+												</Tooltip.Trigger>
+												<TooltipContent label={$t('courseSelector.removeCourse', { course })} />
+											</Tooltip.Root>
+										</div>
+
+										<!-- AND/OR Connector Toggle (between courses) -->
+										{#if !isLastCourse}
+											<Tooltip.Root>
+												<Tooltip.Trigger
+													class="connector-toggle {isOrConnected ? 'or-active' : ''}"
+													onclick={() => {
+														if (isOrConnected) {
+															const { [course]: _, ...rest } = orConnections;
+															orConnections = rest;
+														} else {
+															orConnections = {
+																...orConnections,
+																[course]: true
+															};
+														}
+													}}
+													aria-label={isOrConnected
+														? $t('courseSelector.connector.or')
+														: $t('courseSelector.connector.and')}
+												>
+													{isOrConnected
+														? $t('courseSelector.connector.or')
+														: $t('courseSelector.connector.and')}
+												</Tooltip.Trigger>
+												<TooltipContent
+													label={isOrConnected
+														? $t('courseSelector.connector.or')
+														: $t('courseSelector.connector.and')}
+												/>
+											</Tooltip.Root>
+										{/if}
+									{/each}
+								</div>
+							</div>
+						{/if}
+					{/if}
+				</div>
+
+				<!-- Action Buttons Row (Desktop only) -->
+				<div class="action-row desktop-only">
+					{#if submitting}
+						<div class="generating-indicator">
+							<LoaderCircle class="animate-spin" size={18} />
+							<span>{$t('courseSelector.generatingShort')}</span>
 						</div>
 					{/if}
-				{/if}
-			</div>
+					<Button.Root
+						class="btn btn-outlined btn-download"
+						disabled={!canDownload || isDownloading}
+						type="button"
+						onclick={handleDownload}
+					>
+						{#if isDownloading}
+							<LoaderCircle class="animate-spin" size={18} />
+						{:else}
+							<Download size={18} />
+						{/if}
+						{isDownloading ? $t('courseSelector.downloadingImage') : $t('courseSelector.download')}
+					</Button.Root>
+					<Button.Root
+						class="btn btn-soft"
+						type="button"
+						onclick={() => (saveDialogOpen = true)}
+						disabled={!canSave}
+					>
+						<Save size={18} />
+						{$t('savedSchedules.saveSchedule')}
+					</Button.Root>
+					<Button.Root
+						class="btn btn-outlined"
+						type="button"
+						onclick={() => (loadDialogOpen = true)}
+					>
+						<FolderOpen size={18} />
+						{$t('savedSchedules.loadSchedule')}
+					</Button.Root>
+				</div>
 
-			<!-- Action Buttons Row (Desktop only) -->
-			<div class="action-row desktop-only">
-				{#if submitting}
-					<div class="generating-indicator">
-						<LoaderCircle class="animate-spin" size={18} />
-						<span>{$t('courseSelector.generatingShort')}</span>
+				{#if sectionsError}
+					<div class="alert warning">
+						<TriangleAlert size={20} />
+						<span>{$t('courseSelector.sectionsPartialWarning')}</span>
 					</div>
 				{/if}
-				<Button.Root
-					class="btn btn-outlined btn-download"
-					disabled={!canDownload || isDownloading}
-					type="button"
-					onclick={handleDownload}
-				>
-					{#if isDownloading}
-						<LoaderCircle class="animate-spin" size={18} />
-					{:else}
-						<Download size={18} />
-					{/if}
-					{isDownloading ? $t('courseSelector.downloadingImage') : $t('courseSelector.download')}
-				</Button.Root>
-				<Button.Root
-					class="btn btn-soft"
-					type="button"
-					onclick={() => (saveDialogOpen = true)}
-					disabled={!canSave}
-				>
-					<Save size={18} />
-					{$t('savedSchedules.saveSchedule')}
-				</Button.Root>
-				<Button.Root class="btn btn-outlined" type="button" onclick={() => (loadDialogOpen = true)}>
-					<FolderOpen size={18} />
-					{$t('savedSchedules.loadSchedule')}
-				</Button.Root>
 			</div>
+		{/if}
 
-			{#if sectionsError}
-				<div class="alert warning">
-					<TriangleAlert size={20} />
-					<span>{$t('courseSelector.sectionsPartialWarning')}</span>
-				</div>
-			{/if}
-		</div>
-	{/if}
-
-	<!-- Timetable Section (Full Width Below) -->
-	{#if !isMobile || mobileTab === 'schedule'}
-		<div
-			class="timetable-section"
-			{@attach scheduleRefAttachment}
-			ontouchstart={onTouchStart}
-			ontouchmove={onTouchMove}
-			ontouchend={onTouchEnd}
-			role={isMobile ? 'tabpanel' : undefined}
-			aria-labelledby={isMobile ? 'mobile-tab-schedule' : undefined}
-		>
-			{#if hasResultForSelection && !submitting && totalWarningCount > 0}
-				<div class="warning-panel">
-					<div class="warning-header">
-						<div class="warning-title">
-							<TriangleAlert size={20} />
-							<span>{totalWarningCount} {$t('courseSelector.warnings')}</span>
+		<!-- Timetable Section (Full Width Below) -->
+		{#if !isMobile || mobileTab === 'schedule'}
+			<div
+				class="timetable-section"
+				{@attach scheduleRefAttachment}
+				ontouchstart={onTouchStart}
+				ontouchmove={onTouchMove}
+				ontouchend={onTouchEnd}
+				role={isMobile ? 'tabpanel' : undefined}
+				aria-labelledby={isMobile ? 'mobile-tab-schedule' : undefined}
+			>
+				{#if hasResultForSelection && !submitting && totalWarningCount > 0}
+					<div class="warning-panel">
+						<div class="warning-header">
+							<div class="warning-title">
+								<TriangleAlert size={20} />
+								<span>{totalWarningCount} {$t('courseSelector.warnings')}</span>
+							</div>
+							{#if totalWarningCount > 1}
+								<Button.Root
+									class="btn btn-ghost"
+									type="button"
+									onclick={() => (showWarnings = !showWarnings)}
+								>
+									{showWarnings
+										? $t('courseSelector.hideWarnings')
+										: $t('courseSelector.showWarnings')}
+									<ChevronDown
+										size={18}
+										class="transition-transform {showWarnings ? 'rotate-180' : ''}"
+									/>
+								</Button.Root>
+							{/if}
 						</div>
-						{#if totalWarningCount > 1}
-							<Button.Root
-								class="btn btn-ghost"
-								type="button"
-								onclick={() => (showWarnings = !showWarnings)}
-							>
-								{showWarnings
-									? $t('courseSelector.hideWarnings')
-									: $t('courseSelector.showWarnings')}
-								<ChevronDown
-									size={18}
-									class="transition-transform {showWarnings ? 'rotate-180' : ''}"
-								/>
-							</Button.Root>
+						{#if warningsExpanded}
+							<ul class="warning-list">
+								{#each warningList as warning, i (`${warning}|${i}`)}
+									<li>{warning}</li>
+								{/each}
+							</ul>
+						{:else}
+							<div class="warning-preview">
+								<span>{warningPreviewText}</span>
+								<span class="warning-more">(+{totalWarningCount - 1})</span>
+							</div>
 						{/if}
 					</div>
-					{#if warningsExpanded}
-						<ul class="warning-list">
-							{#each warningList as warning, i (`${warning}|${i}`)}
-								<li>{warning}</li>
-							{/each}
-						</ul>
-					{:else}
-						<div class="warning-preview">
-							<span>{warningPreviewText}</span>
-							<span class="warning-more">(+{totalWarningCount - 1})</span>
+				{/if}
+
+				<!-- Block Time Slots Hint -->
+				<div class="block-hint">
+					<span>{$t('timetable.clickToBlock')}</span>
+					<Tooltip.Root>
+						<Tooltip.Trigger class="info-btn" aria-label={$t('courseSelector.blockingTip.title')}>
+							<Info size={16} aria-hidden="true" />
+						</Tooltip.Trigger>
+						<TooltipContent label={$t('courseSelector.blockingTip.description')} />
+					</Tooltip.Root>
+				</div>
+
+				{#if hasGenerated && currentSchedule}
+					<!-- Schedule Navigation -->
+					{#if scheduleData && scheduleData.schedules.length > 1}
+						<div class="schedule-nav">
+							<Tooltip.Root>
+								<Tooltip.Trigger
+									class="nav-btn"
+									disabled={activeScheduleIndex === 0}
+									onclick={() => (activeScheduleIndex = Math.max(0, activeScheduleIndex - 1))}
+									aria-label={$t('pagination.previous')}
+								>
+									<ChevronLeft size={20} />
+								</Tooltip.Trigger>
+								<TooltipContent label={$t('pagination.previous')} />
+							</Tooltip.Root>
+							<span class="schedule-counter">
+								{activeScheduleIndex + 1} / {scheduleData.schedules.length}
+							</span>
+							<Tooltip.Root>
+								<Tooltip.Trigger
+									class="nav-btn"
+									disabled={activeScheduleIndex >= scheduleData.schedules.length - 1}
+									onclick={() =>
+										(activeScheduleIndex = Math.min(
+											scheduleData.schedules.length - 1,
+											activeScheduleIndex + 1
+										))}
+									aria-label={$t('pagination.next')}
+								>
+									<ChevronRight size={20} />
+								</Tooltip.Trigger>
+								<TooltipContent label={$t('pagination.next')} />
+							</Tooltip.Root>
 						</div>
 					{/if}
-				</div>
-			{/if}
-
-			<!-- Block Time Slots Hint -->
-			<div class="block-hint">
-				<span>{$t('timetable.clickToBlock')}</span>
-				<button
-					type="button"
-					class="info-btn"
-					title={$t('courseSelector.blockingTip.description')}
-					aria-label={$t('courseSelector.blockingTip.title')}
-				>
-					<Info size={16} aria-hidden="true" />
-				</button>
-			</div>
-
-			{#if hasGenerated && currentSchedule}
-				<!-- Schedule Navigation -->
-				{#if scheduleData && scheduleData.schedules.length > 1}
-					<div class="schedule-nav">
-						<button
-							type="button"
-							class="nav-btn"
-							disabled={activeScheduleIndex === 0}
-							onclick={() => (activeScheduleIndex = Math.max(0, activeScheduleIndex - 1))}
-							aria-label={$t('pagination.previous')}
-						>
-							<ChevronLeft size={20} />
-						</button>
-						<span class="schedule-counter">
-							{activeScheduleIndex + 1} / {scheduleData.schedules.length}
-						</span>
-						<button
-							type="button"
-							class="nav-btn"
-							disabled={activeScheduleIndex >= scheduleData.schedules.length - 1}
-							onclick={() =>
-								(activeScheduleIndex = Math.min(
-									scheduleData.schedules.length - 1,
-									activeScheduleIndex + 1
-								))}
-							aria-label={$t('pagination.next')}
-						>
-							<ChevronRight size={20} />
-						</button>
-					</div>
+					{#key activeScheduleIndex}
+						<div class="timetable-wrapper" class:transitioning in:fade={{ duration: 200 }}>
+							<Timetable
+								schedule={currentSchedule}
+								{timeSlots}
+								{daysOfWeek}
+								{blockedHours}
+								onBlockedHoursChange={(hours) => (blockedHours = hours)}
+								bind:scrollRef
+							/>
+						</div>
+					{/key}
+				{:else}
+					<!-- Empty State Timetable -->
+					<Timetable
+						schedule={null}
+						{timeSlots}
+						{daysOfWeek}
+						{blockedHours}
+						onBlockedHoursChange={(hours) => (blockedHours = hours)}
+						bind:scrollRef
+					/>
 				{/if}
-				{#key activeScheduleIndex}
-					<div class="timetable-wrapper" class:transitioning in:fade={{ duration: 200 }}>
-						<Timetable
-							schedule={currentSchedule}
-							{timeSlots}
-							{daysOfWeek}
-							{blockedHours}
-							onBlockedHoursChange={(hours) => (blockedHours = hours)}
-							bind:scrollRef
-						/>
-					</div>
-				{/key}
-			{:else}
-				<!-- Empty State Timetable -->
+			</div>
+		{/if}
+
+		{#if hasGenerated && currentSchedule}
+			<div class="capture-only" {@attach captureRefAttachment} aria-hidden="true" inert>
 				<Timetable
-					schedule={null}
+					schedule={currentSchedule}
 					{timeSlots}
 					{daysOfWeek}
 					{blockedHours}
+					downloadMode={true}
 					onBlockedHoursChange={(hours) => (blockedHours = hours)}
-					bind:scrollRef
+					bind:scrollRef={captureScrollRef}
 				/>
-			{/if}
-		</div>
-	{/if}
+			</div>
+		{/if}
 
-	{#if hasGenerated && currentSchedule}
-		<div class="capture-only" {@attach captureRefAttachment} aria-hidden="true" inert>
-			<Timetable
-				schedule={currentSchedule}
-				{timeSlots}
-				{daysOfWeek}
-				{blockedHours}
-				downloadMode={true}
-				onBlockedHoursChange={(hours) => (blockedHours = hours)}
-				bind:scrollRef={captureScrollRef}
-			/>
-		</div>
-	{/if}
-
-	<!-- Dialogs are lazy-loaded (and mounted only while open) so their code stays
+		<!-- Dialogs are lazy-loaded (and mounted only while open) so their code stays
 	     out of the entry bundle until the user actually opens one. -->
-	{#if scheduleData && saveDialogOpen}
-		{#await import('$lib/components/SaveScheduleDialog.svelte') then { default: SaveScheduleDialog }}
-			<SaveScheduleDialog
-				open={saveDialogOpen}
-				onClose={() => (saveDialogOpen = false)}
-				onSaved={(saved) => {
-					actionMessage = $t('savedSchedules.scheduleWasSaved', {
-						name: saved.name
-					});
-					actionTone = 'success';
-				}}
-				term={term || ''}
-				{selectedCourses}
-				{scheduleData}
-				{blockedHours}
-				{activeScheduleIndex}
-				{orConnections}
-			/>
-		{/await}
-	{/if}
+		{#if scheduleData && saveDialogOpen}
+			{#await import('$lib/components/SaveScheduleDialog.svelte') then { default: SaveScheduleDialog }}
+				<SaveScheduleDialog
+					open={saveDialogOpen}
+					onClose={() => (saveDialogOpen = false)}
+					onSaved={(saved) => {
+						actionMessage = $t('savedSchedules.scheduleWasSaved', {
+							name: saved.name
+						});
+						actionTone = 'success';
+					}}
+					term={term || ''}
+					{selectedCourses}
+					{scheduleData}
+					{blockedHours}
+					{activeScheduleIndex}
+					{orConnections}
+				/>
+			{/await}
+		{/if}
 
-	{#if loadDialogOpen}
-		{#await import('$lib/components/SavedSchedulesDialog.svelte') then { default: SavedSchedulesDialog }}
-			<SavedSchedulesDialog
-				open={loadDialogOpen}
-				onClose={() => (loadDialogOpen = false)}
-				onLoadSchedule={(saved) => {
-					handleLoadSchedule(saved);
-					actionMessage = $t('savedSchedules.scheduleWasLoaded', {
-						name: saved.name
-					});
-					actionTone = 'success';
-				}}
-				currentTerm={term}
-			/>
-		{/await}
-	{/if}
+		{#if loadDialogOpen}
+			{#await import('$lib/components/SavedSchedulesDialog.svelte') then { default: SavedSchedulesDialog }}
+				<SavedSchedulesDialog
+					open={loadDialogOpen}
+					onClose={() => (loadDialogOpen = false)}
+					onLoadSchedule={(saved) => {
+						handleLoadSchedule(saved);
+						actionMessage = $t('savedSchedules.scheduleWasLoaded', {
+							name: saved.name
+						});
+						actionTone = 'success';
+					}}
+					currentTerm={term}
+				/>
+			{/await}
+		{/if}
 
-	<!-- Mobile Bottom Action Bar -->
-	<BottomActionBar
-		visible={isMobile || selectedCourses.length > 0}
-		generating={submitting}
-		canDownload={!!canDownload}
-		downloading={isDownloading}
-		canSave={!!canSave}
-		onDownload={handleDownload}
-		onSave={() => (saveDialogOpen = true)}
-		onLoad={() => (loadDialogOpen = true)}
-	/>
-</section>
+		<!-- Mobile Bottom Action Bar -->
+		<BottomActionBar
+			visible={isMobile || selectedCourses.length > 0}
+			generating={submitting}
+			canDownload={!!canDownload}
+			downloading={isDownloading}
+			canSave={!!canSave}
+			onDownload={handleDownload}
+			onSave={() => (saveDialogOpen = true)}
+			onLoad={() => (loadDialogOpen = true)}
+		/>
+	</section>
+</Tooltip.Provider>
 
 <style>
 	.course-selector {
@@ -1608,7 +1622,7 @@
 		gap: var(--space-sm);
 	}
 
-	.clear-all-btn {
+	:global(.clear-all-btn) {
 		display: inline-flex;
 		align-items: center;
 		gap: 4px;
@@ -1623,7 +1637,7 @@
 		transition: var(--transition-fast);
 	}
 
-	.clear-all-btn:hover {
+	:global(.clear-all-btn:hover) {
 		background: var(--error-light);
 	}
 
@@ -1671,7 +1685,7 @@
 		box-shadow: var(--shadow-focus);
 	}
 
-	.chip-remove {
+	:global(.chip-remove) {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -1685,11 +1699,11 @@
 		transition: var(--transition-fast);
 	}
 
-	.chip-remove:hover {
+	:global(.chip-remove:hover) {
 		background: rgba(25, 118, 210, 0.12);
 	}
 
-	.chip-remove:focus-visible {
+	:global(.chip-remove:focus-visible) {
 		outline: none;
 		box-shadow: var(--shadow-focus);
 	}
@@ -1699,7 +1713,7 @@
 	}
 
 	/* AND/OR Connector Toggle */
-	.connector-toggle {
+	:global(.connector-toggle) {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -1718,24 +1732,24 @@
 		flex-shrink: 0;
 	}
 
-	.connector-toggle:hover {
+	:global(.connector-toggle:hover) {
 		border-color: var(--primary);
 		color: var(--primary-dark);
 		background: var(--primary-soft);
 	}
 
-	.connector-toggle:focus-visible {
+	:global(.connector-toggle:focus-visible) {
 		outline: none;
 		box-shadow: var(--shadow-focus);
 	}
 
-	.connector-toggle.or-active {
+	:global(.connector-toggle.or-active) {
 		border-color: var(--warning);
 		background: var(--warning-bg);
 		color: var(--warning-text);
 	}
 
-	.connector-toggle.or-active:hover {
+	:global(.connector-toggle.or-active:hover) {
 		border-color: var(--warning);
 		background: color-mix(in srgb, var(--warning-bg) 80%, var(--warning));
 	}
@@ -1861,7 +1875,7 @@
 		min-height: 24px;
 	}
 
-	.info-btn {
+	:global(.info-btn) {
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -1874,7 +1888,7 @@
 		transition: var(--transition-fast);
 	}
 
-	.info-btn:hover {
+	:global(.info-btn:hover) {
 		color: var(--primary);
 	}
 
@@ -1896,7 +1910,7 @@
 		gap: var(--space-md);
 	}
 
-	.nav-btn {
+	:global(.nav-btn) {
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -1910,13 +1924,13 @@
 		transition: var(--transition-fast);
 	}
 
-	.nav-btn:hover:not(:disabled) {
+	:global(.nav-btn:hover:not(:disabled)) {
 		background: var(--primary);
 		color: white;
 		border-color: var(--primary);
 	}
 
-	.nav-btn:disabled {
+	:global(.nav-btn:disabled) {
 		opacity: 0.5;
 		cursor: not-allowed;
 	}

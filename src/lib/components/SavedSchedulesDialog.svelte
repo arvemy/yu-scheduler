@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, Dialog } from 'bits-ui';
+	import { Button, Dialog, Tooltip } from 'bits-ui';
 	import {
 		Calendar,
 		Check,
@@ -24,6 +24,7 @@
 		renameSavedSchedule
 	} from '$lib/storage/savedSchedules';
 	import { translateTerm } from '$lib/utils/term';
+	import TooltipContent from '$lib/components/ui/TooltipContent.svelte';
 
 	let {
 		open = false,
@@ -124,133 +125,150 @@
 	);
 </script>
 
-<Dialog.Root {open} onOpenChange={(value) => (!value ? onClose?.() : null)}>
-	<Dialog.Portal>
-		<Dialog.Overlay class="overlay" />
-		<Dialog.Content class="dialog wide">
-			<div class="dialog-header">
-				<Dialog.Title class="dialog-title">
-					<FolderOpen class="text-primary" size={24} />
-					{$t('savedSchedules.savedSchedules')}
-				</Dialog.Title>
-				<Dialog.Close class="close-btn" aria-label={$t('common.close')}>
-					<X size={24} />
-				</Dialog.Close>
-			</div>
-
-			{#if currentTerm}
-				<p class="filter-info">
-					<ListFilter class="text-primary" size={16} />
-					{$t('savedSchedules.showingCurrentTerm', {
-						count: currentTermSchedules.length,
-						term: translateTerm(currentTerm, $t),
-						hidden: hiddenCount
-					})}
-				</p>
-			{/if}
-
-			{#if error}
-				<div class="alert error">
-					<CircleAlert size={20} />
-					<span>{error}</span>
+<Tooltip.Provider delayDuration={350} skipDelayDuration={100}>
+	<Dialog.Root {open} onOpenChange={(value) => (!value ? onClose?.() : null)}>
+		<Dialog.Portal>
+			<Dialog.Overlay class="overlay" />
+			<Dialog.Content class="dialog wide">
+				<div class="dialog-header">
+					<Dialog.Title class="dialog-title">
+						<FolderOpen class="text-primary" size={24} />
+						{$t('savedSchedules.savedSchedules')}
+					</Dialog.Title>
+					<Tooltip.Root>
+						<Dialog.Close>
+							{#snippet child({ props })}
+								<Tooltip.Trigger {...props} class="close-btn" aria-label={$t('common.close')}>
+									<X size={24} />
+								</Tooltip.Trigger>
+							{/snippet}
+						</Dialog.Close>
+						<TooltipContent label={$t('common.close')} />
+					</Tooltip.Root>
 				</div>
-			{/if}
 
-			{#if loading}
-				<div class="loading-state">
-					<div class="skeleton"></div>
-					<div class="skeleton"></div>
-				</div>
-			{:else if currentTermSchedules.length === 0}
-				<div class="empty-state">
-					<FolderPlus class="mb-2 text-ink-muted opacity-50" size={48} />
-					<h4>{$t('savedSchedules.noSavedSchedules')}</h4>
-					<p>{$t('savedSchedules.noSavedSchedulesDesc')}</p>
-				</div>
-			{:else}
-				<div class="schedule-list">
-					{#each currentTermSchedules as schedule (schedule.id)}
-						<div class="schedule-card">
-							<div class="schedule-info">
-								{#if editingId === schedule.id}
-									<input
-										type="text"
-										class="rename-input"
-										bind:value={editName}
-										onkeydown={(e) => e.key === 'Enter' && submitRename(schedule)}
-									/>
-								{:else}
-									<h4 class="schedule-name">{schedule.name}</h4>
-								{/if}
-								<div class="schedule-meta">
-									<span class="meta-item">
-										<Calendar size={14} />
-										{translateTerm(schedule.term, $t)}
-									</span>
-									<span class="meta-item">
-										<Clock size={14} />
-										{new Date(schedule.savedAt).toLocaleDateString($t('locale.code'))}
-									</span>
+				{#if currentTerm}
+					<p class="filter-info">
+						<ListFilter class="text-primary" size={16} />
+						{$t('savedSchedules.showingCurrentTerm', {
+							count: currentTermSchedules.length,
+							term: translateTerm(currentTerm, $t),
+							hidden: hiddenCount
+						})}
+					</p>
+				{/if}
+
+				{#if error}
+					<div class="alert error">
+						<CircleAlert size={20} />
+						<span>{error}</span>
+					</div>
+				{/if}
+
+				{#if loading}
+					<div class="loading-state">
+						<div class="skeleton"></div>
+						<div class="skeleton"></div>
+					</div>
+				{:else if currentTermSchedules.length === 0}
+					<div class="empty-state">
+						<FolderPlus class="mb-2 text-ink-muted opacity-50" size={48} />
+						<h4>{$t('savedSchedules.noSavedSchedules')}</h4>
+						<p>{$t('savedSchedules.noSavedSchedulesDesc')}</p>
+					</div>
+				{:else}
+					<div class="schedule-list">
+						{#each currentTermSchedules as schedule (schedule.id)}
+							<div class="schedule-card">
+								<div class="schedule-info">
+									{#if editingId === schedule.id}
+										<input
+											type="text"
+											class="rename-input"
+											bind:value={editName}
+											onkeydown={(e) => e.key === 'Enter' && submitRename(schedule)}
+										/>
+									{:else}
+										<h4 class="schedule-name">{schedule.name}</h4>
+									{/if}
+									<div class="schedule-meta">
+										<span class="meta-item">
+											<Calendar size={14} />
+											{translateTerm(schedule.term, $t)}
+										</span>
+										<span class="meta-item">
+											<Clock size={14} />
+											{new Date(schedule.savedAt).toLocaleDateString($t('locale.code'))}
+										</span>
+									</div>
+								</div>
+								<div class="schedule-actions">
+									{#if editingId === schedule.id}
+										<Button.Root
+											class="btn btn-primary btn-sm"
+											onclick={() => submitRename(schedule)}
+										>
+											<Check size={16} />
+											{$t('common.save')}
+										</Button.Root>
+										<Button.Root class="btn btn-ghost btn-sm" onclick={() => (editingId = null)}>
+											{$t('common.cancel')}
+										</Button.Root>
+									{:else}
+										<Button.Root
+											class="btn btn-primary btn-sm"
+											onclick={() => onLoadSchedule?.(schedule)}
+										>
+											<FolderOpen size={16} />
+											{$t('savedSchedules.loadSchedule')}
+										</Button.Root>
+										<Tooltip.Root>
+											<Tooltip.Trigger
+												class="btn btn-ghost btn-sm"
+												onclick={() => startRename(schedule)}
+												aria-label={`${$t('savedSchedules.renameSchedule')} ${schedule.name}`}
+											>
+												<Pencil size={16} />
+											</Tooltip.Trigger>
+											<TooltipContent
+												label={`${$t('savedSchedules.renameSchedule')} ${schedule.name}`}
+											/>
+										</Tooltip.Root>
+										<Tooltip.Root>
+											<Tooltip.Trigger
+												class="btn btn-ghost btn-sm"
+												onclick={() => removeSchedule(schedule)}
+												aria-label={`${$t('savedSchedules.deleteSchedule')} ${schedule.name}`}
+											>
+												<Trash2 size={16} />
+											</Tooltip.Trigger>
+											<TooltipContent
+												label={`${$t('savedSchedules.deleteSchedule')} ${schedule.name}`}
+											/>
+										</Tooltip.Root>
+									{/if}
 								</div>
 							</div>
-							<div class="schedule-actions">
-								{#if editingId === schedule.id}
-									<Button.Root
-										class="btn btn-primary btn-sm"
-										onclick={() => submitRename(schedule)}
-									>
-										<Check size={16} />
-										{$t('common.save')}
-									</Button.Root>
-									<Button.Root class="btn btn-ghost btn-sm" onclick={() => (editingId = null)}>
-										{$t('common.cancel')}
-									</Button.Root>
-								{:else}
-									<Button.Root
-										class="btn btn-primary btn-sm"
-										onclick={() => onLoadSchedule?.(schedule)}
-									>
-										<FolderOpen size={16} />
-										{$t('savedSchedules.loadSchedule')}
-									</Button.Root>
-									<Button.Root
-										class="btn btn-ghost btn-sm"
-										onclick={() => startRename(schedule)}
-										aria-label={`${$t('savedSchedules.renameSchedule')} ${schedule.name}`}
-										title={`${$t('savedSchedules.renameSchedule')} ${schedule.name}`}
-									>
-										<Pencil size={16} />
-									</Button.Root>
-									<Button.Root
-										class="btn btn-ghost btn-sm"
-										onclick={() => removeSchedule(schedule)}
-										aria-label={`${$t('savedSchedules.deleteSchedule')} ${schedule.name}`}
-										title={`${$t('savedSchedules.deleteSchedule')} ${schedule.name}`}
-									>
-										<Trash2 size={16} />
-									</Button.Root>
-								{/if}
-							</div>
-						</div>
-					{/each}
-				</div>
-			{/if}
-
-			<div class="dialog-footer">
-				<div class="storage-info">
-					<HardDrive size={16} />
-					<span>{$t('savedSchedules.storageUsage')}: {formatBytes(storageUsage)}</span>
-				</div>
-				{#if schedules.length > 0}
-					<Button.Root class="btn btn-ghost" onclick={clearAll}>
-						<Trash2 size={18} />
-						{$t('savedSchedules.clearAll')}
-					</Button.Root>
+						{/each}
+					</div>
 				{/if}
-			</div>
-		</Dialog.Content>
-	</Dialog.Portal>
-</Dialog.Root>
+
+				<div class="dialog-footer">
+					<div class="storage-info">
+						<HardDrive size={16} />
+						<span>{$t('savedSchedules.storageUsage')}: {formatBytes(storageUsage)}</span>
+					</div>
+					{#if schedules.length > 0}
+						<Button.Root class="btn btn-ghost" onclick={clearAll}>
+							<Trash2 size={18} />
+							{$t('savedSchedules.clearAll')}
+						</Button.Root>
+					{/if}
+				</div>
+			</Dialog.Content>
+		</Dialog.Portal>
+	</Dialog.Root>
+</Tooltip.Provider>
 
 <style>
 	:global(.overlay) {

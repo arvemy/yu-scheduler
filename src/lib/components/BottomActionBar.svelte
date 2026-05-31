@@ -2,6 +2,8 @@
 	import { t } from '$lib/i18n';
 	import { fade, fly } from 'svelte/transition';
 	import { Download, FolderOpen, LoaderCircle, Save, Sparkles } from '@lucide/svelte';
+	import { Tooltip } from 'bits-ui';
+	import TooltipContent from '$lib/components/ui/TooltipContent.svelte';
 
 	let {
 		visible,
@@ -28,88 +30,100 @@
 	} = $props();
 </script>
 
-{#if visible}
-	<div
-		class="bottom-action-bar"
-		role="toolbar"
-		aria-label={$t('courseSelector.actions')}
-		transition:fade={{ duration: 200 }}
-	>
-		<div class="action-buttons" in:fly={{ y: 20, duration: 300, delay: 50 }}>
-			<!-- Generating indicator (shown when generating and no generate button) -->
-			{#if generating && !onGenerate}
-				<div class="generating-indicator">
-					<LoaderCircle class="animate-spin text-primary" size={16} />
-				</div>
-			{/if}
-
-			<!-- Generate Button (only if onGenerate is provided) -->
-			{#if onGenerate}
-				<button
-					class="fab-btn primary"
-					onclick={onGenerate}
-					disabled={!canGenerate || generating}
-					aria-label={generating
-						? $t('courseSelector.generatingSchedule')
-						: $t('courseSelector.generateSchedule')}
-				>
-					<Sparkles class="shrink-0" size={16} />
-					<span
-						>{generating
-							? $t('courseSelector.generatingShort')
-							: $t('courseSelector.generateShort')}</span
-					>
-				</button>
-			{/if}
-
-			<!-- Download Button -->
-			<button
-				class="fab-btn outlined"
-				onclick={onDownload}
-				disabled={!canDownload || downloading}
-				aria-label={downloading
-					? $t('courseSelector.downloadingImage')
-					: $t('courseSelector.download')}
-				title={downloading
-					? $t('courseSelector.downloadingImage')
-					: $t('courseSelector.downloadImage')}
-			>
-				{#if downloading}
-					<LoaderCircle class="animate-spin" size={16} />
-				{:else}
-					<Download class="shrink-0" size={16} />
+<Tooltip.Provider delayDuration={350} skipDelayDuration={100}>
+	{#if visible}
+		<div
+			class="bottom-action-bar"
+			role="toolbar"
+			aria-label={$t('courseSelector.actions')}
+			transition:fade={{ duration: 200 }}
+		>
+			<div class="action-buttons" in:fly={{ y: 20, duration: 300, delay: 50 }}>
+				<!-- Generating indicator (shown when generating and no generate button) -->
+				{#if generating && !onGenerate}
+					<div class="generating-indicator">
+						<LoaderCircle class="animate-spin text-primary" size={16} />
+					</div>
 				{/if}
-			</button>
 
-			<!-- Save Button -->
-			{#if onSave}
-				<button
-					class="fab-btn outlined secondary"
-					onclick={onSave}
-					disabled={!canSave}
-					aria-label={$t('savedSchedules.saveSchedule')}
-					title={canSave
-						? $t('savedSchedules.saveSchedule')
-						: $t('courseSelector.generateScheduleFirst')}
-				>
-					<Save class="shrink-0" size={16} />
-				</button>
-			{/if}
+				<!-- Generate Button (only if onGenerate is provided) -->
+				{#if onGenerate}
+					<button
+						class="fab-btn primary"
+						onclick={onGenerate}
+						disabled={!canGenerate || generating}
+						aria-label={generating
+							? $t('courseSelector.generatingSchedule')
+							: $t('courseSelector.generateSchedule')}
+					>
+						<Sparkles class="shrink-0" size={16} />
+						<span
+							>{generating
+								? $t('courseSelector.generatingShort')
+								: $t('courseSelector.generateShort')}</span
+						>
+					</button>
+				{/if}
 
-			<!-- Load Button -->
-			{#if onLoad}
-				<button
-					class="fab-btn outlined info"
-					onclick={onLoad}
-					aria-label={$t('savedSchedules.loadSchedule')}
-					title={$t('savedSchedules.loadSchedule')}
-				>
-					<FolderOpen class="shrink-0" size={16} />
-				</button>
-			{/if}
+				<!-- Download Button -->
+				<Tooltip.Root>
+					<Tooltip.Trigger
+						class="fab-btn outlined"
+						onclick={onDownload}
+						disabled={!canDownload || downloading}
+						aria-label={downloading
+							? $t('courseSelector.downloadingImage')
+							: $t('courseSelector.download')}
+					>
+						{#if downloading}
+							<LoaderCircle class="animate-spin" size={16} />
+						{:else}
+							<Download class="shrink-0" size={16} />
+						{/if}
+					</Tooltip.Trigger>
+					<TooltipContent
+						label={downloading
+							? $t('courseSelector.downloadingImage')
+							: $t('courseSelector.downloadImage')}
+					/>
+				</Tooltip.Root>
+
+				<!-- Save Button -->
+				{#if onSave}
+					<Tooltip.Root>
+						<Tooltip.Trigger
+							class="fab-btn outlined secondary"
+							onclick={onSave}
+							disabled={!canSave}
+							aria-label={$t('savedSchedules.saveSchedule')}
+						>
+							<Save class="shrink-0" size={16} />
+						</Tooltip.Trigger>
+						<TooltipContent
+							label={canSave
+								? $t('savedSchedules.saveSchedule')
+								: $t('courseSelector.generateScheduleFirst')}
+						/>
+					</Tooltip.Root>
+				{/if}
+
+				<!-- Load Button -->
+				{#if onLoad}
+					<Tooltip.Root>
+						<Tooltip.Trigger
+							class="fab-btn outlined info"
+							onclick={onLoad}
+							aria-label={$t('savedSchedules.loadSchedule')}
+						>
+							<FolderOpen class="shrink-0" size={16} />
+						</Tooltip.Trigger>
+						<TooltipContent label={$t('savedSchedules.loadSchedule')} />
+					</Tooltip.Root>
+				{/if}
+			</div>
 		</div>
-	</div>
-{/if}
+	{/if}
+</Tooltip.Provider>
 
 <style>
 	.bottom-action-bar {
@@ -150,7 +164,7 @@
 		backdrop-filter: blur(6px);
 	}
 
-	.fab-btn {
+	:global(.fab-btn) {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -166,24 +180,24 @@
 		backdrop-filter: blur(6px);
 	}
 
-	.fab-btn:disabled {
+	:global(.fab-btn:disabled) {
 		opacity: 0.5;
 		cursor: not-allowed;
 	}
 
-	.fab-btn.primary {
+	:global(.fab-btn.primary) {
 		background: var(--primary);
 		color: white;
 		padding: 8px 14px;
 	}
 
-	.fab-btn.primary:hover:not(:disabled) {
+	:global(.fab-btn.primary:hover:not(:disabled)) {
 		background: var(--primary-dark);
 		transform: translateY(-1px);
 		box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
 	}
 
-	.fab-btn.outlined {
+	:global(.fab-btn.outlined) {
 		background: rgba(255, 255, 255, 0.9);
 		color: var(--primary);
 		border: 1px solid var(--primary);
@@ -191,28 +205,28 @@
 		min-width: auto;
 	}
 
-	.fab-btn.outlined:hover:not(:disabled) {
+	:global(.fab-btn.outlined:hover:not(:disabled)) {
 		background: var(--primary);
 		color: white;
 		transform: translateY(-1px);
 	}
 
-	.fab-btn.outlined.secondary {
+	:global(.fab-btn.outlined.secondary) {
 		color: var(--secondary);
 		border-color: var(--secondary);
 	}
 
-	.fab-btn.outlined.secondary:hover:not(:disabled) {
+	:global(.fab-btn.outlined.secondary:hover:not(:disabled)) {
 		background: var(--secondary);
 		color: white;
 	}
 
-	.fab-btn.outlined.info {
+	:global(.fab-btn.outlined.info) {
 		color: var(--info);
 		border-color: var(--info);
 	}
 
-	.fab-btn.outlined.info:hover:not(:disabled) {
+	:global(.fab-btn.outlined.info:hover:not(:disabled)) {
 		background: var(--info);
 		color: white;
 	}
