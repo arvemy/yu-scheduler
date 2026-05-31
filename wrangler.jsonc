@@ -1,6 +1,8 @@
 {
 	"$schema": "./node_modules/wrangler/config-schema.json",
 	"name": "yu-scheduler",
+	"workers_dev": false,
+	"preview_urls": false,
 	"main": ".svelte-kit/cloudflare/_worker.js",
 	// Recent compatibility date enables nodejs_compat_v2 (requires >= 2024-09-23)
 	// and the latest Workers runtime bug fixes.

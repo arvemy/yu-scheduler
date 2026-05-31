@@ -36,3 +36,23 @@ Element.prototype.scrollIntoView = vi.fn();
 Element.prototype.hasPointerCapture = vi.fn(() => false);
 Element.prototype.setPointerCapture = vi.fn();
 Element.prototype.releasePointerCapture = vi.fn();
+Element.prototype.animate = vi.fn(
+	() =>
+		({
+			cancel: vi.fn(),
+			commitStyles: vi.fn(),
+			finish: vi.fn(),
+			pause: vi.fn(),
+			play: vi.fn(),
+			reverse: vi.fn(),
+			updatePlaybackRate: vi.fn(),
+			addEventListener: vi.fn(),
+			removeEventListener: vi.fn(),
+			dispatchEvent: vi.fn(() => true),
+			finished: Promise.resolve(),
+			ready: Promise.resolve(),
+			playState: 'finished',
+			effect: null,
+			timeline: null
+		}) as unknown as Animation
+);

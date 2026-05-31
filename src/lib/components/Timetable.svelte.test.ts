@@ -66,4 +66,24 @@ describe('Timetable', () => {
 		expect(onBlockedHoursChange).toHaveBeenCalledTimes(1);
 		expect(onBlockedHoursChange.mock.calls[0][0]).toEqual([]);
 	});
+
+	it('supports keyboard blocking for an individual time cell', async () => {
+		const onBlockedHoursChange = vi.fn();
+		render(Timetable, {
+			props: {
+				schedule,
+				timeSlots,
+				daysOfWeek,
+				blockedHours: [] as BlockedHour[],
+				onBlockedHoursChange
+			}
+		});
+
+		const cell = await screen.findByRole('button', {
+			name: /MATH 101 \(01\), 09:40-10:30, A1\. Block\/unblock Monday at 09:40-10:30/
+		});
+		await fireEvent.keyDown(cell, { key: 'Enter' });
+
+		expect(onBlockedHoursChange).toHaveBeenCalledWith([{ day: 'Monday', slot: '09:40-10:30' }]);
+	});
 });

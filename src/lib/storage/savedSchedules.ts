@@ -97,11 +97,12 @@ export const checkStorageAvailability = (): { available: boolean; error?: string
 		localStorage.removeItem(testKey);
 		return { available: true };
 	} catch (error) {
-		if (error instanceof Error) {
+		if (error && typeof error === 'object' && 'name' in error) {
+			const name = String((error as { name?: unknown }).name);
 			return {
 				available: false,
 				error:
-					error.name === 'QuotaExceededError'
+					name === 'QuotaExceededError'
 						? 'errors.storageQuotaExceeded'
 						: 'errors.storageNotAvailable'
 			};

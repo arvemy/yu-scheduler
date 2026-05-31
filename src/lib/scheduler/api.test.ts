@@ -86,4 +86,63 @@ describe('scheduler api (mocked fetch)', () => {
 		const { listTerms } = await importApi();
 		await expect(listTerms()).rejects.toMatchObject({ code: 'FAILED_TO_LOAD_TERMS' });
 	});
+
+	it('ignores unsupported manifest files when listing terms', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi.fn((url: string | URL) => {
+				const href = String(url);
+				if (href.endsWith('/data/terms/index.json')) {
+					return Promise.resolve(
+						new Response(
+							JSON.stringify([{ term: 'Draft Import', file: 'draft.json' }, ...TERM_INDEX]),
+							{ status: 200 }
+						)
+					);
+				}
+				if (href.endsWith('/data/terms/2025-2026_fall.json')) {
+					return Promise.resolve(new Response(JSON.stringify(TERM_DATA), { status: 200 }));
+				}
+				return Promise.resolve(new Response('not found', { status: 404 }));
+			})
+		);
+
+		const { listTerms } = await importApi();
+		await expect(listTerms()).resolves.toEqual(['2025-2026 Fall']);
+	});
+
+	it('normalizes Turkish day names in mocked term data', async () => {
+		vi.stubGlobal(
+			'fetch',
+			vi.fn((url: string | URL) => {
+				const href = String(url);
+				if (href.endsWith('/data/terms/index.json')) {
+					return Promise.resolve(new Response(JSON.stringify(TERM_INDEX), { status: 200 }));
+				}
+				if (href.endsWith('/data/terms/2025-2026_fall.json')) {
+					return Promise.resolve(
+						new Response(
+							JSON.stringify({
+								'MATH 101': [
+									{
+										Day: 'PAZARTESI',
+										'Start Time': '09:40',
+										'End Time': '10:30',
+										Section: '01',
+										Classroom: 'A1'
+									}
+								]
+							}),
+							{ status: 200 }
+						)
+					);
+				}
+				return Promise.resolve(new Response('not found', { status: 404 }));
+			})
+		);
+
+		const { loadTermData } = await importApi();
+		const { data } = await loadTermData('2025-2026 Fall');
+		expect(data['MATH 101'][0].Day).toBe('Monday');
+	});
 });

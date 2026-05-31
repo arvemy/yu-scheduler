@@ -213,12 +213,19 @@
 										<FolderOpen size={16} />
 										{$t('savedSchedules.loadSchedule')}
 									</Button.Root>
-									<Button.Root class="btn btn-ghost btn-sm" onclick={() => startRename(schedule)}>
+									<Button.Root
+										class="btn btn-ghost btn-sm"
+										onclick={() => startRename(schedule)}
+										aria-label={`${$t('savedSchedules.renameSchedule')} ${schedule.name}`}
+										title={`${$t('savedSchedules.renameSchedule')} ${schedule.name}`}
+									>
 										<Pencil size={16} />
 									</Button.Root>
 									<Button.Root
 										class="btn btn-ghost btn-sm"
 										onclick={() => removeSchedule(schedule)}
+										aria-label={`${$t('savedSchedules.deleteSchedule')} ${schedule.name}`}
+										title={`${$t('savedSchedules.deleteSchedule')} ${schedule.name}`}
 									>
 										<Trash2 size={16} />
 									</Button.Root>
