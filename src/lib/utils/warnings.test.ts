@@ -32,6 +32,24 @@ describe('translateWarning', () => {
 		expect(result).toContain('PHYS 101');
 	});
 
+	it('translates the all-courses no-data headline', () => {
+		expect(translateWarning(warn('ALL_COURSES_NO_DATA'), t)).toBe(
+			get(tStore)('errors.allCoursesNoData')
+		);
+	});
+
+	it('translates the all-courses blocked headline', () => {
+		expect(translateWarning(warn('ALL_COURSES_BLOCKED'), t)).toBe(
+			get(tStore)('errors.allCoursesBlocked')
+		);
+	});
+
+	it('translates a stale-section option as unavailable rather than a conflict', () => {
+		const result = translateWarning(warn('OPTION_NOT_SCHEDULABLE', { course: 'PHYS 101' }), t);
+		expect(result).toBe(get(tStore)('errors.optionNotSchedulable', { course: 'PHYS 101' }));
+		expect(result).toContain('PHYS 101');
+	});
+
 	it('falls back to the raw message for an unknown code', () => {
 		expect(translateWarning(warn('SOMETHING_NEW', {}, 'raw fallback'), t)).toBe('raw fallback');
 	});
@@ -59,6 +77,17 @@ describe('translateWarnings', () => {
 			warn('TIME_CONFLICT_BETWEEN_COURSES', { course1: 'C', course2: 'D' })
 		];
 		expect(translateWarnings([], codes, t)).toHaveLength(2);
+	});
+
+	it('keeps every stale-option warning, one per course', () => {
+		const codes = [
+			warn('OPTION_NOT_SCHEDULABLE', { course: 'PHYS 101' }),
+			warn('OPTION_NOT_SCHEDULABLE', { course: 'CHEM 101' })
+		];
+		const result = translateWarnings([], codes, t);
+		expect(result).toHaveLength(2);
+		expect(result.some((m) => m.includes('PHYS 101'))).toBe(true);
+		expect(result.some((m) => m.includes('CHEM 101'))).toBe(true);
 	});
 
 	it('suppresses the generic conflict code when a specific one is present', () => {

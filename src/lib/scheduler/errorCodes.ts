@@ -18,10 +18,13 @@ export const WarningCodes = {
 	TIME_CONFLICT_WITH_BLOCKED_HOURS: 'TIME_CONFLICT_WITH_BLOCKED_HOURS',
 	TIME_CONFLICT_WITH_SPECIFIC_BLOCKED_HOURS: 'TIME_CONFLICT_WITH_SPECIFIC_BLOCKED_HOURS',
 	ALL_COURSES_EXCLUDED: 'ALL_COURSES_EXCLUDED',
+	ALL_COURSES_NO_DATA: 'ALL_COURSES_NO_DATA',
+	ALL_COURSES_BLOCKED: 'ALL_COURSES_BLOCKED',
 	NO_VALID_SCHEDULE_CONFLICTS: 'NO_VALID_SCHEDULE_CONFLICTS',
 	NO_VALID_SCHEDULE_BLOCKED_HOURS: 'NO_VALID_SCHEDULE_BLOCKED_HOURS',
 	NO_VALID_SCHEDULE_GENERAL: 'NO_VALID_SCHEDULE_GENERAL',
-	NO_VALID_SCHEDULE_INCLUDING_COURSE: 'NO_VALID_SCHEDULE_INCLUDING_COURSE'
+	NO_VALID_SCHEDULE_INCLUDING_COURSE: 'NO_VALID_SCHEDULE_INCLUDING_COURSE',
+	OPTION_NOT_SCHEDULABLE: 'OPTION_NOT_SCHEDULABLE'
 } as const;
 
 export const WARNING_MESSAGES: Record<string, string> = {
@@ -33,11 +36,17 @@ export const WARNING_MESSAGES: Record<string, string> = {
 		'{course} conflicts with your blocked time slot.',
 	[WarningCodes.TIME_CONFLICT_WITH_SPECIFIC_BLOCKED_HOURS]:
 		'{course} conflicts with your blocked time slot at {blocked_hours}.',
-	[WarningCodes.ALL_COURSES_EXCLUDED]: 'All selected courses were excluded due to conflicts.',
+	[WarningCodes.ALL_COURSES_EXCLUDED]: 'None of your selected courses could be scheduled.',
+	[WarningCodes.ALL_COURSES_NO_DATA]:
+		'None of your selected courses have schedule data for this term.',
+	[WarningCodes.ALL_COURSES_BLOCKED]: 'All selected courses fall on your blocked hours.',
 	[WarningCodes.NO_VALID_SCHEDULE_CONFLICTS]: 'Course time conflicts prevent a valid schedule.',
 	[WarningCodes.NO_VALID_SCHEDULE_BLOCKED_HOURS]: 'Blocked time slots prevent a valid schedule.',
 	[WarningCodes.NO_VALID_SCHEDULE_GENERAL]: 'No schedule fits your current selections.',
-	[WarningCodes.NO_VALID_SCHEDULE_INCLUDING_COURSE]: 'No valid schedule including {course} found.'
+	[WarningCodes.NO_VALID_SCHEDULE_INCLUDING_COURSE]:
+		"{course} can't be added — it conflicts with your other selected courses.",
+	[WarningCodes.OPTION_NOT_SCHEDULABLE]:
+		"{course} can't be added — the selected section is no longer available."
 };
 
 export const ERROR_MESSAGES: Record<string, string> = {

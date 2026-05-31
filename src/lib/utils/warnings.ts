@@ -64,6 +64,12 @@ export const translateWarning = (warning: WarningInfo, t: Translator): string =>
 		case 'ALL_COURSES_EXCLUDED':
 			return t('errors.allCoursesExcluded');
 
+		case 'ALL_COURSES_NO_DATA':
+			return t('errors.allCoursesNoData');
+
+		case 'ALL_COURSES_BLOCKED':
+			return t('errors.allCoursesBlocked');
+
 		case 'NO_VALID_SCHEDULE_CONFLICTS':
 			return t('errors.noValidScheduleConflicts');
 
@@ -75,6 +81,11 @@ export const translateWarning = (warning: WarningInfo, t: Translator): string =>
 
 		case 'NO_VALID_SCHEDULE_INCLUDING_COURSE':
 			return t('errors.noValidScheduleIncludingCourse', {
+				course: (params?.course as string) || 'Course'
+			});
+
+		case 'OPTION_NOT_SCHEDULABLE':
+			return t('errors.optionNotSchedulable', {
 				course: (params?.course as string) || 'Course'
 			});
 
@@ -112,6 +123,7 @@ export const translateWarnings = (
 
 		const allowMultipleInstancesCodes = [
 			'COURSE_NOT_AVAILABLE',
+			'OPTION_NOT_SCHEDULABLE',
 			'TIME_CONFLICT_BETWEEN_COURSES',
 			'TIME_CONFLICT_WITH_SPECIFIC_BLOCKED_HOURS',
 			'TIME_CONFLICT_WITH_BLOCKED_HOURS'

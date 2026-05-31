@@ -3,6 +3,7 @@ import { ErrorCodes, WarningCodes, ERROR_MESSAGES } from '$lib/scheduler/errorCo
 import {
 	buildAllCoursesExcludedWarning,
 	buildEligibleSections,
+	buildOptionExclusionWarnings,
 	buildWarnings,
 	createScheduleData,
 	createSpecificCourseConflictWarning,
@@ -39,14 +40,14 @@ export const generateScheduleFromData = (
 	const selectedCourses = req.courses ?? [];
 	const optionGroups = Array.isArray(req.course_option_groups) ? req.course_option_groups : [];
 
+	const eligibleSections = getEligibleSections(data);
+	const blockedHours = req.blocked_hours ?? [];
+	const blockedSet = normalizeBlockedHours(blockedHours);
+
 	const runForCourses = (courses: typeof selectedCourses): ScheduleData => {
 		if (courses.length === 0) {
 			return createScheduleData([], [ERROR_MESSAGES[ErrorCodes.NO_COURSES_SELECTED]], []);
 		}
-
-		const eligibleSections = getEligibleSections(data);
-		const blockedHours = req.blocked_hours ?? [];
-		const blockedSet = normalizeBlockedHours(blockedHours);
 
 		const { validCourses, filteredSections, excludedCourses, courseConflicts } =
 			filterEligibleCourses(courses, eligibleSections, blockedSet);
@@ -55,11 +56,14 @@ export const generateScheduleFromData = (
 			const { warnings, warningCodes } = buildWarnings(
 				excludedCourses,
 				courseConflicts,
-				blockedHours,
-				[],
 				eligibleSections
 			);
-			warningCodes.push(buildAllCoursesExcludedWarning(blockedSet));
+			const headline = buildAllCoursesExcludedWarning(
+				excludedCourses,
+				eligibleSections,
+				courseConflicts
+			);
+			if (headline) warningCodes.push(headline);
 
 			return createScheduleData([], warnings, warningCodes);
 		}
@@ -74,8 +78,6 @@ export const generateScheduleFromData = (
 		const { warnings, warningCodes } = buildWarnings(
 			excludedCourses,
 			courseConflicts,
-			blockedHours,
-			conflictPairs,
 			eligibleSections
 		);
 
@@ -188,11 +190,7 @@ export const generateScheduleFromData = (
 		for (const group of normalizedGroups) {
 			for (const opt of group.options) {
 				if (!successfulOptionCourses.has(opt.course)) {
-					extraWarnings.push(
-						createWarning(WarningCodes.NO_VALID_SCHEDULE_INCLUDING_COURSE, {
-							course: opt.course
-						})
-					);
+					extraWarnings.push(...buildOptionExclusionWarnings(opt, eligibleSections, blockedSet));
 				}
 			}
 		}

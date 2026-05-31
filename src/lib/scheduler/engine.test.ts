@@ -145,7 +145,7 @@ describe('Scheduler Engine', () => {
 		expect(codes).toContain(WarningCodes.TIME_CONFLICT_BETWEEN_COURSES);
 	});
 
-	it('returns warnings when no schedule possible due to blocked hours', () => {
+	it('reports a per-course blocked warning (no headline) for a single blocked course', () => {
 		const req: GenerateScheduleRequest = {
 			courses: [{ course: 'MATH101' }],
 			// Block all known MATH slots
@@ -156,8 +156,160 @@ describe('Scheduler Engine', () => {
 		};
 
 		const result = generateScheduleFromData(req, mockCourseData);
+		const codes = result.warning_codes.map((w) => w.code);
 
 		expect(result.schedules.length).toBe(0);
-		expect(result.warning_codes.map((w) => w.code)).toContain(WarningCodes.ALL_COURSES_EXCLUDED);
+		expect(codes).toContain(WarningCodes.TIME_CONFLICT_WITH_SPECIFIC_BLOCKED_HOURS);
+		// A single excluded course explains itself; no "all courses" headline.
+		expect(codes).not.toContain(WarningCodes.ALL_COURSES_EXCLUDED);
+		expect(codes).not.toContain(WarningCodes.ALL_COURSES_BLOCKED);
+	});
+
+	describe('Exclusion reason accuracy', () => {
+		it('reports missing data (not a conflict) for a single course with no data', () => {
+			const req: GenerateScheduleRequest = {
+				courses: [{ course: 'GHOST101' }], // absent from mockCourseData
+				blocked_hours: []
+			};
+
+			const result = generateScheduleFromData(req, mockCourseData);
+			const codes = result.warning_codes.map((w) => w.code);
+
+			expect(result.schedules.length).toBe(0);
+			expect(codes).toContain(WarningCodes.COURSE_NOT_AVAILABLE);
+			// One course must not trigger an "all courses" headline.
+			expect(codes).not.toContain(WarningCodes.ALL_COURSES_EXCLUDED);
+			expect(codes).not.toContain(WarningCodes.ALL_COURSES_NO_DATA);
+		});
+
+		it('uses the no-data headline when every selected course lacks data', () => {
+			const req: GenerateScheduleRequest = {
+				courses: [{ course: 'GHOST101' }, { course: 'GHOST102' }],
+				blocked_hours: []
+			};
+
+			const result = generateScheduleFromData(req, mockCourseData);
+			const codes = result.warning_codes.map((w) => w.code);
+
+			expect(result.schedules.length).toBe(0);
+			expect(codes).toContain(WarningCodes.ALL_COURSES_NO_DATA);
+			expect(codes).not.toContain(WarningCodes.ALL_COURSES_EXCLUDED);
+		});
+
+		it('uses the blocked headline when every selected course is fully blocked', () => {
+			const customData = {
+				A: [createSession('Monday', '09:40', '10:30')],
+				B: [createSession('Tuesday', '09:40', '10:30')]
+			};
+
+			const req: GenerateScheduleRequest = {
+				courses: [{ course: 'A' }, { course: 'B' }],
+				blocked_hours: [
+					{ day: 'Monday', slot: '09:40-10:30' },
+					{ day: 'Tuesday', slot: '09:40-10:30' }
+				]
+			};
+
+			const result = generateScheduleFromData(req, customData);
+			const codes = result.warning_codes.map((w) => w.code);
+
+			expect(result.schedules.length).toBe(0);
+			expect(codes).toContain(WarningCodes.ALL_COURSES_BLOCKED);
+			expect(codes).not.toContain(WarningCodes.ALL_COURSES_EXCLUDED);
+		});
+
+		it('falls back to the generic headline when exclusion reasons are mixed', () => {
+			const customData = {
+				A: [createSession('Monday', '09:40', '10:30')]
+				// GHOST is absent → no data
+			};
+
+			const req: GenerateScheduleRequest = {
+				courses: [{ course: 'A' }, { course: 'GHOST' }],
+				blocked_hours: [{ day: 'Monday', slot: '09:40-10:30' }]
+			};
+
+			const result = generateScheduleFromData(req, customData);
+			const codes = result.warning_codes.map((w) => w.code);
+
+			expect(result.schedules.length).toBe(0);
+			expect(codes).toContain(WarningCodes.ALL_COURSES_EXCLUDED);
+			expect(codes).not.toContain(WarningCodes.ALL_COURSES_NO_DATA);
+			expect(codes).not.toContain(WarningCodes.ALL_COURSES_BLOCKED);
+		});
+
+		it('explains an OR option with no data as missing data, not a conflict', () => {
+			const req: GenerateScheduleRequest = {
+				courses: [],
+				course_option_groups: [{ options: [{ course: 'MATH101' }, { course: 'GHOST101' }] }],
+				blocked_hours: []
+			};
+
+			const result = generateScheduleFromData(req, mockCourseData);
+			const codes = result.warning_codes.map((w) => w.code);
+
+			// MATH101 schedules still come through.
+			expect(result.schedules.length).toBeGreaterThan(0);
+			// GHOST101 is missing data — say so rather than "no valid schedule including".
+			expect(codes).toContain(WarningCodes.COURSE_NOT_AVAILABLE);
+			expect(codes).not.toContain(WarningCodes.NO_VALID_SCHEDULE_INCLUDING_COURSE);
+		});
+
+		it('surfaces a generic headline for a single course pinned to a stale section', () => {
+			// MATH101 has data, but section 99 does not exist. The exclusion is neither
+			// "no data" nor a blocked-hours conflict, so no per-course warning is emitted —
+			// the headline must not leave the empty result silent.
+			const req: GenerateScheduleRequest = {
+				courses: [{ course: 'MATH101', section: '99' }],
+				blocked_hours: []
+			};
+
+			const result = generateScheduleFromData(req, mockCourseData);
+			const codes = result.warning_codes.map((w) => w.code);
+
+			expect(result.schedules.length).toBe(0);
+			expect(result.warning_codes.length).toBeGreaterThan(0);
+			expect(codes).toContain(WarningCodes.ALL_COURSES_EXCLUDED);
+			// blocked_hours is empty — never claim a blocked-hours headline.
+			expect(codes).not.toContain(WarningCodes.ALL_COURSES_BLOCKED);
+		});
+
+		it('does not claim "all blocked" when stale-section courses have no blocked hours', () => {
+			const req: GenerateScheduleRequest = {
+				courses: [
+					{ course: 'MATH101', section: '99' },
+					{ course: 'PHYS101', section: '99' }
+				],
+				blocked_hours: []
+			};
+
+			const result = generateScheduleFromData(req, mockCourseData);
+			const codes = result.warning_codes.map((w) => w.code);
+
+			expect(result.schedules.length).toBe(0);
+			expect(codes).toContain(WarningCodes.ALL_COURSES_EXCLUDED);
+			expect(codes).not.toContain(WarningCodes.ALL_COURSES_BLOCKED);
+			expect(codes).not.toContain(WarningCodes.ALL_COURSES_NO_DATA);
+		});
+
+		it('explains an OR option dropped for a stale pinned section as unavailable, not a conflict', () => {
+			const req: GenerateScheduleRequest = {
+				courses: [],
+				course_option_groups: [
+					{ options: [{ course: 'MATH101' }, { course: 'PHYS101', section: '99' }] }
+				],
+				blocked_hours: []
+			};
+
+			const result = generateScheduleFromData(req, mockCourseData);
+			const codes = result.warning_codes.map((w) => w.code);
+
+			// MATH101 schedules still come through.
+			expect(result.schedules.length).toBeGreaterThan(0);
+			// The stale PHYS101 option must not silently disappear from the warnings.
+			expect(codes).toContain(WarningCodes.OPTION_NOT_SCHEDULABLE);
+			// PHYS101 doesn't actually conflict with anything — don't blame a conflict.
+			expect(codes).not.toContain(WarningCodes.NO_VALID_SCHEDULE_INCLUDING_COURSE);
+		});
 	});
 });

@@ -532,8 +532,6 @@ export const createSpecificCourseConflictWarning = (
 export const buildWarnings = (
 	excludedCourses: string[],
 	courseConflicts: CourseConflictMap,
-	blockedHours: BlockedHour[],
-	conflictPairs: ConflictPair[],
 	eligibleSections: EligibleSections
 ): { warnings: string[]; warningCodes: WarningInfo[] } => {
 	const warnings: string[] = [];
@@ -581,26 +579,72 @@ export const buildWarnings = (
 	return { warnings, warningCodes };
 };
 
-export const buildAllCoursesExcludedWarning = (blockedSet: Set<string>): WarningInfo => {
-	if (blockedSet.size === 0) {
-		return createWarning(WarningCodes.ALL_COURSES_EXCLUDED);
+const courseHasNoData = (course: string, eligibleSections: EligibleSections): boolean =>
+	!eligibleSections[course] || eligibleSections[course].length === 0;
+
+const courseIsBlocked = (course: string, courseConflicts: CourseConflictMap): boolean =>
+	course in courseConflicts;
+
+/**
+ * Headline shown when every selected course was dropped before scheduling.
+ * Reflects the actual reason (missing data vs. blocked hours vs. mixed). A single
+ * course that was classified (no-data or blocked) explains itself through its own
+ * per-course warning, so no headline is needed. But filterEligibleCourses can drop
+ * a data-backed course for a reason we don't classify (e.g. a stale/nonexistent
+ * pinned section), and buildWarnings emits nothing for it — so we only claim
+ * "no data" / "blocked" when every exclusion was actually identified that way, and
+ * otherwise surface the generic headline (even for one course) so the empty result
+ * is never left unexplained.
+ */
+export const buildAllCoursesExcludedWarning = (
+	excludedCourses: string[],
+	eligibleSections: EligibleSections,
+	courseConflicts: CourseConflictMap
+): WarningInfo | null => {
+	if (excludedCourses.length === 0) return null;
+
+	if (excludedCourses.every((course) => courseHasNoData(course, eligibleSections))) {
+		return excludedCourses.length <= 1 ? null : createWarning(WarningCodes.ALL_COURSES_NO_DATA);
 	}
 
-	const blockedByDay: Record<string, string[]> = {};
-	for (const entry of blockedSet) {
-		const [day, slot] = entry.split('|');
-		if (!day || !slot) continue;
-		if (!blockedByDay[day]) blockedByDay[day] = [];
-		blockedByDay[day].push(slot);
+	if (excludedCourses.every((course) => courseIsBlocked(course, courseConflicts))) {
+		return excludedCourses.length <= 1 ? null : createWarning(WarningCodes.ALL_COURSES_BLOCKED);
 	}
 
-	const blockedSummary = Object.entries(blockedByDay).map(
-		([day, slots]) => `${day}: ${Array.from(new Set(slots)).sort().join(', ')}`
+	return createWarning(WarningCodes.ALL_COURSES_EXCLUDED);
+};
+
+/**
+ * Explains why a single OR-group option could not be included in any schedule.
+ * If the option fails on its own (no data / blocked hours), report that precise
+ * reason. If it was dropped on its own for a reason buildWarnings can't classify
+ * (e.g. a saved selection pins a section that no longer exists), say the section is
+ * unavailable rather than blaming a conflict. Only when the option is individually
+ * schedulable do we report that it genuinely clashes with the other selected courses.
+ */
+export const buildOptionExclusionWarnings = (
+	option: CourseEntry,
+	eligibleSections: EligibleSections,
+	blockedSet: Set<string>
+): WarningInfo[] => {
+	const { excludedCourses, courseConflicts } = filterEligibleCourses(
+		[option],
+		eligibleSections,
+		blockedSet
 	);
 
-	return createWarning(WarningCodes.ALL_COURSES_EXCLUDED, {
-		blocked_summary: blockedSummary.join('; ')
-	});
+	if (excludedCourses.length > 0) {
+		const { warningCodes } = buildWarnings(excludedCourses, courseConflicts, eligibleSections);
+		if (warningCodes.length > 0) return warningCodes;
+		// The option failed on its own but the reason wasn't classified as no-data or
+		// blocked — the only such case is a stale/nonexistent pinned section. Explain
+		// that neutrally instead of falsely reporting a conflict with other courses.
+		return [createWarning(WarningCodes.OPTION_NOT_SCHEDULABLE, { course: option.course })];
+	}
+
+	return [
+		createWarning(WarningCodes.NO_VALID_SCHEDULE_INCLUDING_COURSE, { course: option.course })
+	];
 };
 
 export const createScheduleData = (
