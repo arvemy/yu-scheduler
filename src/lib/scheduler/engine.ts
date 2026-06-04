@@ -1,4 +1,11 @@
-import type { GenerateScheduleRequest, ScheduleData, SessionData, Schedule } from '$lib/types';
+import type {
+	CourseEntry,
+	GenerateScheduleRequest,
+	ScheduleData,
+	SessionData,
+	Schedule,
+	WarningInfo
+} from '$lib/types';
 import { ErrorCodes, WarningCodes, ERROR_MESSAGES } from '$lib/scheduler/errorCodes';
 import {
 	buildAllCoursesExcludedWarning,
@@ -32,6 +39,41 @@ export type GenerateScheduleOptions = {
 	shouldCancel?: () => boolean;
 };
 
+const MAX_OPTION_COMBINATIONS = 96;
+
+// Headlines that speak for the whole request ("none of your courses could be
+// scheduled"). They get recorded against every option in a failed combination, so
+// they must be stripped before reusing per-option warnings to explain a single
+// OR-group option that failed coverage — its sibling options may still be schedulable.
+const ALL_COURSES_HEADLINE_CODES = new Set<string>([
+	WarningCodes.ALL_COURSES_EXCLUDED,
+	WarningCodes.ALL_COURSES_NO_DATA,
+	WarningCodes.ALL_COURSES_BLOCKED
+]);
+
+const warningKey = (warning: WarningInfo): string =>
+	`${warning.code}|${warning.message}|${JSON.stringify(warning.params ?? {})}`;
+
+const uniqueWarnings = (warnings: WarningInfo[]): WarningInfo[] => {
+	const seen = new Set<string>();
+	const deduped: WarningInfo[] = [];
+
+	for (const warning of warnings) {
+		const key = warningKey(warning);
+		if (seen.has(key)) continue;
+		seen.add(key);
+		deduped.push(warning);
+	}
+
+	return deduped;
+};
+
+const optionKey = (option: CourseEntry): string =>
+	JSON.stringify([option.course, option.section ?? null]);
+
+const scheduleKey = (schedule: Schedule): string =>
+	schedule.sections.map((section) => `${section.course}|${section.section}`).join('::');
+
 export const generateScheduleFromData = (
 	req: GenerateScheduleRequest,
 	data: Record<string, SessionData[]>,
@@ -44,28 +86,53 @@ export const generateScheduleFromData = (
 	const blockedHours = req.blocked_hours ?? [];
 	const blockedSet = normalizeBlockedHours(blockedHours);
 
-	const runForCourses = (courses: typeof selectedCourses): ScheduleData => {
+	const courseHasMissingData = (course: string): boolean =>
+		!eligibleSections[course] || eligibleSections[course].length === 0;
+
+	const buildStaleSectionWarnings = (
+		excludedCourses: string[],
+		warningCodes: WarningInfo[]
+	): WarningInfo[] => {
+		const warnedCourses = new Set(
+			warningCodes
+				.map((warning) => warning.params?.course)
+				.filter((course): course is string => typeof course === 'string')
+		);
+
+		return excludedCourses
+			.filter((course) => !courseHasMissingData(course) && !warnedCourses.has(course))
+			.map((course) => createWarning(WarningCodes.OPTION_NOT_SCHEDULABLE, { course }));
+	};
+
+	const runForCourses = (courses: CourseEntry[]): ScheduleData => {
 		if (courses.length === 0) {
 			return createScheduleData([], [ERROR_MESSAGES[ErrorCodes.NO_COURSES_SELECTED]], []);
 		}
 
 		const { validCourses, filteredSections, excludedCourses, courseConflicts } =
 			filterEligibleCourses(courses, eligibleSections, blockedSet);
+		const blockingExcludedCourses = excludedCourses.filter(
+			(course) => !courseHasMissingData(course)
+		);
 
-		if (validCourses.length === 0) {
-			const { warnings, warningCodes } = buildWarnings(
-				excludedCourses,
-				courseConflicts,
-				eligibleSections
-			);
-			const headline = buildAllCoursesExcludedWarning(
-				excludedCourses,
-				eligibleSections,
-				courseConflicts
-			);
-			if (headline) warningCodes.push(headline);
+		const { warnings, warningCodes } = buildWarnings(
+			excludedCourses,
+			courseConflicts,
+			eligibleSections
+		);
+		warningCodes.push(...buildStaleSectionWarnings(excludedCourses, warningCodes));
 
-			return createScheduleData([], warnings, warningCodes);
+		if (validCourses.length === 0 || blockingExcludedCourses.length > 0) {
+			if (validCourses.length === 0) {
+				const headline = buildAllCoursesExcludedWarning(
+					excludedCourses,
+					eligibleSections,
+					courseConflicts
+				);
+				if (headline) warningCodes.push(headline);
+			}
+
+			return createScheduleData([], warnings, uniqueWarnings(warningCodes));
 		}
 
 		const { validSchedules, conflictPairs } = generateValidSchedules(
@@ -73,12 +140,6 @@ export const generateScheduleFromData = (
 			filteredSections,
 			options.onProgress,
 			options.shouldCancel
-		);
-
-		const { warnings, warningCodes } = buildWarnings(
-			excludedCourses,
-			courseConflicts,
-			eligibleSections
 		);
 
 		if (validSchedules.length === 0) {
@@ -114,10 +175,10 @@ export const generateScheduleFromData = (
 			}
 		}
 
-		return createScheduleData(validSchedules, warnings, warningCodes);
+		return createScheduleData(validSchedules, warnings, uniqueWarnings(warningCodes));
 	};
 
-	// No option groups: keep existing behavior.
+	// Without option groups, every non-missing selected course is mandatory.
 	if (optionGroups.length === 0) {
 		return runForCourses(selectedCourses);
 	}
@@ -142,76 +203,206 @@ export const generateScheduleFromData = (
 	}
 	const baseCourses = selectedCourses.filter((entry) => !groupedCourses.has(entry.course));
 
-	// Explore combinations to find all valid schedules across the option groups.
-	const MAX_OPTION_COMBINATIONS = 96;
-	let explored = 0;
+	const optionMissingWarnings: WarningInfo[] = [];
+	const activeGroups = normalizedGroups
+		.map((group) => {
+			const activeOptions: CourseEntry[] = [];
+			for (const opt of group.options) {
+				if (courseHasMissingData(opt.course)) {
+					optionMissingWarnings.push(
+						...buildOptionExclusionWarnings(opt, eligibleSections, blockedSet)
+					);
+				} else {
+					activeOptions.push(opt);
+				}
+			}
+			return { options: activeOptions };
+		})
+		.filter((group) => group.options.length > 0);
 
-	let bestResult: ScheduleData | null = null;
-	let bestPick: typeof selectedCourses = [];
+	const appendWarnings = (result: ScheduleData, warnings: WarningInfo[]): ScheduleData => {
+		const warningCodes = uniqueWarnings([...(result.warning_codes ?? []), ...warnings]);
+		return {
+			...result,
+			warning_codes: warningCodes,
+			warnings: warningCodes.map((warning) => warning.message)
+		};
+	};
+
+	if (activeGroups.length === 0) {
+		const result = baseCourses.length > 0 ? runForCourses(baseCourses) : null;
+		if (result) return appendWarnings(result, optionMissingWarnings);
+		const warningCodes = uniqueWarnings([
+			...optionMissingWarnings,
+			...(optionMissingWarnings.length > 1 ? [createWarning(WarningCodes.ALL_COURSES_NO_DATA)] : [])
+		]);
+		return createScheduleData([], [], warningCodes);
+	}
+
+	// Explore combinations to find all valid schedules across the option groups.
+	let referenceResult: ScheduleData | null = null;
 
 	const allValidSchedules: Schedule[] = [];
-	const successfulOptionCourses = new Set<string>();
+	const seenScheduleKeys = new Set<string>();
+	const successfulOptionKeys = new Set<string>();
+	const successfulWarnings: WarningInfo[] = [];
+	const failedWarningsByOptionKey = new Map<string, WarningInfo[]>();
+	const failedWarnings: WarningInfo[] = [];
+	const processedCombinationKeys = new Set<string>();
+	let firstSuccessfulPick: CourseEntry[] | null = null;
 
-	const pick: typeof selectedCourses = normalizedGroups.map((g) => g.options[0]);
+	const pick: CourseEntry[] = activeGroups.map((g) => g.options[0]);
+
+	const combinationKey = (combination: CourseEntry[]): string =>
+		combination.map((entry) => optionKey(entry)).join('||');
+
+	const processCombination = (combination: CourseEntry[]): boolean => {
+		if (options.shouldCancel?.()) return false;
+
+		const key = combinationKey(combination);
+		if (processedCombinationKeys.has(key)) return false;
+		processedCombinationKeys.add(key);
+
+		const result = runForCourses([...baseCourses, ...combination]);
+		if (!referenceResult) referenceResult = result;
+
+		if (result.schedules.length > 0) {
+			for (const schedule of result.schedules) {
+				const key = scheduleKey(schedule);
+				if (seenScheduleKeys.has(key)) continue;
+				seenScheduleKeys.add(key);
+				allValidSchedules.push(schedule);
+			}
+			if (!firstSuccessfulPick) firstSuccessfulPick = [...combination];
+			successfulWarnings.push(...(result.warning_codes ?? []));
+			for (const entry of combination) successfulOptionKeys.add(optionKey(entry));
+			return true;
+		}
+
+		const resultWarnings = result.warning_codes ?? [];
+		failedWarnings.push(...resultWarnings);
+		for (const entry of combination) {
+			const key = optionKey(entry);
+			const existing = failedWarningsByOptionKey.get(key) ?? [];
+			existing.push(...resultWarnings);
+			failedWarningsByOptionKey.set(key, existing);
+		}
+		return true;
+	};
+
+	let boundedCombinationsProcessed = 0;
 	const dfs = (depth: number) => {
 		if (options.shouldCancel?.()) return;
-		if (explored >= MAX_OPTION_COMBINATIONS) return;
+		if (boundedCombinationsProcessed >= MAX_OPTION_COMBINATIONS) return;
 
-		if (depth >= normalizedGroups.length) {
-			explored += 1;
-			const result = runForCourses([...baseCourses, ...pick]);
-
-			if (result.schedules.length > 0) {
-				allValidSchedules.push(...result.schedules);
-				for (const p of pick) successfulOptionCourses.add(p.course);
-			}
-
-			// Keep the first result (most preferred) as a fallback/reference
-			// or if it's the best one we've seen (though "best" is ambiguous if we merge)
-			if (!bestResult) {
-				bestResult = result;
-				bestPick = [...pick];
+		if (depth >= activeGroups.length) {
+			if (processCombination([...pick])) {
+				boundedCombinationsProcessed += 1;
 			}
 			return;
 		}
 
-		const group = normalizedGroups[depth];
+		const group = activeGroups[depth];
 		for (const opt of group.options) {
 			pick[depth] = opt;
 			dfs(depth + 1);
+			if (boundedCombinationsProcessed >= MAX_OPTION_COMBINATIONS) break;
 		}
 	};
 
 	dfs(0);
 
-	// If we found any valid schedules, return them all.
-	if (allValidSchedules.length > 0) {
-		const extraWarnings = [] as ReturnType<typeof createWarning>[];
-		for (const group of normalizedGroups) {
-			for (const opt of group.options) {
-				if (!successfulOptionCourses.has(opt.course)) {
-					extraWarnings.push(...buildOptionExclusionWarnings(opt, eligibleSections, blockedSet));
+	const coverageBasePick = firstSuccessfulPick ?? activeGroups.map((group) => group.options[0]);
+	for (let groupIndex = 0; groupIndex < activeGroups.length; groupIndex += 1) {
+		for (const opt of activeGroups[groupIndex].options) {
+			if (options.shouldCancel?.()) break;
+			const coveragePick = [...coverageBasePick];
+			coveragePick[groupIndex] = opt;
+			processCombination(coveragePick);
+		}
+	}
+
+	const findOptionCoverage = (groupIndex: number, option: CourseEntry): boolean => {
+		const key = optionKey(option);
+		if (successfulOptionKeys.has(key)) return true;
+
+		const maxAttempts = MAX_OPTION_COMBINATIONS;
+		let attempts = 0;
+		let capped = false;
+		const forcedPick = activeGroups.map((group) => group.options[0]);
+		forcedPick[groupIndex] = option;
+
+		const search = (depth: number) => {
+			if (successfulOptionKeys.has(key) || options.shouldCancel?.() || capped) return;
+
+			if (depth >= activeGroups.length) {
+				if (attempts >= maxAttempts) {
+					capped = true;
+					return;
 				}
+				attempts += 1;
+				processCombination([...forcedPick]);
+				return;
+			}
+
+			if (depth === groupIndex) {
+				forcedPick[depth] = option;
+				search(depth + 1);
+				return;
+			}
+
+			for (const candidate of activeGroups[depth].options) {
+				forcedPick[depth] = candidate;
+				search(depth + 1);
+				if (successfulOptionKeys.has(key) || capped) return;
+			}
+		};
+
+		search(0);
+		return successfulOptionKeys.has(key) || capped;
+	};
+
+	const dataBackedOptions = new Map<string, { option: CourseEntry; groupIndex: number }>();
+	for (let groupIndex = 0; groupIndex < activeGroups.length; groupIndex += 1) {
+		for (const opt of activeGroups[groupIndex].options) {
+			const key = optionKey(opt);
+			if (!dataBackedOptions.has(key)) {
+				dataBackedOptions.set(key, { option: opt, groupIndex });
 			}
 		}
+	}
 
-		const reference = bestResult!;
+	const uncoveredOptionWarnings: WarningInfo[] = [];
+	for (const [key, { option: opt, groupIndex }] of dataBackedOptions) {
+		if (successfulOptionKeys.has(key)) continue;
+		if (findOptionCoverage(groupIndex, opt)) continue;
+
+		const warningsForOption = (failedWarningsByOptionKey.get(key) ?? []).filter(
+			(warning) => !ALL_COURSES_HEADLINE_CODES.has(warning.code)
+		);
+		uncoveredOptionWarnings.push(
+			...(warningsForOption.length > 0
+				? warningsForOption
+				: buildOptionExclusionWarnings(opt, eligibleSections, blockedSet))
+		);
+	}
+
+	const blockingWarnings = uniqueWarnings([...optionMissingWarnings, ...uncoveredOptionWarnings]);
+	if (uncoveredOptionWarnings.length > 0) {
+		return createScheduleData([], [], blockingWarnings);
+	}
+
+	if (allValidSchedules.length > 0) {
+		const reference = referenceResult!;
+		const warningCodes = uniqueWarnings([...optionMissingWarnings, ...successfulWarnings]);
 		return {
 			schedules: allValidSchedules,
-			warnings: extraWarnings.map((w) => w.message),
-			warning_codes: extraWarnings,
+			warnings: warningCodes.map((warning) => warning.message),
+			warning_codes: warningCodes,
 			time_slots: reference.time_slots,
 			days_of_week: reference.days_of_week
 		};
 	}
 
-	const chosen = bestPick.length ? bestPick : normalizedGroups.map((g) => g.options[0]);
-	const result = bestResult ?? runForCourses([...baseCourses, ...chosen]);
-
-	// If we had to fall back (no valid schedules found at all), logic remains similar:
-	// We can try to explain why the *preferred* option failed (already in result),
-	// and arguably we could hint that others failed too, but the existing error messages
-	// for the specific run are usually sufficient (e.g. "Time conflict between X and Y").
-
-	return result;
+	return createScheduleData([], [], uniqueWarnings([...optionMissingWarnings, ...failedWarnings]));
 };
