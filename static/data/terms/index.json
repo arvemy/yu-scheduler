@@ -1,5 +1,9 @@
 [
- {
+  {
+    "term": "2025-2026 Summer",
+    "file": "2025-2026_summer.json"
+  },
+  {
     "term": "2025-2026 Spring",
     "file": "2025-2026_spring.json"
   },

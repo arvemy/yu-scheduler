@@ -53,7 +53,7 @@
 	};
 </script>
 
-<Tooltip.Provider delayDuration={350} skipDelayDuration={100}>
+<Tooltip.Provider delayDuration={350} skipDelayDuration={100} ignoreNonKeyboardFocus>
 	<header class="header">
 		<!-- Floating controls (top-right) -->
 		<div class="floating-controls">

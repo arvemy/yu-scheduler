@@ -30,7 +30,7 @@
 	} = $props();
 </script>
 
-<Tooltip.Provider delayDuration={350} skipDelayDuration={100}>
+<Tooltip.Provider delayDuration={350} skipDelayDuration={100} ignoreNonKeyboardFocus>
 	{#if visible}
 		<div
 			class="bottom-action-bar"

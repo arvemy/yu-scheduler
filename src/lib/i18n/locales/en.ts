@@ -50,6 +50,7 @@ export const en = {
 		any: 'X',
 		sectionSelectAriaLabel: 'Select section for {{course}}',
 		removeCourse: 'Remove course {{course}}',
+		reorderCourse: 'Drag to reorder course {{course}}',
 		showCourses: 'Show courses in group {{group}}',
 		blockUnblockCell: 'Block/unblock {{day}} at {{slot}}',
 		blockUnblockHour: 'Block/unblock this hour for all days',
@@ -222,11 +223,11 @@ export const en = {
 		feature4: 'Save and manage multiple schedule options',
 		updates: {
 			title: 'Latest Updates',
-			term: '2025–2026 Spring',
+			term: '2025–2026 Summer',
 			items: {
-				springTermAdded: 'Spring term courses have been added to the system'
+				termCoursesAdded: 'Summer term courses have been added to the system'
 			},
-			addedOn: 'Added on: Friday, Jan 23'
+			addedOn: 'Added on: Thursday, Jun 4'
 		},
 		importantNotice:
 			'Please verify your schedule at <a href="https://oim.yasar.edu.tr/ders-kayitlari" target="_blank" rel="noopener noreferrer">oim.yasar.edu.tr/ders-kayitlari</a> for the most accurate information.',

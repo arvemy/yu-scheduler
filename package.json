@@ -59,6 +59,7 @@
 	"dependencies": {
 		"@lucide/svelte": "^1.16.0",
 		"bits-ui": "^2.18.1",
-		"modern-screenshot": "^4.7.0"
+		"modern-screenshot": "^4.7.0",
+		"svelte-dnd-action": "^0.9.69"
 	}
 }

@@ -50,6 +50,7 @@ export const tr = {
 		any: 'X',
 		sectionSelectAriaLabel: '{{course}} dersi için şube seç',
 		removeCourse: '{{course}} dersini kaldır',
+		reorderCourse: '{{course}} dersini taşımak için sürükleyin',
 		showCourses: '{{group}} grubundaki dersleri göster',
 		blockUnblockCell: '{{day}} günü {{slot}} saatini engelle veya engeli kaldır',
 		blockUnblockHour: 'Bu saati tüm günler için engelle veya engeli kaldır',
@@ -221,11 +222,11 @@ export const tr = {
 		feature4: 'Birden fazla programı kaydedin ve yönetin',
 		updates: {
 			title: 'Son Güncellemeler',
-			term: '2025–2026 Bahar',
+			term: '2025–2026 Yaz',
 			items: {
-				springTermAdded: 'Bahar dönemi dersleri sisteme eklenmiştir'
+				termCoursesAdded: 'Yaz dönemi dersleri sisteme eklenmiştir'
 			},
-			addedOn: 'Eklendi: 23 Ocak Cuma'
+			addedOn: 'Eklendi: 4 Haziran Perşembe'
 		},
 		importantNotice:
 			'En doğru bilgi için lütfen ders programınızı <a href="https://oim.yasar.edu.tr/ders-kayitlari" target="_blank" rel="noopener noreferrer">oim.yasar.edu.tr/ders-kayitlari</a> adresinden kontrol ediniz.',

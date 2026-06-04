@@ -1,0 +1,5996 @@
+{
+  "ARCH 1020": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "ARCH 2220": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "ARCH 3031": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "ARCH 3320": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "ARCH 4031": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "ARCH 4420": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "BA 2201": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    }
+  ],
+  "BA 3352": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    }
+  ],
+  "CE 4830": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "COMP 4439": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    }
+  ],
+  "COMP 4801": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "EC 1101": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    }
+  ],
+  "EC 1102": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    }
+  ],
+  "EC 3003": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    }
+  ],
+  "EEE 2426": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    }
+  ],
+  "EEE 3615": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "EEE 3638": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "EEE 4830": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "ENGL 0020": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    }
+  ],
+  "ENGL 0050": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    }
+  ],
+  "ENGR 1115": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "ENGR 1116": [
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "ESE 4830": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "GAST 2201": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    }
+  ],
+  "GAST 3305": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "GAST 3358": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    }
+  ],
+  "GAST 4402": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    }
+  ],
+  "GAST 4404": [
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    }
+  ],
+  "GAST 4405": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "GAST 4411": [
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    }
+  ],
+  "HIST 1110": [
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    }
+  ],
+  "HIST 1120": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "HIST 1210": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "18:40",
+      "End Time": "19:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "19:40",
+      "End Time": "20:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "20:40",
+      "End Time": "21:30",
+      "Classroom": null
+    }
+  ],
+  "HIST 1220": [
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "HKUK 2009": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    }
+  ],
+  "HKUK 2010": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    }
+  ],
+  "HKUK 2014": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    }
+  ],
+  "HKUK 2517": [
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "HKUK 2523": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    }
+  ],
+  "HKUK 2529": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    }
+  ],
+  "HKUK 2532": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    }
+  ],
+  "HKUK 3017": [
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    }
+  ],
+  "HKUK 3020": [
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    }
+  ],
+  "HKUK 4001": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    }
+  ],
+  "HKUK 4002": [
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    }
+  ],
+  "HKUK 4009": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    }
+  ],
+  "HKUK 4011": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    }
+  ],
+  "HKUK 4015": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "18:40",
+      "End Time": "19:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "19:40",
+      "End Time": "20:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "18:40",
+      "End Time": "19:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "19:40",
+      "End Time": "20:30",
+      "Classroom": null
+    }
+  ],
+  "HKUK 4017": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    }
+  ],
+  "IE 2532": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "IE 4830": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "INAR 3020": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "INAR 4020": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "INAR 4033": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "INAR 4071": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "INDD 4407": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "ISG 9110": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    }
+  ],
+  "ISG 9120": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    }
+  ],
+  "ISG 9210": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "ISG 9220": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "LAWS 2502": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    }
+  ],
+  "LAWS 4002": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    }
+  ],
+  "LAWS 4502": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    }
+  ],
+  "MATH 1131": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    }
+  ],
+  "MATH 1132": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    }
+  ],
+  "MATH 2260": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    }
+  ],
+  "MBBP 1110": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    }
+  ],
+  "MBBP 1130": [
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    }
+  ],
+  "MBBP 1208": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "MBBP 2111": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "ME 4830": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "MFBP 1102": [
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "MFBP 1241": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "MFBP 2257": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "MFBP 2262": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    }
+  ],
+  "MGGP 1101": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "MGGP 1131": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "18:40",
+      "End Time": "19:30",
+      "Classroom": null
+    }
+  ],
+  "MGGP 2118": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "MGGP 2125": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "MGTP 1133": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    }
+  ],
+  "MIS 4829": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "MSTJ 2200": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "MYLP 1120": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "MYLP 2250": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "MYME 1050": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    }
+  ],
+  "MYMU 1050": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "MYMU 1060": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "PHYS 1121": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    }
+  ],
+  "PHYS 1122": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    }
+  ],
+  "PSYC 3078": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "SCUL 0711": [
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "18:40",
+      "End Time": "19:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "19:40",
+      "End Time": "20:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "20:40",
+      "End Time": "21:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "21:40",
+      "End Time": "22:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "22:40",
+      "End Time": "23:30",
+      "Classroom": null
+    }
+  ],
+  "SE 4830": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "SE 4920": [
+    {
+      "Section": "1",
+      "Day": "CUMARTESI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMARTESI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMARTESI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMARTESI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMARTESI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMARTESI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    }
+  ],
+  "SOFL 1101": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "SOFL 1102": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "3",
+      "Day": "SALI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "3",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "3",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "3",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "3",
+      "Day": "PERŞEMBE",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "3",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "3",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "3",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    }
+  ],
+  "SOFL 1115": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "SOFL 1116": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    }
+  ],
+  "SOFL 1513": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    }
+  ],
+  "SOFL 1514": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "SOFL 1611": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "08:40",
+      "End Time": "09:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "2",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "TF 3000": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ],
+  "TF 3303": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    }
+  ],
+  "TF 3304": [
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    }
+  ],
+  "TURK 1110": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    }
+  ],
+  "TURK 1120": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "TURK 1210": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "18:40",
+      "End Time": "19:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "19:40",
+      "End Time": "20:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "20:40",
+      "End Time": "21:30",
+      "Classroom": null
+    }
+  ],
+  "TURK 1220": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    }
+  ],
+  "UFND 2010": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "UFND 2020": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "18:40",
+      "End Time": "19:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "19:40",
+      "End Time": "20:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "20:40",
+      "End Time": "21:30",
+      "Classroom": null
+    }
+  ],
+  "UFND 3010": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    }
+  ],
+  "UFND 3020": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "UFND 3310": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "18:40",
+      "End Time": "19:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "19:40",
+      "End Time": "20:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "20:40",
+      "End Time": "21:30",
+      "Classroom": null
+    }
+  ],
+  "UFND 3320": [
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    }
+  ],
+  "UFND 3410": [
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "UFND 3420": [
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "18:40",
+      "End Time": "19:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "19:40",
+      "End Time": "20:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "20:40",
+      "End Time": "21:30",
+      "Classroom": null
+    }
+  ],
+  "UFND 4010": [
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "09:40",
+      "End Time": "10:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "10:40",
+      "End Time": "11:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "11:40",
+      "End Time": "12:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "12:40",
+      "End Time": "13:30",
+      "Classroom": null
+    }
+  ],
+  "UFND 4020": [
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "UFND 6210": [
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "18:40",
+      "End Time": "19:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "19:40",
+      "End Time": "20:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PAZARTESI",
+      "Start Time": "20:40",
+      "End Time": "21:30",
+      "Classroom": null
+    }
+  ],
+  "UFND 6220": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "18:40",
+      "End Time": "19:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "19:40",
+      "End Time": "20:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "20:40",
+      "End Time": "21:30",
+      "Classroom": null
+    }
+  ],
+  "UFND 6320": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "18:40",
+      "End Time": "19:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "19:40",
+      "End Time": "20:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "20:40",
+      "End Time": "21:30",
+      "Classroom": null
+    }
+  ],
+  "UFND 7010": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "UFND 7020": [
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "18:40",
+      "End Time": "19:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "19:40",
+      "End Time": "20:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "PERŞEMBE",
+      "Start Time": "20:40",
+      "End Time": "21:30",
+      "Classroom": null
+    }
+  ],
+  "UMFD 1210": [
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "ÇARŞAMBA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "UMFD 1220": [
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "18:40",
+      "End Time": "19:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "19:40",
+      "End Time": "20:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "SALI",
+      "Start Time": "20:40",
+      "End Time": "21:30",
+      "Classroom": null
+    }
+  ],
+  "UMFD 1710": [
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "13:40",
+      "End Time": "14:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "14:40",
+      "End Time": "15:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "15:40",
+      "End Time": "16:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "16:40",
+      "End Time": "17:30",
+      "Classroom": null
+    }
+  ],
+  "UMFD 1720": [
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "17:40",
+      "End Time": "18:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "18:40",
+      "End Time": "19:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "19:40",
+      "End Time": "20:30",
+      "Classroom": null
+    },
+    {
+      "Section": "1",
+      "Day": "CUMA",
+      "Start Time": "20:40",
+      "End Time": "21:30",
+      "Classroom": null
+    }
+  ],
+  "VCDS 4000": [
+    {
+      "Section": "1",
+      "Day": null,
+      "Start Time": null,
+      "End Time": null,
+      "Classroom": null
+    }
+  ]
+}

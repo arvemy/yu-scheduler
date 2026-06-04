@@ -26,7 +26,7 @@
 	} = $props();
 </script>
 
-<Tooltip.Provider delayDuration={350} skipDelayDuration={100}>
+<Tooltip.Provider delayDuration={350} skipDelayDuration={100} ignoreNonKeyboardFocus>
 	<Dialog.Root {open} onOpenChange={(value) => (!value ? onClose?.() : null)}>
 		<Dialog.Portal>
 			<Dialog.Overlay class="overlay" />
@@ -85,7 +85,7 @@
 					<ul>
 						<li>
 							<CircleCheck class="shrink-0 text-success" size={14} />
-							{$t('welcome.updates.items.springTermAdded')}
+							{$t('welcome.updates.items.termCoursesAdded')}
 						</li>
 					</ul>
 					<p class="updates-date">{$t('welcome.updates.addedOn')}</p>

@@ -90,7 +90,7 @@
 	};
 </script>
 
-<Tooltip.Provider delayDuration={350} skipDelayDuration={100}>
+<Tooltip.Provider delayDuration={350} skipDelayDuration={100} ignoreNonKeyboardFocus>
 	<Dialog.Root {open} onOpenChange={(value) => (!value ? onClose?.() : null)}>
 		<Dialog.Portal>
 			<Dialog.Overlay class="overlay" />

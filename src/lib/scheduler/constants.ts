@@ -37,7 +37,8 @@ export const TIME_SLOTS: string[] = [
 	'18:40-19:30',
 	'19:40-20:30',
 	'20:40-21:30',
-	'21:40-22:30'
+	'21:40-22:30',
+	'22:40-23:30'
 ];
 
 export const DAYS_OF_WEEK: string[] = [

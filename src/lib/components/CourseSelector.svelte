@@ -8,6 +8,7 @@
 		CircleCheck,
 		Download,
 		FolderOpen,
+		GripVertical,
 		Info,
 		LoaderCircle,
 		Save,
@@ -16,6 +17,8 @@
 		X
 	} from '@lucide/svelte';
 	import { watch, useDebounce } from '$lib/utils/reactivity.svelte';
+	import { dragHandleZone, dragHandle, TRIGGERS } from 'svelte-dnd-action';
+	import { flip } from 'svelte/animate';
 	import { t } from '$lib/i18n';
 	import { DAYS_OF_WEEK, TIME_SLOTS, generateSchedule, getCourses, getSections } from '$lib';
 	import type { BlockedHour, CourseEntry, SavedSchedule, ScheduleData } from '$lib/types';
@@ -68,6 +71,21 @@
 	 * Key is course name, value is true if this course is OR-connected to the next course in selectedCourses.
 	 */
 	let orConnections = $state<Record<string, boolean>>({});
+
+	// Drag-and-drop reordering of selected course chips. svelte-dnd-action requires
+	// items to be objects with a unique `id`, so we keep a local mirror of
+	// `selectedCourses` (the string[] source of truth).
+	//
+	// `id` is the DnD identity; `course` is what we render/finalize from. They are
+	// kept separate because while a pointer drag is in flight svelte-dnd-action
+	// swaps the dragged item's `id` for an internal placeholder id (preserving the
+	// other fields), so deriving the course from `id` would make the placeholder
+	// chip lose its label/section/OR lookups mid-drag.
+	const flipDurationMs = 150;
+	type DndItem = { id: string; course: string };
+	let dndItems = $state<DndItem[]>([]);
+	let dragging = $state(false); // true between the first `consider` and `finalize`
+
 	let loading = $state(true);
 	let submitting = $state(false);
 	let searchInput = $state('');
@@ -402,6 +420,18 @@
 		}
 	);
 
+	// Mirror the source-of-truth order into the local DnD model. This only fires
+	// when `selectedCourses` changes (add/remove/clear/load/term switch) — never
+	// mid-drag, since `consider` mutates `dndItems` not `selectedCourses`. The
+	// `dragging` guard is belt-and-suspenders against any other mid-drag writes.
+	watch(
+		() => selectedCourses,
+		(coursesValue) => {
+			if (dragging) return;
+			dndItems = coursesValue.map((course) => ({ id: course, course }));
+		}
+	);
+
 	watch(
 		() => [term, blockedHours] as const,
 		([termValue, hoursValue]) => {
@@ -718,6 +748,42 @@
 		openGroup = null;
 	};
 
+	// --- Drag-and-drop reordering of selected course chips ---
+	const handleDndConsider = (
+		event: CustomEvent<{ items: DndItem[]; info: { trigger: string } }>
+	) => {
+		dndItems = event.detail.items;
+		// Keyboard drags end with a `consider` (DRAG_STOPPED) instead of a `finalize`
+		// (the order is already committed by the per-move finalize events). Clear
+		// `dragging` here too, otherwise the resync watch stays frozen and later
+		// add/remove/load/term changes would leave the chips stale.
+		dragging = event.detail.info.trigger !== TRIGGERS.DRAG_STOPPED;
+	};
+
+	const handleDndFinalize = (event: CustomEvent<{ items: DndItem[] }>) => {
+		dndItems = event.detail.items;
+		const next = event.detail.items.map((item) => item.course);
+		dragging = false;
+
+		// Commit to the source of truth (→ persistence + regeneration) only on drop,
+		// and only when the order actually changed.
+		if (
+			next.length !== selectedCourses.length ||
+			next.some((course, i) => course !== selectedCourses[i])
+		) {
+			selectedCourses = next;
+		}
+
+		// Drop an OR connection that now sits on the final chip: it has no visible
+		// connector, and leaving it set would silently OR-connect this course to
+		// whatever gets appended next.
+		const lastCourse = next[next.length - 1];
+		if (lastCourse !== undefined && lastCourse in orConnections) {
+			const { [lastCourse]: _dropped, ...rest } = orConnections;
+			orConnections = rest;
+		}
+	};
+
 	const handleLoadSchedule = (saved: SavedSchedule) => {
 		suppressAutoGenerate = true;
 		activeScheduleIndex = saved.activeScheduleIndex ?? 0;
@@ -809,7 +875,7 @@
 	);
 </script>
 
-<Tooltip.Provider delayDuration={350} skipDelayDuration={100}>
+<Tooltip.Provider delayDuration={350} skipDelayDuration={100} ignoreNonKeyboardFocus>
 	<section class="course-selector">
 		{#if isMobile}
 			<div class="mobile-tab-switcher" role="tablist" aria-label="Course selector">
@@ -1004,93 +1070,112 @@
 										<TooltipContent label={$t('tooltips.clearAll')} />
 									</Tooltip.Root>
 								</div>
-								<div class="selected-chips">
-									{#each selectedCourses as course, index (course)}
+								<div
+									class="selected-chips"
+									use:dragHandleZone={{
+										items: dndItems,
+										flipDurationMs,
+										dragDisabled: selectedCourses.length < 2
+									}}
+									onconsider={handleDndConsider}
+									onfinalize={handleDndFinalize}
+								>
+									{#each dndItems as item, index (item.id)}
+										{@const course = item.course}
 										{@const courseSections = sections[course]}
 										{@const hasMultipleSections = (courseSections?.length ?? 0) > 1}
-										{@const isLastCourse = index === selectedCourses.length - 1}
+										{@const isLastCourse = index === dndItems.length - 1}
 										{@const isOrConnected = orConnections[course] ?? false}
-										<div class="selected-chip">
-											<span class="chip-label">{course}</span>
+										<div class="chip-unit" animate:flip={{ duration: flipDurationMs }}>
+											<div class="selected-chip">
+												<span
+													class="chip-drag-handle"
+													use:dragHandle
+													aria-label={$t('courseSelector.reorderCourse', { course })}
+												>
+													<GripVertical size={14} aria-hidden="true" />
+												</span>
+												<span class="chip-label">{course}</span>
 
-											{#if hasMultipleSections}
-												<select
-													class="chip-section-select"
-													name={`section-${course}`}
-													aria-label={$t('courseSelector.sectionSelectAriaLabel', { course })}
-													value={sectionChoices[course] ?? ''}
-													onchange={(event) => {
-														const value = (event.currentTarget as HTMLSelectElement).value;
-														// Reassign to ensure watchers see a new reference
-														// (the schedule generator watches `sectionChoices` as a whole)
-														if (!value) {
-															if (course in sectionChoices) {
-																const { [course]: _ignored, ...rest } = sectionChoices;
-																sectionChoices = rest;
+												{#if hasMultipleSections}
+													<select
+														class="chip-section-select"
+														name={`section-${course}`}
+														aria-label={$t('courseSelector.sectionSelectAriaLabel', { course })}
+														value={sectionChoices[course] ?? ''}
+														onchange={(event) => {
+															const value = (event.currentTarget as HTMLSelectElement).value;
+															// Reassign to ensure watchers see a new reference
+															// (the schedule generator watches `sectionChoices` as a whole)
+															if (!value) {
+																if (course in sectionChoices) {
+																	const { [course]: _ignored, ...rest } = sectionChoices;
+																	sectionChoices = rest;
+																}
+																return;
 															}
-															return;
-														}
 
-														sectionChoices = {
-															...sectionChoices,
-															[course]: value
-														};
-													}}
-												>
-													<option value="">{$t('courseSelector.any')}</option>
-													{#each courseSections as sectionId (sectionId)}
-														<option value={sectionId}>{sectionId}</option>
-													{/each}
-												</select>
-											{/if}
-
-											<Tooltip.Root>
-												<Tooltip.Trigger
-													class="chip-remove group"
-													onclick={() => toggleCourse(course)}
-													aria-label={$t('courseSelector.removeCourse', { course })}
-												>
-													<X
-														class="shrink-0 opacity-70 transition-colors group-hover:text-error"
-														size={16}
-														aria-hidden="true"
-													/>
-												</Tooltip.Trigger>
-												<TooltipContent label={$t('courseSelector.removeCourse', { course })} />
-											</Tooltip.Root>
-										</div>
-
-										<!-- AND/OR Connector Toggle (between courses) -->
-										{#if !isLastCourse}
-											<Tooltip.Root>
-												<Tooltip.Trigger
-													class="connector-toggle {isOrConnected ? 'or-active' : ''}"
-													onclick={() => {
-														if (isOrConnected) {
-															const { [course]: _, ...rest } = orConnections;
-															orConnections = rest;
-														} else {
-															orConnections = {
-																...orConnections,
-																[course]: true
+															sectionChoices = {
+																...sectionChoices,
+																[course]: value
 															};
-														}
-													}}
-													aria-label={isOrConnected
-														? $t('courseSelector.connector.or')
-														: $t('courseSelector.connector.and')}
-												>
-													{isOrConnected
-														? $t('courseSelector.connector.or')
-														: $t('courseSelector.connector.and')}
-												</Tooltip.Trigger>
-												<TooltipContent
-													label={isOrConnected
-														? $t('courseSelector.connector.or')
-														: $t('courseSelector.connector.and')}
-												/>
-											</Tooltip.Root>
-										{/if}
+														}}
+													>
+														<option value="">{$t('courseSelector.any')}</option>
+														{#each courseSections as sectionId (sectionId)}
+															<option value={sectionId}>{sectionId}</option>
+														{/each}
+													</select>
+												{/if}
+
+												<Tooltip.Root>
+													<Tooltip.Trigger
+														class="chip-remove group"
+														onclick={() => toggleCourse(course)}
+														aria-label={$t('courseSelector.removeCourse', { course })}
+													>
+														<X
+															class="shrink-0 opacity-70 transition-colors group-hover:text-error"
+															size={16}
+															aria-hidden="true"
+														/>
+													</Tooltip.Trigger>
+													<TooltipContent label={$t('courseSelector.removeCourse', { course })} />
+												</Tooltip.Root>
+											</div>
+
+											<!-- AND/OR Connector Toggle (between courses) -->
+											{#if !isLastCourse}
+												<Tooltip.Root>
+													<Tooltip.Trigger
+														class="connector-toggle {isOrConnected ? 'or-active' : ''}"
+														onclick={() => {
+															if (isOrConnected) {
+																const { [course]: _, ...rest } = orConnections;
+																orConnections = rest;
+															} else {
+																orConnections = {
+																	...orConnections,
+																	[course]: true
+																};
+															}
+														}}
+														aria-label={isOrConnected
+															? $t('courseSelector.connector.or')
+															: $t('courseSelector.connector.and')}
+													>
+														{isOrConnected
+															? $t('courseSelector.connector.or')
+															: $t('courseSelector.connector.and')}
+													</Tooltip.Trigger>
+													<TooltipContent
+														label={isOrConnected
+															? $t('courseSelector.connector.or')
+															: $t('courseSelector.connector.and')}
+													/>
+												</Tooltip.Root>
+											{/if}
+										</div>
 									{/each}
 								</div>
 							</div>
@@ -1646,6 +1731,35 @@
 		flex-wrap: wrap;
 		gap: var(--space-sm);
 		align-items: center;
+	}
+
+	/* Draggable unit: a chip plus its trailing AND/OR connector. The inner gap
+	   reproduces the chip↔connector spacing the flat layout used to get from the
+	   container gap, so the visual rhythm is unchanged. */
+	.chip-unit {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-sm);
+	}
+
+	.chip-drag-handle {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		margin-right: 2px;
+		color: var(--ink-muted);
+		cursor: grab;
+		/* let svelte-dnd-action own the touch gesture on the handle */
+		touch-action: none;
+	}
+
+	.chip-drag-handle:active {
+		cursor: grabbing;
+	}
+
+	/* svelte-dnd-action sets aria-disabled on the zone when dragging is disabled */
+	:global(.selected-chips[aria-disabled='true']) .chip-drag-handle {
+		cursor: default;
 	}
 
 	.selected-chip {

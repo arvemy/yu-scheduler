@@ -289,7 +289,7 @@
 	};
 </script>
 
-<Tooltip.Provider delayDuration={350} skipDelayDuration={100}>
+<Tooltip.Provider delayDuration={350} skipDelayDuration={100} ignoreNonKeyboardFocus>
 	<div class="timetable-container">
 		{#if !mounted}
 			<!-- SSR/Loading skeleton - matches expected height to prevent CLS -->
