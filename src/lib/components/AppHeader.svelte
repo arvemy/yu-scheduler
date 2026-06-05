@@ -4,6 +4,7 @@
 	import { locale, setLocale, t } from '$lib/i18n';
 	import { translateTerm } from '$lib/utils/term';
 	import { useMobile } from '$lib/utils/useMediaQuery.svelte';
+	import type { ProgramMeta } from '$lib/types';
 	import TooltipContent from '$lib/components/ui/TooltipContent.svelte';
 
 	let {
@@ -11,7 +12,10 @@
 		currentTerm = null,
 		termsLoading = false,
 		termsError = false,
+		programs = [],
+		currentProgram = null,
 		onChangeTerm,
+		onChangeProgram,
 		onOpenWelcome,
 		portfolioUrl = 'https://arvemy.github.io'
 	}: {
@@ -19,7 +23,10 @@
 		currentTerm: string | null;
 		termsLoading: boolean;
 		termsError: boolean;
+		programs?: ProgramMeta[];
+		currentProgram?: string | null;
 		onChangeTerm: (term: string) => void;
+		onChangeProgram?: (program: string | null) => void;
 		onOpenWelcome: () => void;
 		portfolioUrl?: string;
 	} = $props();
@@ -30,6 +37,28 @@
 	const termItems = $derived(
 		terms.map((term) => ({ value: term, label: translateTerm(term, $t) }))
 	);
+
+	// Sentinel for the "All programs" option (Select needs a non-empty value).
+	const ALL_PROGRAMS = '__all__';
+
+	const programName = (program: ProgramMeta): string =>
+		program.name?.[$locale] ?? program.name?.en ?? program.id;
+
+	const programItems = $derived([
+		{ value: ALL_PROGRAMS, label: $t('program.all') },
+		...[...programs]
+			.sort((a, b) => programName(a).localeCompare(programName(b), $locale))
+			.map((program) => ({ value: program.id, label: programName(program) }))
+	]);
+
+	const currentProgramLabel = $derived(
+		programItems.find((item) => item.value === (currentProgram ?? ALL_PROGRAMS))?.label ??
+			$t('program.all')
+	);
+
+	const handleProgramChange = (value: string) => {
+		onChangeProgram?.(value === ALL_PROGRAMS ? null : value);
+	};
 
 	const languageItems = $derived([
 		{ value: 'en', label: $t('language.english') },
@@ -234,6 +263,39 @@
 					</Select.Root>
 				{/if}
 			</div>
+
+			<!-- Program selector (filters the picker; only shown when a catalog exists) -->
+			{#if programs.length > 0}
+				<div class="program-selector-wrapper">
+					<Select.Root
+						type="single"
+						items={programItems}
+						value={currentProgram ?? ALL_PROGRAMS}
+						onValueChange={handleProgramChange}
+					>
+						<Select.Trigger
+							class="term-trigger program-trigger"
+							aria-label={$t('program.ariaLabel')}
+						>
+							<span class="term-value">{currentProgramLabel}</span>
+							<ChevronDown class="shrink-0" size={18} />
+						</Select.Trigger>
+						<Select.Content
+							class="select-content term-content program-content"
+							align="center"
+							sideOffset={4}
+						>
+							<Select.Viewport class="select-viewport">
+								{#each programItems as item (item.value)}
+									<Select.Item class="select-item" value={item.value} label={item.label}>
+										{item.label}
+									</Select.Item>
+								{/each}
+							</Select.Viewport>
+						</Select.Content>
+					</Select.Root>
+				</div>
+			{/if}
 		</div>
 	</header>
 </Tooltip.Provider>
@@ -337,6 +399,42 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+
+	/* Program selector — a secondary, lighter sibling of the term trigger. */
+	.program-selector-wrapper {
+		margin-top: var(--space-sm);
+		min-height: 36px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		max-width: 100%;
+	}
+
+	:global(.program-trigger) {
+		min-width: 200px;
+		max-width: min(360px, 90vw);
+		height: 36px;
+		font-weight: 600;
+		font-size: 13px;
+		letter-spacing: 0.3px;
+		border-width: 1px;
+		border-color: var(--border);
+		color: var(--ink);
+	}
+
+	:global(.program-trigger:hover) {
+		border-color: rgba(25, 118, 210, 0.5);
+	}
+
+	:global(.program-trigger .term-value) {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	:global(.program-content) {
+		max-width: min(420px, 92vw);
 	}
 
 	.skeleton-term {

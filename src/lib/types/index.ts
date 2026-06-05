@@ -74,6 +74,36 @@ export interface TermManifestEntry {
 	file: string;
 }
 
+/** Bilingual text from the OBS catalog; either side may be absent. */
+export interface LocalizedText {
+	tr: string | null;
+	en: string | null;
+}
+
+/** Per-course detail sourced from the OBS Bologna catalog. */
+export interface CourseMeta {
+	title: LocalizedText;
+	akts: number | null;
+	/** Locale-aware OBS Bologna page for the course. */
+	obs?: LocalizedText;
+}
+
+/** A degree program and the set of course codes that belong to it. */
+export interface ProgramMeta {
+	id: string;
+	degree: string;
+	name: LocalizedText;
+	faculty?: LocalizedText;
+	courses: string[];
+}
+
+/** Slim per-academic-year catalog served from `/data/catalog/<year>.json`. */
+export interface CatalogData {
+	academic_year: string;
+	courses: Record<string, CourseMeta>;
+	programs: ProgramMeta[];
+}
+
 export interface GenerateScheduleWorkerRequest {
 	id: string;
 	type: 'generate';

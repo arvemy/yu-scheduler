@@ -87,10 +87,23 @@ export const tr = {
 			gotIt: 'Anladım!'
 		},
 		actions: 'Program işlemleri',
+		totalAkts: '{{count}} AKTS',
+		totalAktsPartial: '{{count}}+ AKTS',
+		totalAktsPartialTooltip:
+			'Seçili bazı derslerin AKTS bilgisi yok, bu yüzden gerçek toplam daha yüksek olabilir.',
+		totalAktsAlternativesTooltip: 'Toplam, programa hangi VEYA alternatifinin girdiğine bağlıdır.',
+		aktsOr: 'veya',
+		aktsLabel: 'AKTS',
+		viewOnObs: "OBS'de görüntüle",
 		connector: {
 			and: 'VE',
 			or: 'VEYA'
 		}
+	},
+	program: {
+		label: 'Program',
+		all: 'Tüm programlar',
+		ariaLabel: 'Bölümünüzü seçin'
 	},
 	pagination: {
 		previous: 'Önceki',

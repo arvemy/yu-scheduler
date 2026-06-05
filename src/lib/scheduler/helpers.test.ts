@@ -6,7 +6,8 @@ import {
 	sessionOverlapsBlocked,
 	checkNoOverlaps,
 	filterEligibleCourses,
-	generateValidSchedules
+	generateValidSchedules,
+	getYearFromTerm
 } from './helpers';
 import { createSession, mockCourseData } from './test-utils';
 import type { BlockedHour, CourseEntry } from '$lib/types';
@@ -217,6 +218,26 @@ describe('Scheduler Helpers', () => {
 
 			const { validSchedules } = generateValidSchedules(courses, filteredSections);
 			expect(validSchedules.length).toBe(0);
+		});
+	});
+
+	describe('getYearFromTerm', () => {
+		it('extracts the academic-year range from a term name', () => {
+			expect(getYearFromTerm('2025-2026 Fall')).toBe('2025-2026');
+			expect(getYearFromTerm('2024-2025 Summer')).toBe('2024-2025');
+		});
+
+		it('tolerates spacing around the dash', () => {
+			expect(getYearFromTerm('2025 - 2026 Spring')).toBe('2025-2026');
+		});
+
+		it('falls back to a single year when there is no range', () => {
+			expect(getYearFromTerm('Fall 2025')).toBe('2025');
+		});
+
+		it('returns null when no year is present', () => {
+			expect(getYearFromTerm('')).toBeNull();
+			expect(getYearFromTerm('Draft Import')).toBeNull();
 		});
 	});
 });

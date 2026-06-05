@@ -2,13 +2,13 @@
 	import AppHeader from '$lib/components/AppHeader.svelte';
 	import CourseSelector from '$lib/components/CourseSelector.svelte';
 	import { t } from '$lib/i18n';
-	import { listTerms } from '$lib';
-	import type { BlockedHour, ScheduleData, SavedSchedule } from '$lib/types';
+	import { listTerms, loadCatalog } from '$lib';
+	import type { BlockedHour, CatalogData, ScheduleData, SavedSchedule } from '$lib/types';
 	import { dismissWelcomeModal, shouldShowWelcomeModal } from '$lib/storage/welcome';
 	import { getLatestTerm } from '$lib/utils/term';
 	import { devWarn } from '$lib/utils/logger';
 	import { parseStoredJson, storeJson, validateLastGenerated } from '$lib/utils/storage';
-	import { getLastGeneratedKey } from '$lib/storage/keys';
+	import { getLastGeneratedKey, getTermKey } from '$lib/storage/keys';
 	import { watch } from '$lib/utils/reactivity.svelte';
 	import { onMount } from 'svelte';
 
@@ -22,6 +22,14 @@
 	let blockedHours = $state<BlockedHour[]>([]);
 	let hasGenerated = $state(false);
 	let activeScheduleIndex = $state(0);
+
+	const emptyCatalog: CatalogData = { academic_year: '', courses: {}, programs: [] };
+	let catalog = $state<CatalogData>(emptyCatalog);
+	let currentProgram = $state<string | null>(null);
+	// Suppresses the program-persist watch while a term switch resets and then
+	// restores currentProgram, so the transient reset doesn't wipe the saved value.
+	// Plain (non-reactive) on purpose: toggling it must not re-fire the watch.
+	let suppressProgramPersist = false;
 
 	let showWelcomeModal = $state(false);
 	let dontShowWelcomeAgain = $state(false);
@@ -60,6 +68,44 @@
 
 	const handleChangeTerm = (term: string) => {
 		currentTerm = term;
+	};
+
+	const handleChangeProgram = (program: string | null) => {
+		currentProgram = program;
+	};
+
+	// Load the slim catalog for a term's academic year and restore that term's
+	// persisted program filter (cleared if it no longer exists in the catalog —
+	// e.g. after switching to a year with different/absent programs).
+	const loadCatalogForTerm = async (term: string) => {
+		let loaded: CatalogData;
+		try {
+			loaded = await loadCatalog(term);
+		} catch (err) {
+			devWarn('Failed to load catalog', err);
+			loaded = emptyCatalog;
+		}
+
+		// A newer term switch may have started while this load was in flight; ignore
+		// the stale result so a slow fetch can't apply another year's catalog/programs.
+		if (term !== currentTerm) return;
+		catalog = loaded;
+
+		let restored: string | null = null;
+		try {
+			const stored = localStorage.getItem(getTermKey(term, 'selectedProgram'));
+			if (stored && catalog.programs.some((program) => program.id === stored)) {
+				restored = stored;
+			}
+		} catch (err) {
+			devWarn('Failed to restore program', err);
+		}
+		currentProgram = restored;
+		// Re-enable persistence after the restore has been applied; the stale guard
+		// above means only the current term's load reaches here.
+		queueMicrotask(() => {
+			suppressProgramPersist = false;
+		});
 	};
 
 	const handleSchedule = (data: ScheduleData, courses: string[]) => {
@@ -115,6 +161,13 @@
 			hasGenerated = false;
 			blockedHours = [];
 			activeScheduleIndex = 0;
+			// Reset synchronously so the persist watch never writes the previous term's
+			// program under the new term key. Suppress persistence across the reset +
+			// async restore so the transient null doesn't delete the saved value.
+			suppressProgramPersist = true;
+			currentProgram = null;
+			catalog = emptyCatalog;
+			void loadCatalogForTerm(term);
 
 			// Restore last generated schedule with validation
 			const result = parseStoredJson(getLastGeneratedKey(term), validateLastGenerated);
@@ -138,6 +191,23 @@
 		}
 	);
 
+	// Persist the program filter per term.
+	watch(
+		() => [currentTerm, currentProgram] as const,
+		([term, program]) => {
+			if (!term || suppressProgramPersist) return;
+			try {
+				if (program) {
+					localStorage.setItem(getTermKey(term, 'selectedProgram'), program);
+				} else {
+					localStorage.removeItem(getTermKey(term, 'selectedProgram'));
+				}
+			} catch (err) {
+				devWarn('Failed to persist program', err);
+			}
+		}
+	);
+
 	const handleWelcomeClose = () => {
 		showWelcomeModal = false;
 		if (dontShowWelcomeAgain) {
@@ -153,7 +223,10 @@
 			{currentTerm}
 			{termsLoading}
 			{termsError}
+			programs={catalog.programs}
+			{currentProgram}
 			onChangeTerm={handleChangeTerm}
+			onChangeProgram={handleChangeProgram}
 			onOpenWelcome={() => (showWelcomeModal = true)}
 		/>
 
@@ -162,6 +235,8 @@
 		<main class="flex flex-col gap-6">
 			<CourseSelector
 				term={currentTerm}
+				{catalog}
+				selectedProgram={currentProgram}
 				bind:selectedCourses
 				bind:blockedHours
 				{scheduleData}

@@ -6,6 +6,7 @@ export {
 	loadTermData,
 	getCourses,
 	getSections,
+	loadCatalog,
 	SchedulerError
 } from '$lib/scheduler/api';
 export { generateSchedule } from '$lib/scheduler/workerClient';

@@ -89,6 +89,19 @@ export const getTermNameFromFile = (filename: string): string => {
 	return base.replace(/_/g, '-').replace(/^-+|-+$/g, '');
 };
 
+/**
+ * Extract the academic-year prefix (e.g. `"2025-2026"`) from a manifest term
+ * name like `"2025-2026 Fall"` — used to resolve the catalog filename. Accepts
+ * both range (`YYYY-YYYY`) and single (`YYYY`) years; returns null when neither
+ * is present.
+ */
+export const getYearFromTerm = (term: string): string | null => {
+	if (!term) return null;
+	const match = term.trim().match(/(\d{4})\s*-\s*(\d{4})|(\d{4})/);
+	if (!match) return null;
+	return match[1] && match[2] ? `${match[1]}-${match[2]}` : match[3];
+};
+
 export const getFileFromTerm = (term: string): string => {
 	const parts = term.trim().split(/\s+/);
 	const knownSeasons = new Set(TERM_SUFFIX.map((s) => s.replace('.json', '').toLowerCase()));

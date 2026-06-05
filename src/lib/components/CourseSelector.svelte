@@ -7,6 +7,7 @@
 		CircleAlert,
 		CircleCheck,
 		Download,
+		ExternalLink,
 		FolderOpen,
 		GripVertical,
 		Info,
@@ -19,9 +20,16 @@
 	import { watch, useDebounce } from '$lib/utils/reactivity.svelte';
 	import { dragHandleZone, dragHandle, TRIGGERS } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
-	import { t } from '$lib/i18n';
+	import { locale, t } from '$lib/i18n';
 	import { DAYS_OF_WEEK, TIME_SLOTS, generateSchedule, getCourses, getSections } from '$lib';
-	import type { BlockedHour, CourseEntry, SavedSchedule, ScheduleData } from '$lib/types';
+	import type {
+		BlockedHour,
+		CatalogData,
+		CourseEntry,
+		CourseMeta,
+		SavedSchedule,
+		ScheduleData
+	} from '$lib/types';
 	import Timetable from '$lib/components/Timetable.svelte';
 	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
 	import { downloadScheduleAsImage } from '$lib/utils/downloadSchedule';
@@ -30,6 +38,8 @@
 	import { useMobile } from '$lib/utils/useMediaQuery.svelte';
 	import { devWarn } from '$lib/utils/logger';
 	import { translateWarnings } from '$lib/utils/warnings';
+	import { normalizeForSearch } from '$lib/utils/search';
+	import { computeAktsTotals } from '$lib/utils/akts';
 	import { SWIPE_THRESHOLD_PX } from '$lib/config/ui';
 	import TooltipContent from '$lib/components/ui/TooltipContent.svelte';
 	import {
@@ -45,6 +55,8 @@
 
 	let {
 		term,
+		catalog,
+		selectedProgram = null,
 		selectedCourses = $bindable(),
 		blockedHours = $bindable(),
 		scheduleData,
@@ -54,6 +66,8 @@
 		onLoadSavedSchedule
 	}: {
 		term: string | null;
+		catalog?: CatalogData;
+		selectedProgram?: string | null;
 		selectedCourses: string[];
 		blockedHours: BlockedHour[];
 		scheduleData: ScheduleData | null;
@@ -62,6 +76,95 @@
 		onSchedule: (data: ScheduleData, courses: string[]) => void;
 		onLoadSavedSchedule?: (saved: SavedSchedule) => void;
 	} = $props();
+
+	// --- Catalog enrichment (titles / AKTS / OBS links) + program filtering ---
+
+	// Catalog course codes occasionally carry doubled internal whitespace (e.g.
+	// "MOTP  2337"), while the term data — and therefore every code we look up — uses
+	// a single space ("MOTP 2337"). Collapse runs of whitespace so catalog metadata
+	// lookups and program-membership tests line up with the term codes.
+	const normalizeCode = (code: string): string => code.replace(/\s+/g, ' ').trim();
+
+	const courseMeta = $derived.by<Record<string, CourseMeta>>(() => {
+		const source = catalog?.courses;
+		if (!source) return {};
+		const out: Record<string, CourseMeta> = {};
+		for (const [code, meta] of Object.entries(source)) {
+			out[normalizeCode(code)] = meta;
+		}
+		return out;
+	});
+
+	const courseTitle = (code: string): string => {
+		const title = courseMeta[code]?.title;
+		return title?.[$locale] ?? title?.en ?? '';
+	};
+
+	const obsUrl = (code: string): string | null => {
+		const obs = courseMeta[code]?.obs;
+		return obs?.[$locale] ?? obs?.en ?? null;
+	};
+
+	// Set of course codes in the selected program, or null when no program is
+	// chosen (the picker then shows every course in the term). Read `catalog` and
+	// `selectedProgram` directly inside each consuming `$derived` so the
+	// dependency is tracked there — a derived-of-derived was not re-running.
+	const programCodeSet = (): Set<string> | null => {
+		if (!selectedProgram) return null;
+		const program = catalog?.programs?.find((p) => p.id === selectedProgram);
+		// Normalize here too: the program lists share the catalog's irregular spacing,
+		// so an exact `has(course)` against a single-spaced term code would otherwise
+		// drop the affected courses from the filtered picker.
+		return program ? new Set(program.courses.map(normalizeCode)) : null;
+	};
+
+	// AKTS load of the current selection. OR-connected adjacent courses are
+	// alternatives, so each OR run contributes a single course's credits and runs
+	// with differing credits yield several possible totals — see `computeAktsTotals`.
+	// `$derived.by` (a closure) so `orConnections`, declared below, isn't read before
+	// its initialization.
+	const selectedAktsInfo = $derived.by(() =>
+		computeAktsTotals(selectedCourses, orConnections, courseMeta)
+	);
+
+	// Render the AKTS total(s): a single value ("17 AKTS"), the distinct
+	// possibilities when OR alternatives differ ("17 or 18 AKTS", or a "17–24" range
+	// once there are too many to list), or a lower bound ("17+ AKTS") when some AKTS
+	// data is missing. `null` hides the label entirely (no credits to show).
+	const AKTS_LIST_LIMIT = 4;
+	const aktsLabel = $derived.by<{ text: string; title?: string } | null>(() => {
+		const { totals, partial } = selectedAktsInfo;
+		if (totals.length === 0) return null;
+		const min = totals[0];
+		const max = totals[totals.length - 1];
+		if (max <= 0) return null;
+
+		if (partial) {
+			return {
+				text: $t('courseSelector.totalAktsPartial', { count: min }),
+				title: $t('courseSelector.totalAktsPartialTooltip')
+			};
+		}
+
+		if (totals.length === 1) {
+			return { text: $t('courseSelector.totalAkts', { count: min }) };
+		}
+
+		const count =
+			totals.length <= AKTS_LIST_LIMIT
+				? totals.join(` ${$t('courseSelector.aktsOr')} `)
+				: `${min}–${max}`;
+		return {
+			text: $t('courseSelector.totalAkts', { count }),
+			title: $t('courseSelector.totalAktsAlternativesTooltip')
+		};
+	});
+
+	// `needle` is expected to already be normalized (see callers) so the comparison
+	// is case- and diacritic-insensitive on both sides.
+	const matchesNeedle = (course: string, needle: string): boolean =>
+		normalizeForSearch(course).includes(needle) ||
+		normalizeForSearch(courseTitle(course)).includes(needle);
 
 	let courses = $state<Record<string, string[]>>({});
 	let sections = $state<Record<string, string[]>>({});
@@ -638,37 +741,40 @@
 	);
 
 	const filteredGroups = $derived.by(() => {
-		const needle = searchInput.trim().toLowerCase();
-		return Object.entries(courses)
-			.map(([group, list]) => {
-				const filtered = needle
-					? list.filter((course) => course.toLowerCase().includes(needle))
-					: list;
-				return { group, courses: filtered };
-			})
-			.filter((entry) => entry.courses.length > 0);
+		const needle = normalizeForSearch(searchInput.trim());
+		const set = programCodeSet();
+		const out: { group: string; courses: string[] }[] = [];
+		for (const [group, list] of Object.entries(courses)) {
+			const filtered: string[] = [];
+			for (const course of list) {
+				if (set && !set.has(course)) continue;
+				if (needle && !matchesNeedle(course, needle)) continue;
+				filtered.push(course);
+			}
+			if (filtered.length > 0) out.push({ group, courses: filtered });
+		}
+		return out;
 	});
 
 	type SearchResult = { course: string; group: string };
 
 	const searchResults = $derived.by<SearchResult[]>(() => {
-		const needle = searchInput.trim().toLowerCase();
+		const needle = normalizeForSearch(searchInput.trim());
 		if (!needle) return [];
 
+		const set = programCodeSet();
 		const results: SearchResult[] = [];
 		for (const [group, list] of Object.entries(courses)) {
 			for (const course of list) {
-				const lower = course.toLowerCase();
-				if (!lower.includes(needle)) continue;
+				if (set && !set.has(course)) continue;
+				if (!matchesNeedle(course, needle)) continue;
 				results.push({ course, group });
 			}
 		}
 
 		results.sort((a, b) => {
-			const aLower = a.course.toLowerCase();
-			const bLower = b.course.toLowerCase();
-			const aRank = aLower.startsWith(needle) ? 0 : 1;
-			const bRank = bLower.startsWith(needle) ? 0 : 1;
+			const aRank = normalizeForSearch(a.course).startsWith(needle) ? 0 : 1;
+			const bRank = normalizeForSearch(b.course).startsWith(needle) ? 0 : 1;
 			if (aRank !== bRank) return aRank - bRank;
 			return a.course.localeCompare(b.course);
 		});
@@ -867,6 +973,10 @@
 
 	// Current schedule for timetable
 	const currentSchedule = $derived(scheduleData?.schedules?.[activeScheduleIndex] ?? null);
+	// Guarded count: bits-ui evaluates the nav buttons' `disabled` getters during the
+	// reactive flush when `scheduleData` is cleared (e.g. on term switch), before the
+	// wrapping {#if} unmounts them — so read the length defensively.
+	const scheduleCount = $derived(scheduleData?.schedules?.length ?? 0);
 	const timeSlots = $derived(
 		scheduleData?.time_slots?.length ? scheduleData.time_slots : TIME_SLOTS
 	);
@@ -957,8 +1067,20 @@
 										id={`course-search-option-${index}`}
 										onclick={() => selectCourseFromSearch(result.course)}
 									>
-										<span class="result-course">{result.course}</span>
-										<span class="result-meta">{result.group}</span>
+										<span class="result-info">
+											<span class="result-course">{result.course}</span>
+											{#if courseTitle(result.course)}
+												<span class="result-title">{courseTitle(result.course)}</span>
+											{/if}
+										</span>
+										<span class="result-meta">
+											{#if courseMeta[result.course]?.akts != null}
+												<span class="result-akts"
+													>{courseMeta[result.course].akts} {$t('courseSelector.aktsLabel')}</span
+												>
+											{/if}
+											<span class="result-group">{result.group}</span>
+										</span>
 									</button>
 								{/each}
 							{/if}
@@ -1038,7 +1160,15 @@
 																	role="option"
 																	aria-selected={selectedCourses.includes(course)}
 																>
-																	{course}
+																	<span class="dropdown-text">
+																		<span class="dropdown-code">{course}</span>
+																		{#if courseTitle(course)}
+																			<span class="dropdown-title">{courseTitle(course)}</span>
+																		{/if}
+																	</span>
+																	{#if courseMeta[course]?.akts != null}
+																		<span class="dropdown-akts">{courseMeta[course].akts}</span>
+																	{/if}
 																</button>
 															{/each}
 														</div>
@@ -1056,7 +1186,9 @@
 							<div class="selected-section">
 								<div class="selected-header">
 									<h2 class="section-label">
-										{$t('courseSelector.selectedCourses')} ({selectedCourses.length})
+										{$t('courseSelector.selectedCourses')} ({selectedCourses.length}){#if aktsLabel}
+											· <span class="akts-total" title={aktsLabel.title}>{aktsLabel.text}</span
+											>{/if}
 									</h2>
 									<Tooltip.Root>
 										<Tooltip.Trigger
@@ -1096,6 +1228,16 @@
 													<GripVertical size={14} aria-hidden="true" />
 												</span>
 												<span class="chip-label">{course}</span>
+												{#if courseTitle(course)}
+													<span class="chip-title" title={courseTitle(course)}
+														>{courseTitle(course)}</span
+													>
+												{/if}
+												{#if courseMeta[course]?.akts != null}
+													<span class="chip-akts" title={$t('courseSelector.aktsLabel')}
+														>{courseMeta[course].akts}</span
+													>
+												{/if}
 
 												{#if hasMultipleSections}
 													<select
@@ -1126,6 +1268,19 @@
 															<option value={sectionId}>{sectionId}</option>
 														{/each}
 													</select>
+												{/if}
+
+												{#if obsUrl(course)}
+													<a
+														class="chip-obs"
+														href={obsUrl(course)}
+														target="_blank"
+														rel="noopener"
+														title={$t('courseSelector.viewOnObs')}
+														aria-label={$t('courseSelector.viewOnObs')}
+													>
+														<ExternalLink size={13} aria-hidden="true" />
+													</a>
 												{/if}
 
 												<Tooltip.Root>
@@ -1308,17 +1463,14 @@
 								<TooltipContent label={$t('pagination.previous')} />
 							</Tooltip.Root>
 							<span class="schedule-counter">
-								{activeScheduleIndex + 1} / {scheduleData.schedules.length}
+								{activeScheduleIndex + 1} / {scheduleCount}
 							</span>
 							<Tooltip.Root>
 								<Tooltip.Trigger
 									class="nav-btn"
-									disabled={activeScheduleIndex >= scheduleData.schedules.length - 1}
+									disabled={activeScheduleIndex >= scheduleCount - 1}
 									onclick={() =>
-										(activeScheduleIndex = Math.min(
-											scheduleData.schedules.length - 1,
-											activeScheduleIndex + 1
-										))}
+										(activeScheduleIndex = Math.min(scheduleCount - 1, activeScheduleIndex + 1))}
 									aria-label={$t('pagination.next')}
 								>
 									<ChevronRight size={20} />
@@ -1555,14 +1707,42 @@
 		cursor: not-allowed;
 	}
 
+	.result-info {
+		display: flex;
+		flex: 1;
+		min-width: 0;
+		flex-direction: column;
+		gap: 2px;
+	}
+
 	.result-course {
 		font-weight: 700;
 	}
 
+	.result-title {
+		font-size: 12px;
+		font-weight: 500;
+		color: var(--ink-muted);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
 	.result-meta {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		gap: 2px;
+		flex-shrink: 0;
 		font-size: 12px;
 		font-weight: 600;
 		color: var(--ink-muted);
+	}
+
+	.result-akts {
+		font-size: 11px;
+		font-weight: 700;
+		color: var(--primary-dark);
 	}
 
 	/* Alerts */
@@ -1692,6 +1872,12 @@
 		margin: 0;
 	}
 
+	/* The AKTS total carries a `title` hint only when partial, so signal the
+	   underlying course data is incomplete with a help cursor in that case. */
+	.akts-total[title] {
+		cursor: help;
+	}
+
 	/* Selected Courses Section */
 	.selected-section {
 		display: flex;
@@ -1740,6 +1926,12 @@
 		display: inline-flex;
 		align-items: center;
 		gap: var(--space-sm);
+		/* Keep a chip + its connector within the row on narrow screens: allow the
+		   unit (and the chip inside it) to shrink, and never let it exceed the row —
+		   otherwise it overflows sideways and gives the whole page a horizontal
+		   scroll, which also clips the group chips above. */
+		min-width: 0;
+		max-width: 100%;
 	}
 
 	.chip-drag-handle {
@@ -1747,6 +1939,7 @@
 		align-items: center;
 		justify-content: center;
 		margin-right: 2px;
+		flex-shrink: 0;
 		color: var(--ink-muted);
 		cursor: grab;
 		/* let svelte-dnd-action own the touch gesture on the handle */
@@ -1776,12 +1969,15 @@
 		font-weight: 600;
 		cursor: default;
 		transition: var(--transition-fast);
+		/* Shrinkable so the title can ellipsize when the row runs out of room. */
+		min-width: 0;
 	}
 
 	.chip-section-select {
 		margin-left: 4px;
 		padding: 1px 4px;
 		height: 22px;
+		flex-shrink: 0;
 		min-width: 6ch;
 		width: 6.5ch;
 		max-width: 10ch;
@@ -1824,6 +2020,58 @@
 
 	.chip-label {
 		line-height: 1.2;
+		/* The course code stays intact; the title (below) is what gives way. */
+		flex-shrink: 0;
+		white-space: nowrap;
+	}
+
+	.chip-title {
+		/* min-width:0 lets this flex item shrink below its text so the ellipsis can
+		   engage when the chip is squeezed; max-width still caps it when there's room. */
+		min-width: 0;
+		max-width: 16ch;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		font-size: 12px;
+		font-weight: 500;
+		color: color-mix(in srgb, var(--primary-dark) 70%, transparent);
+	}
+
+	.chip-akts {
+		display: inline-flex;
+		align-items: center;
+		height: 18px;
+		padding: 0 5px;
+		flex-shrink: 0;
+		border-radius: var(--radius-sm);
+		background: var(--primary-soft);
+		color: var(--primary-dark);
+		font-size: 11px;
+		font-weight: 700;
+		line-height: 1;
+	}
+
+	.chip-obs {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		margin-left: 2px;
+		padding: 2px;
+		border-radius: var(--radius-sm);
+		color: var(--primary);
+		opacity: 0.75;
+		transition: var(--transition-fast);
+	}
+
+	.chip-obs:hover {
+		opacity: 1;
+		background: rgba(25, 118, 210, 0.12);
+	}
+
+	.chip-obs:focus-visible {
+		outline: none;
+		box-shadow: var(--shadow-focus);
 	}
 
 	/* AND/OR Connector Toggle */
@@ -1923,7 +2171,10 @@
 	}
 
 	.dropdown-item {
-		display: block;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-sm);
 		width: 100%;
 		text-align: left;
 		padding: 10px 14px;
@@ -1943,6 +2194,38 @@
 	.dropdown-item.selected {
 		background: var(--primary);
 		color: white;
+	}
+
+	.dropdown-text {
+		display: flex;
+		flex-direction: column;
+		gap: 1px;
+		min-width: 0;
+	}
+
+	.dropdown-code {
+		font-weight: 600;
+	}
+
+	.dropdown-title {
+		font-size: 12px;
+		font-weight: 500;
+		color: var(--ink-muted);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.dropdown-akts {
+		flex-shrink: 0;
+		font-size: 11px;
+		font-weight: 700;
+		color: var(--primary-dark);
+	}
+
+	.dropdown-item.selected .dropdown-title,
+	.dropdown-item.selected .dropdown-akts {
+		color: rgba(255, 255, 255, 0.9);
 	}
 
 	/* Action Row */

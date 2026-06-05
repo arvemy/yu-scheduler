@@ -87,10 +87,24 @@ export const en = {
 			gotIt: 'Got it!'
 		},
 		actions: 'Schedule actions',
+		totalAkts: '{{count}} AKTS',
+		totalAktsPartial: '{{count}}+ AKTS',
+		totalAktsPartialTooltip:
+			'Some selected courses have no AKTS data, so the real total may be higher.',
+		totalAktsAlternativesTooltip:
+			'The total depends on which OR alternative ends up in the schedule.',
+		aktsOr: 'or',
+		aktsLabel: 'AKTS',
+		viewOnObs: 'View on OBS',
 		connector: {
 			and: 'AND',
 			or: 'OR'
 		}
+	},
+	program: {
+		label: 'Program',
+		all: 'All programs',
+		ariaLabel: 'Select your degree program'
 	},
 	pagination: {
 		previous: 'Previous',

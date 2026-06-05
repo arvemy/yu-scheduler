@@ -1,11 +1,12 @@
 import { base } from '$app/paths';
-import type { SessionData, TermManifestEntry } from '$lib/types';
+import type { CatalogData, SessionData, TermManifestEntry } from '$lib/types';
 import { ErrorCodes, ERROR_MESSAGES } from '$lib/scheduler/errorCodes';
 import {
 	buildEligibleSections,
 	findMatchingSuffix,
 	getFileFromTerm,
 	getTermNameFromFile,
+	getYearFromTerm,
 	mapDaysToEnglish
 } from '$lib/scheduler/helpers';
 
@@ -19,6 +20,7 @@ export class SchedulerError extends Error {
 }
 
 const termCache = new Map<string, Record<string, SessionData[]>>();
+const catalogCache = new Map<string, CatalogData>();
 let manifestCache: TermManifestEntry[] | null = null;
 
 const withBase = (path: string): string => `${base}${path}`;
@@ -129,4 +131,33 @@ export const getSections = async (term?: string | null): Promise<Record<string, 
 		if (error instanceof SchedulerError) throw error;
 		throw new SchedulerError(ErrorCodes.FAILED_TO_LOAD_SECTIONS);
 	}
+};
+
+const emptyCatalog = (year: string): CatalogData => ({
+	academic_year: year,
+	courses: {},
+	programs: []
+});
+
+/**
+ * Load the slim OBS catalog (course titles/credits/links + program membership)
+ * for a term's academic year. Enrichment is optional, so a missing catalog
+ * (e.g. a year that hasn't been crawled) resolves to an empty catalog rather
+ * than throwing — the picker still works code-only.
+ */
+export const loadCatalog = async (term?: string | null): Promise<CatalogData> => {
+	const year = term ? getYearFromTerm(term) : null;
+	if (!year) return emptyCatalog('');
+
+	const cached = catalogCache.get(year);
+	if (cached) return cached;
+
+	let catalog: CatalogData;
+	try {
+		catalog = await fetchJson<CatalogData>(withBase(`/data/catalog/${year}.json`));
+	} catch {
+		catalog = emptyCatalog(year);
+	}
+	catalogCache.set(year, catalog);
+	return catalog;
 };

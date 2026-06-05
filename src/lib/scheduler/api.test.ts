@@ -111,6 +111,57 @@ describe('scheduler api (mocked fetch)', () => {
 		await expect(listTerms()).resolves.toEqual(['2025-2026 Fall']);
 	});
 
+	it('loadCatalog resolves the catalog for a term year', async () => {
+		const catalog = {
+			academic_year: '2025-2026',
+			courses: { 'MATH 101': { title: { tr: 'KALKÜLÜS', en: 'CALCULUS' }, akts: 6 } },
+			programs: [
+				{ id: 'p1', degree: 'bachelor', name: { tr: 'X', en: 'X' }, courses: ['MATH 101'] }
+			]
+		};
+		vi.stubGlobal(
+			'fetch',
+			vi.fn((url: string | URL) => {
+				const href = String(url);
+				if (href.endsWith('/data/catalog/2025-2026.json')) {
+					return Promise.resolve(new Response(JSON.stringify(catalog), { status: 200 }));
+				}
+				return Promise.resolve(new Response('not found', { status: 404 }));
+			})
+		);
+
+		const { loadCatalog } = await importApi();
+		const result = await loadCatalog('2025-2026 Fall');
+		expect(result.courses['MATH 101'].title.en).toBe('CALCULUS');
+		expect(result.programs[0].courses).toEqual(['MATH 101']);
+	});
+
+	it('loadCatalog returns an empty catalog when the file is missing', async () => {
+		// Default mock 404s for the catalog URL.
+		const { loadCatalog } = await importApi();
+		const result = await loadCatalog('2024-2025 Spring');
+		expect(result).toEqual({ academic_year: '2024-2025', courses: {}, programs: [] });
+	});
+
+	it('loadCatalog returns an empty catalog when the term has no year', async () => {
+		const { loadCatalog } = await importApi();
+		const result = await loadCatalog('Draft Import');
+		expect(result.courses).toEqual({});
+		expect(result.programs).toEqual([]);
+	});
+
+	it('loadCatalog caches the second call (fetch not called again)', async () => {
+		const fetchSpy = makeFetch();
+		vi.stubGlobal('fetch', fetchSpy);
+		const { loadCatalog } = await importApi();
+
+		await loadCatalog('2025-2026 Fall');
+		const callsAfterFirst = fetchSpy.mock.calls.length;
+		await loadCatalog('2025-2026 Fall');
+
+		expect(fetchSpy.mock.calls.length).toBe(callsAfterFirst);
+	});
+
 	it('normalizes Turkish day names in mocked term data', async () => {
 		vi.stubGlobal(
 			'fetch',
