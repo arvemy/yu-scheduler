@@ -36,4 +36,13 @@ describe('normalizeForSearch', () => {
 		// ş still folds to s, and the dotless ı now folds to i too.
 		expect(normalizeForSearch('ışık')).toBe('isik');
 	});
+
+	it('collapses internal whitespace and trims so spacing quirks still match', () => {
+		// Regression: the catalog ships a doubled-space "SOFTWARE  ENGINEERING";
+		// a normally typed single-space query must still match it.
+		expect(normalizeForSearch('SOFTWARE  ENGINEERING')).toBe('software engineering');
+		expect(normalizeForSearch('  trim  me  ')).toBe('trim me');
+		const title = normalizeForSearch('SOFTWARE  ENGINEERING');
+		expect(title.includes(normalizeForSearch('software engineering'))).toBe(true);
+	});
 });

@@ -11,6 +11,16 @@
  * explicitly. Catalog titles are uppercase (`KULLANIMI` → `kullanimi`) while users
  * type the natural lowercase Turkish form (`kullanımı`); without this fold the
  * dotless `ı` in the query would never match the plain `i` in the title.
+ *
+ * Runs of whitespace are collapsed to a single space (and trimmed) so a normally
+ * typed query still matches catalog spacing quirks — e.g. `software engineering`
+ * matches the catalog's doubled-space `SOFTWARE  ENGINEERING`.
  */
 export const normalizeForSearch = (value: string): string =>
-	value.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ı/g, 'i');
+	value
+		.toLowerCase()
+		.normalize('NFD')
+		.replace(/[̀-ͯ]/g, '')
+		.replace(/ı/g, 'i')
+		.replace(/\s+/g, ' ')
+		.trim();

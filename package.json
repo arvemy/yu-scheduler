@@ -60,6 +60,7 @@
 		"@lucide/svelte": "^1.17.0",
 		"bits-ui": "^2.18.1",
 		"modern-screenshot": "^4.7.0",
-		"svelte-dnd-action": "^0.9.69"
+		"svelte-dnd-action": "^0.9.69",
+		"svelte-sonner": "^1.1.1"
 	}
 }

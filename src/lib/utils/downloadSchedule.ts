@@ -25,13 +25,20 @@ export interface DownloadOptions {
 	};
 }
 
+/**
+ * Captures the schedule to a PNG and triggers a download.
+ *
+ * Errors are reported through {@link onError} (never thrown) and signalled by a
+ * `false` return, so callers can suppress a success notification on failure.
+ * Resolves `true` only when the download was triggered.
+ */
 export const downloadScheduleAsImage = async (
 	scheduleRef: HTMLElement,
 	scrollRef: HTMLElement | null,
 	tabNumber: number,
 	onError: (message: string) => void,
 	options: DownloadOptions = {}
-): Promise<void> => {
+): Promise<boolean> => {
 	let captureHost: HTMLDivElement | null = null;
 
 	try {
@@ -138,10 +145,12 @@ export const downloadScheduleAsImage = async (
 		} finally {
 			setTimeout(() => URL.revokeObjectURL(url), 1000);
 		}
+		return true;
 	} catch (error) {
 		onError(
 			error instanceof Error ? error.message : 'Failed to download schedule. Please try again.'
 		);
+		return false;
 	} finally {
 		captureHost?.remove();
 	}

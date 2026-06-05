@@ -4,6 +4,7 @@
 		Check,
 		ChevronRight,
 		CircleCheck,
+		Database,
 		GraduationCap,
 		Info,
 		Lightbulb,
@@ -89,6 +90,18 @@
 						</li>
 					</ul>
 					<p class="updates-date">{$t('welcome.updates.addedOn')}</p>
+				</div>
+
+				<!-- Data source -->
+				<div class="data-source-section">
+					<h2 class="section-heading">
+						<Database class="text-primary" size={20} />
+						{$t('welcome.dataSource.title')}
+					</h2>
+					<!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted, developer-authored i18n string -->
+					<p class="data-source-text">{@html $t('welcome.dataSource.body')}</p>
+					<!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted, developer-authored i18n string -->
+					<p class="data-source-text data-source-verify">{@html $t('welcome.dataSource.verify')}</p>
 				</div>
 
 				<div class="notice-panel">
@@ -284,6 +297,43 @@
 		margin: 0;
 		font-size: 12px;
 		color: var(--ink-muted);
+	}
+
+	/* Data source */
+	.data-source-section {
+		background: var(--bg);
+		border-radius: var(--radius-md);
+		padding: var(--space-md);
+	}
+
+	.data-source-section .section-heading {
+		display: flex;
+		align-items: center;
+		gap: var(--space-sm);
+		margin: 0 0 var(--space-sm);
+		font-size: 14px;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		color: var(--ink);
+	}
+
+	.data-source-text {
+		margin: 0;
+		font-size: 13px;
+		line-height: 1.6;
+		color: var(--ink-secondary);
+	}
+
+	.data-source-verify {
+		margin-top: var(--space-sm);
+		font-weight: 600;
+		color: var(--ink);
+	}
+
+	.data-source-text :global(a) {
+		color: var(--primary-dark);
+		text-decoration: underline;
 	}
 
 	.notice-panel {

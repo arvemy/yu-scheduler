@@ -308,3 +308,26 @@
 		fill: var(--neutral-800);
 	}
 }
+
+/*
+ * svelte-sonner toasts — align the library's look with our design tokens.
+ * Sonner renders `data-sonner-theme` (not `data-theme`) and defines the
+ * rich-color variables on that selector itself, so the override must match the
+ * same attribute and out-specify it: the leading `html` lifts specificity above
+ * Sonner's own `[data-sonner-toaster][data-sonner-theme='light']` rule so the
+ * remap wins regardless of stylesheet order. `--color-success-bg` is used
+ * rather than `--success-bg` to avoid a same-name custom-property cycle.
+ */
+[data-sonner-toaster] {
+	--border-radius: var(--radius-md);
+	font-family: inherit;
+}
+
+html [data-sonner-toaster][data-sonner-theme='light'] {
+	--success-bg: var(--color-success-bg);
+	--success-border: var(--success);
+	--success-text: var(--success-dark);
+	--error-bg: var(--error-light);
+	--error-border: var(--error-soft);
+	--error-text: var(--error);
+}

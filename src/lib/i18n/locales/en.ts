@@ -104,7 +104,17 @@ export const en = {
 	program: {
 		label: 'Program',
 		all: 'All programs',
-		ariaLabel: 'Select your degree program'
+		ariaLabel: 'Select your degree program',
+		searchPlaceholder: 'Search programs…',
+		noResults: 'No programs found'
+	},
+	degree: {
+		associate: "Associate's",
+		bachelor: "Bachelor's",
+		master: "Master's"
+	},
+	notifications: {
+		downloaded: 'Schedule downloaded'
 	},
 	pagination: {
 		previous: 'Previous',
@@ -242,6 +252,12 @@ export const en = {
 				termCoursesAdded: 'Summer term courses have been added to the system'
 			},
 			addedOn: 'Added on: Thursday, Jun 4'
+		},
+		dataSource: {
+			title: 'Where this data comes from',
+			body: "Course and program data is sourced from Yaşar University's official OBS Bologna information system and compiled by an open-source crawler (yu-data). It may be incomplete or lag behind recent changes the university makes.",
+			verify:
+				'Always confirm the details against the original source at <a href="https://obs.yasar.edu.tr/oibs/bologna/" target="_blank" rel="noopener noreferrer">obs.yasar.edu.tr</a> before you register.'
 		},
 		importantNotice:
 			'Please verify your schedule at <a href="https://oim.yasar.edu.tr/ders-kayitlari" target="_blank" rel="noopener noreferrer">oim.yasar.edu.tr/ders-kayitlari</a> for the most accurate information.',

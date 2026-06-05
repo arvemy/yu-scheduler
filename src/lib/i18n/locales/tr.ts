@@ -103,7 +103,17 @@ export const tr = {
 	program: {
 		label: 'Program',
 		all: 'Tüm programlar',
-		ariaLabel: 'Bölümünüzü seçin'
+		ariaLabel: 'Bölümünüzü seçin',
+		searchPlaceholder: 'Program ara…',
+		noResults: 'Program bulunamadı'
+	},
+	degree: {
+		associate: 'Önlisans',
+		bachelor: 'Lisans',
+		master: 'Yüksek Lisans'
+	},
+	notifications: {
+		downloaded: 'Program görseli indirildi'
 	},
 	pagination: {
 		previous: 'Önceki',
@@ -240,6 +250,12 @@ export const tr = {
 				termCoursesAdded: 'Yaz dönemi dersleri sisteme eklenmiştir'
 			},
 			addedOn: 'Eklendi: 4 Haziran Perşembe'
+		},
+		dataSource: {
+			title: 'Bu veriler nereden geliyor?',
+			body: "Ders ve program verileri, Yaşar Üniversitesi'nin resmi OBS Bologna bilgi sisteminden alınır ve açık kaynaklı bir tarayıcı (yu-data) ile derlenir. Eksik olabilir veya üniversitenin yaptığı son değişikliklerin gerisinde kalabilir.",
+			verify:
+				'Kayıt yaptırmadan önce bilgileri her zaman <a href="https://obs.yasar.edu.tr/oibs/bologna/" target="_blank" rel="noopener noreferrer">obs.yasar.edu.tr</a> adresindeki orijinal kaynaktan doğrulayın.'
 		},
 		importantNotice:
 			'En doğru bilgi için lütfen ders programınızı <a href="https://oim.yasar.edu.tr/ders-kayitlari" target="_blank" rel="noopener noreferrer">oim.yasar.edu.tr/ders-kayitlari</a> adresinden kontrol ediniz.',

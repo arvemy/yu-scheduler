@@ -20,6 +20,7 @@
 	import { watch, useDebounce } from '$lib/utils/reactivity.svelte';
 	import { dragHandleZone, dragHandle, TRIGGERS } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
+	import { toast } from 'svelte-sonner';
 	import { locale, t } from '$lib/i18n';
 	import { DAYS_OF_WEEK, TIME_SLOTS, generateSchedule, getCourses, getSections } from '$lib';
 	import type {
@@ -935,13 +936,12 @@
 		isDownloading = true;
 		await tick();
 		try {
-			await downloadScheduleAsImage(
+			const ok = await downloadScheduleAsImage(
 				node,
 				captureScrollRef ?? scrollRef,
 				activeScheduleIndex,
 				(error) => {
-					actionMessage = error;
-					actionTone = 'error';
+					toast.error(error);
 				},
 				{
 					footer: {
@@ -954,8 +954,9 @@
 					}
 				}
 			);
-			actionMessage = $t('courseSelector.download') + ' ✓';
-			actionTone = 'success';
+			// Only confirm on success — the helper reports failures via the error
+			// callback above and returns false, so we must not also toast success.
+			if (ok) toast.success($t('notifications.downloaded'));
 		} catch {
 			// Error handled in callback
 		} finally {
@@ -1527,10 +1528,7 @@
 					open={saveDialogOpen}
 					onClose={() => (saveDialogOpen = false)}
 					onSaved={(saved) => {
-						actionMessage = $t('savedSchedules.scheduleWasSaved', {
-							name: saved.name
-						});
-						actionTone = 'success';
+						toast.success($t('savedSchedules.scheduleWasSaved', { name: saved.name }));
 					}}
 					term={term || ''}
 					{selectedCourses}
@@ -1549,10 +1547,7 @@
 					onClose={() => (loadDialogOpen = false)}
 					onLoadSchedule={(saved) => {
 						handleLoadSchedule(saved);
-						actionMessage = $t('savedSchedules.scheduleWasLoaded', {
-							name: saved.name
-						});
-						actionTone = 'success';
+						toast.success($t('savedSchedules.scheduleWasLoaded', { name: saved.name }));
 					}}
 					currentTerm={term}
 				/>
