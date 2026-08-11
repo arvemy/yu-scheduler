@@ -1,3 +1,5 @@
+
+
 # YuScheduler
 
 A modern, client-side course scheduling tool designed for Yaşar University students. YuScheduler helps students plan their semesters by generating conflict-free schedules based on their selected courses and personal time constraints.
@@ -76,12 +78,14 @@ pnpm check
 
 ### Testing
 
-The project uses Vitest with the Svelte Testing Library (jsdom environment). Tests are colocated with the code as `*.test.ts` (and `*.svelte.test.ts` for component/rune tests).
+The project uses Vitest with the Svelte Testing Library (jsdom environment) for unit and component tests, which are colocated with the code as `*.test.ts` (and `*.svelte.test.ts`). End-to-end tests use Playwright and live in `tests/e2e`.
 
 ```bash
-pnpm test            # run the suite once
-pnpm test:watch      # watch mode
-pnpm test:coverage   # run with a V8 coverage report
+pnpm test            # run unit tests once
+pnpm test:watch      # unit tests in watch mode
+pnpm test:coverage   # unit tests with a V8 coverage report
+pnpm test:e2e        # run Playwright e2e suite
+pnpm test:all        # run both unit and e2e tests
 ```
 
 ### Linting & Formatting
