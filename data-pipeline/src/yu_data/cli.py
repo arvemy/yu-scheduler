@@ -10,7 +10,7 @@ from typing import Any
 from . import scheduler_export
 from .obs.catalog import crawl
 from .obs.client import ObsClient
-from .schedules import summer_pdf
+from .schedules import term_pdf
 
 def write_json(path: Path, data: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -100,10 +100,12 @@ def build_parser() -> argparse.ArgumentParser:
     crawl_parser.set_defaults(func=run_crawl_obs)
 
     pdf_parser = sub.add_parser(
-        "parse-summer-pdf", help="Parse the summer-school PDF into term JSON."
+        "parse-term-pdf",
+        aliases=["parse-summer-pdf"],
+        help="Parse a term's course-list PDF into term JSON.",
     )
-    summer_pdf.configure_parser(pdf_parser)
-    pdf_parser.set_defaults(func=summer_pdf.run)
+    term_pdf.configure_parser(pdf_parser)
+    pdf_parser.set_defaults(func=term_pdf.run)
 
     export_parser = sub.add_parser(
         "export-catalog",

@@ -67,19 +67,21 @@ def test_crawl_builds_catalog_and_report():
     assert len(excluded) == 1
 
 
-def test_crawl_warns_on_curriculum_year_mismatch():
-    # The fixture's selected curriculum is labelled 2025-2026.
-    _catalog, report = crawl(
-        FakeClient(), academic_year="2025-2026", limit_per_degree=1, log=lambda _m: None
-    )
-    assert not any("does not match" in w for w in report["parse_warnings"])
+def test_crawl_warns_when_curriculum_is_newer_than_year():
+    # The fixture's selected curriculum is "2025 (2025-2026 ...)". The same or an
+    # older curriculum is normal: it stays in force for later academic years.
+    for year in ("2025-2026", "2026-2027"):
+        _catalog, report = crawl(
+            FakeClient(), academic_year=year, limit_per_degree=1, log=lambda _m: None
+        )
+        assert not any("newer than" in w for w in report["parse_warnings"])
 
     _catalog, report = crawl(
-        FakeClient(), academic_year="2026-2027", limit_per_degree=1, log=lambda _m: None
+        FakeClient(), academic_year="2024-2025", limit_per_degree=1, log=lambda _m: None
     )
-    mismatches = [w for w in report["parse_warnings"] if "does not match" in w]
-    assert len(mismatches) == 1
-    assert "'2026-2027'" in mismatches[0]
+    stale = [w for w in report["parse_warnings"] if "newer than" in w]
+    assert len(stale) == 1
+    assert "'2024-2025'" in stale[0]
 
 
 class EmptyCurriculumClient(FakeClient):

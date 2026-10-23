@@ -6,7 +6,7 @@ scheduler only needs, per course, a bilingual title + AKTS + an OBS link, and,
 per program, the set of course codes that belong to it (so the picker can be
 filtered to one program). This module produces that slim view and writes it
 straight into the scheduler's ``static/data/catalog/<year>.json`` (mirroring how
-``schedules/summer_pdf.py`` writes term JSON into ``static/data/terms/``).
+``schedules/term_pdf.py`` writes term JSON into ``static/data/terms/``).
 """
 
 from __future__ import annotations
