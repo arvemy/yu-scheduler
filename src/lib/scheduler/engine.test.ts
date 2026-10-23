@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { generateScheduleFromData } from './engine';
 import { mockCourseData, createSession } from './test-utils';
-import type { GenerateScheduleRequest } from '$lib/types';
+import type { GenerateScheduleRequest } from '#lib/types/index.js';
 import { WarningCodes } from './errorCodes';
 
 describe('Scheduler Engine', () => {

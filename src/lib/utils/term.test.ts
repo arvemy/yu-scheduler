@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { getLatestTerm, translateTerm } from './term';
-import type { Translator } from '$lib/i18n';
+import type { Translator } from '#lib/i18n/index.js';
 
 /** Minimal fake translator that resolves only the keys translateTerm needs. */
 const makeTranslator = (locale: 'en' | 'tr'): Translator => {

@@ -1,4 +1,4 @@
-import { dev } from '$app/environment';
+import { dev } from '$app/env';
 
 /**
  * Log levels for development logging.
@@ -12,7 +12,7 @@ export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
  *
  * @example
  * ```ts
- * import { devLog, devWarn, devError } from '$lib/utils/logger';
+ * import { devLog, devWarn, devError } from '#lib/utils/logger.js';
  *
  * try {
  *   localStorage.setItem('key', 'value');

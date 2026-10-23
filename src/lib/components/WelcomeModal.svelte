@@ -11,8 +11,8 @@
 		TriangleAlert,
 		X
 	} from '@lucide/svelte';
-	import { t } from '$lib/i18n';
-	import TooltipContent from '$lib/components/ui/TooltipContent.svelte';
+	import { t } from '#lib/i18n/index.js';
+	import TooltipContent from '#lib/components/ui/TooltipContent.svelte';
 
 	let {
 		open = false,

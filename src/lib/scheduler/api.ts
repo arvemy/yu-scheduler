@@ -1,6 +1,7 @@
-import { base } from '$app/paths';
-import type { CatalogData, SessionData, TermManifestEntry } from '$lib/types';
-import { ErrorCodes, ERROR_MESSAGES } from '$lib/scheduler/errorCodes';
+import { asset } from '$app/paths';
+import type { AssetPath } from '$app/types';
+import type { CatalogData, SessionData, TermManifestEntry } from '#lib/types/index.js';
+import { ErrorCodes, ERROR_MESSAGES } from '#lib/scheduler/errorCodes.js';
 import {
 	buildEligibleSections,
 	findMatchingSuffix,
@@ -8,7 +9,7 @@ import {
 	getTermNameFromFile,
 	getYearFromTerm,
 	mapDaysToEnglish
-} from '$lib/scheduler/helpers';
+} from '#lib/scheduler/helpers.js';
 
 export class SchedulerError extends Error {
 	code: string;
@@ -23,7 +24,9 @@ const termCache = new Map<string, Record<string, SessionData[]>>();
 const catalogCache = new Map<string, CatalogData>();
 let manifestCache: TermManifestEntry[] | null = null;
 
-const withBase = (path: string): string => `${base}${path}`;
+// Data file names are only known at runtime, so they can't match the generated
+// `AssetPath` union of static files.
+const withBase = (path: string): string => asset(path.slice(1) as AssetPath);
 
 const fetchJson = async <T>(url: string): Promise<T> => {
 	const response = await fetch(url);

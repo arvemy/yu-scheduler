@@ -1,6 +1,6 @@
 import { derived, writable, type Readable, type Writable } from 'svelte/store';
-import { dev } from '$app/environment';
-import { STORAGE_KEYS } from '$lib/storage/keys';
+import { dev } from '$app/env';
+import { STORAGE_KEYS } from '#lib/storage/keys.js';
 import { en, type Messages } from './locales/en';
 import { tr } from './locales/tr';
 

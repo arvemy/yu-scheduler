@@ -2,9 +2,9 @@
 	import { Popover } from 'bits-ui';
 	import { Check, ChevronDown, ChevronRight, GraduationCap, Search } from '@lucide/svelte';
 	import { SvelteSet } from 'svelte/reactivity';
-	import { locale, t } from '$lib/i18n';
-	import { normalizeForSearch } from '$lib/utils/search';
-	import type { ProgramMeta } from '$lib/types';
+	import { locale, t } from '#lib/i18n/index.js';
+	import { normalizeForSearch } from '#lib/utils/search.js';
+	import type { ProgramMeta } from '#lib/types/index.js';
 
 	let {
 		programs = [],

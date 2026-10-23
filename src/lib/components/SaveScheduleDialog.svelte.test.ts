@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
-import { setLocale } from '$lib/i18n';
-import { STORAGE_KEYS } from '$lib/storage/keys';
-import type { ScheduleData } from '$lib/types';
+import { setLocale } from '#lib/i18n/index.js';
+import { STORAGE_KEYS } from '#lib/storage/keys.js';
+import type { ScheduleData } from '#lib/types/index.js';
 import SaveScheduleDialog from './SaveScheduleDialog.svelte';
 
 const scheduleData: ScheduleData = {

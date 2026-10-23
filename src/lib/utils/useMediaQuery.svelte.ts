@@ -10,7 +10,7 @@ import { BREAKPOINTS, type BreakpointKey } from './breakpoints';
  * @example
  * ```svelte
  * <script lang="ts">
- *   import { useMediaQuery } from '$lib/utils/useMediaQuery.svelte';
+ *   import { useMediaQuery } from '#lib/utils/useMediaQuery.svelte.js';
  *
  *   const mobile = useMediaQuery('md'); // true when < 768px
  *   const tablet = useMediaQuery('lg'); // true when < 1024px
@@ -66,7 +66,7 @@ export function useMediaQuery(breakpoint: BreakpointKey | number = 'md') {
  * @example
  * ```svelte
  * <script lang="ts">
- *   import { useMobile } from '$lib/utils/useMediaQuery.svelte';
+ *   import { useMobile } from '#lib/utils/useMediaQuery.svelte.js';
  *
  *   const { isMobile } = useMobile();
  * </script>

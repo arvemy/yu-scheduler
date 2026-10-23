@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/svelte';
-import { setLocale } from '$lib/i18n';
+import { setLocale } from '#lib/i18n/index.js';
 import AppHeader from './AppHeader.svelte';
 
 const setMatchMedia = (matches: boolean) => {
@@ -42,8 +42,8 @@ describe('AppHeader', () => {
 			'https://github.com/arvemy/yu-scheduler'
 		);
 		expect(screen.getByRole('button', { name: 'About' })).toBeInTheDocument();
-		expect(screen.getByRole('button', { name: /Switch language/ })).toBeInTheDocument();
-		expect(screen.getByRole('button', { name: 'Fall 2025-2026' })).toBeInTheDocument();
+		expect(screen.getByRole('combobox', { name: /Switch language/ })).toBeInTheDocument();
+		expect(screen.getByRole('combobox', { name: 'Fall 2025-2026' })).toBeInTheDocument();
 	});
 
 	it('shows a term loading error state', () => {

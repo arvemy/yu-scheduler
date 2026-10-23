@@ -1,10 +1,10 @@
-import type { BlockedHour, SavedSchedule, ScheduleData } from '$lib/types';
+import type { BlockedHour, SavedSchedule, ScheduleData } from '#lib/types/index.js';
 import {
 	parseStoredJson,
 	storeJson,
 	type ValidationResult,
 	validateSavedSchedule
-} from '$lib/utils/storage';
+} from '#lib/utils/storage.js';
 
 import { STORAGE_KEYS } from './keys';
 

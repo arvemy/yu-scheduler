@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { get } from 'svelte/store';
 import { locale, t, setLocale, messages, type Locale } from './index';
-import { STORAGE_KEYS } from '$lib/storage/keys';
+import { STORAGE_KEYS } from '#lib/storage/keys.js';
 
 /** Collect the set of dot-notation leaf paths of a nested message object. */
 const leafPaths = (obj: Record<string, unknown>, prefix = ''): string[] => {

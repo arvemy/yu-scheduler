@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { CourseMeta } from '$lib/types';
+import type { CourseMeta } from '#lib/types/index.js';
 import { computeAktsTotals } from './akts';
 
 /** Build a courseMeta map from a `{ code: akts }` shorthand. */

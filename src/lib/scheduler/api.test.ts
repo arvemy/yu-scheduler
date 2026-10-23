@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import type { SessionData } from '$lib/types';
+import type { SessionData } from '#lib/types/index.js';
 
 const TERM_INDEX = [{ term: '2025-2026 Fall', file: '2025-2026_fall.json' }];
 

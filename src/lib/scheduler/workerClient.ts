@@ -2,8 +2,8 @@ import type {
 	GenerateScheduleRequest,
 	GenerateScheduleWorkerMessage,
 	ScheduleData
-} from '$lib/types';
-import { loadTermData } from '$lib/scheduler/api';
+} from '#lib/types/index.js';
+import { loadTermData } from '#lib/scheduler/api.js';
 
 /**
  * Deep clone an object to remove any Svelte 5 $state proxies.

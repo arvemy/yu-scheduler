@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { get } from 'svelte/store';
 import { translateWarning, translateWarnings } from './warnings';
-import { setLocale, t as tStore } from '$lib/i18n';
-import type { Translator } from '$lib/i18n';
-import type { WarningInfo } from '$lib/types';
+import { setLocale, t as tStore } from '#lib/i18n/index.js';
+import type { Translator } from '#lib/i18n/index.js';
+import type { WarningInfo } from '#lib/types/index.js';
 
 const warn = (code: string, params: Record<string, unknown> = {}, message = ''): WarningInfo => ({
 	code,

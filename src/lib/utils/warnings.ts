@@ -1,5 +1,5 @@
-import type { Translator } from '$lib/i18n';
-import type { WarningInfo } from '$lib/types';
+import type { Translator } from '#lib/i18n/index.js';
+import type { WarningInfo } from '#lib/types/index.js';
 
 const normalizeReason = (reason: string): string => reason.trim().replace(/[.!?]+$/, '');
 

@@ -1,4 +1,4 @@
-import type { Translator } from '$lib/i18n';
+import type { Translator } from '#lib/i18n/index.js';
 
 export const translateTerm = (term: string, t: Translator): string => {
 	if (!term) return '';

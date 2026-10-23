@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
-import { setLocale } from '$lib/i18n';
-import { getTermKey } from '$lib/storage/keys';
-import type { ScheduleData } from '$lib/types';
+import { setLocale } from '#lib/i18n/index.js';
+import { getTermKey } from '#lib/storage/keys.js';
+import type { ScheduleData } from '#lib/types/index.js';
 
-vi.mock('$lib', async (importOriginal) => {
-	const actual = await importOriginal<typeof import('$lib')>();
+vi.mock('#lib', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('#lib')>();
 	return {
 		...actual,
 		getCourses: vi.fn(),
@@ -15,7 +15,7 @@ vi.mock('$lib', async (importOriginal) => {
 	};
 });
 
-import { generateSchedule, getCourses, getSections } from '$lib';
+import { generateSchedule, getCourses, getSections } from '#lib';
 import CourseSelector from './CourseSelector.svelte';
 
 const TERM = '2025-2026 Fall';

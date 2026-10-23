@@ -6,7 +6,7 @@ import type {
 	SectionInfo,
 	SessionData,
 	WarningInfo
-} from '$lib/types';
+} from '#lib/types/index.js';
 import {
 	DAYS_OF_WEEK,
 	DAY_MAP,
@@ -14,8 +14,8 @@ import {
 	TIME_SLOTS,
 	MAX_CONFLICT_PAIRS,
 	PROGRESS_BATCH_SIZE
-} from '$lib/scheduler/constants';
-import { WARNING_MESSAGES, WarningCodes } from '$lib/scheduler/errorCodes';
+} from '#lib/scheduler/constants.js';
+import { WARNING_MESSAGES, WarningCodes } from '#lib/scheduler/errorCodes.js';
 
 type EligibleSections = Record<string, Array<[string, SessionData[]]>>;
 

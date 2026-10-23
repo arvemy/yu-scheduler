@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
+	import { t } from '#lib/i18n/index.js';
 	import { fade, fly } from 'svelte/transition';
 	import { Download, FolderOpen, LoaderCircle, Save, Sparkles } from '@lucide/svelte';
 	import { Tooltip } from 'bits-ui';
-	import TooltipContent from '$lib/components/ui/TooltipContent.svelte';
+	import TooltipContent from '#lib/components/ui/TooltipContent.svelte';
 
 	let {
 		visible,

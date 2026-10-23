@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import type { ScheduleData } from '$lib/types';
+import type { ScheduleData } from '#lib/types/index.js';
 
 // The worker client loads term data before talking to the worker; stub it so
 // no network/term files are needed.
-vi.mock('$lib/scheduler/api', () => ({
+vi.mock('#lib/scheduler/api.js', () => ({
 	loadTermData: vi.fn(async (term?: string | null) => ({ term: term ?? 'X', data: {} }))
 }));
 

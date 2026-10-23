@@ -40,8 +40,7 @@ test('home route meets a local preview performance smoke budget', async ({ page 
 
 	const metrics = await page.evaluate(() => {
 		const navigation = performance.getEntriesByType('navigation')[0] as
-			| PerformanceNavigationTiming
-			| undefined;
+			PerformanceNavigationTiming | undefined;
 		const resources = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
 		const scriptBytes = resources
 			.filter((entry) => entry.initiatorType === 'script')

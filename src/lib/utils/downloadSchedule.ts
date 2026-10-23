@@ -7,7 +7,7 @@ import {
 	DOWNLOAD_FOOTER_HEIGHT,
 	DOWNLOAD_FOOTER_PADDING,
 	DOWNLOAD_TABLE_WIDTH_PX
-} from '$lib/config/ui';
+} from '#lib/config/ui.js';
 
 export interface DownloadOptions {
 	/**

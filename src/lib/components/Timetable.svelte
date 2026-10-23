@@ -3,13 +3,13 @@
 	import { SvelteMap } from 'svelte/reactivity';
 	import { Tooltip } from 'bits-ui';
 	import { ChevronDown, ChevronLeft, ChevronRight, Clock, Lock } from '@lucide/svelte';
-	import type { BlockedHour, Schedule, SessionData } from '$lib/types';
-	import { t } from '$lib/i18n';
-	import { SWIPE_THRESHOLD_PX } from '$lib/config/ui';
-	import { rangesOverlap, slotStringToRange } from '$lib/utils/time';
-	import { colorForCourse } from '$lib/utils/colors';
-	import { useMobile } from '$lib/utils/useMediaQuery.svelte';
-	import TooltipContent from '$lib/components/ui/TooltipContent.svelte';
+	import type { BlockedHour, Schedule, SessionData } from '#lib/types/index.js';
+	import { t } from '#lib/i18n/index.js';
+	import { SWIPE_THRESHOLD_PX } from '#lib/config/ui.js';
+	import { rangesOverlap, slotStringToRange } from '#lib/utils/time.js';
+	import { colorForCourse } from '#lib/utils/colors.js';
+	import { useMobile } from '#lib/utils/useMediaQuery.svelte.js';
+	import TooltipContent from '#lib/components/ui/TooltipContent.svelte';
 
 	let {
 		schedule,

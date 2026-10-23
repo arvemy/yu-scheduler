@@ -1,4 +1,4 @@
-import type { SessionData } from '$lib/types';
+import type { SessionData } from '#lib/types/index.js';
 
 export const createSession = (
 	day: string,

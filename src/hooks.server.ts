@@ -1,4 +1,4 @@
-import type { Handle } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit/hooks';
 
 /**
  * Security response headers for worker-served responses (the SPA shell document
@@ -7,7 +7,8 @@ import type { Handle } from '@sveltejs/kit';
  * `_headers` file — so the same policy is mirrored there for those responses.
  *
  * The Content-Security-Policy itself is emitted separately by SvelteKit
- * (see `kit.csp` in svelte.config.js), so it is intentionally not set here.
+ * (see the `csp` option of the `sveltekit()` plugin in vite.config.ts), so it is
+ * intentionally not set here.
  */
 const securityHeaders: Record<string, string> = {
 	'X-Content-Type-Options': 'nosniff',

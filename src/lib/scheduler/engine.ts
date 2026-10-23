@@ -5,8 +5,8 @@ import type {
 	SessionData,
 	Schedule,
 	WarningInfo
-} from '$lib/types';
-import { ErrorCodes, WarningCodes, ERROR_MESSAGES } from '$lib/scheduler/errorCodes';
+} from '#lib/types/index.js';
+import { ErrorCodes, WarningCodes, ERROR_MESSAGES } from '#lib/scheduler/errorCodes.js';
 import {
 	buildAllCoursesExcludedWarning,
 	buildEligibleSections,
@@ -19,8 +19,8 @@ import {
 	filterEligibleCourses,
 	generateValidSchedules,
 	normalizeBlockedHours
-} from '$lib/scheduler/helpers';
-import { CONFLICT_SAMPLE_LIMIT } from '$lib/scheduler/constants';
+} from '#lib/scheduler/helpers.js';
+import { CONFLICT_SAMPLE_LIMIT } from '#lib/scheduler/constants.js';
 
 const eligibleSectionsCache = new WeakMap<object, ReturnType<typeof buildEligibleSections>>();
 

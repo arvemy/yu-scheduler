@@ -1,5 +1,5 @@
-import type { GenerateScheduleWorkerMessage, TermCourseData } from '$lib/types';
-import { generateScheduleFromData } from '$lib/scheduler/engine';
+import type { GenerateScheduleWorkerMessage, TermCourseData } from '#lib/types/index.js';
+import { generateScheduleFromData } from '#lib/scheduler/engine.js';
 
 const cancelled = new Set<string>();
 const termDataCache = new Map<string, TermCourseData>();

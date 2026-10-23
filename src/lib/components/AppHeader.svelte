@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { DropdownMenu, Select, Tooltip } from 'bits-ui';
 	import { ChevronDown, EllipsisVertical, Info, Languages, User } from '@lucide/svelte';
-	import { locale, setLocale, t } from '$lib/i18n';
-	import { translateTerm } from '$lib/utils/term';
-	import { useMobile } from '$lib/utils/useMediaQuery.svelte';
-	import type { ProgramMeta } from '$lib/types';
-	import TooltipContent from '$lib/components/ui/TooltipContent.svelte';
-	import ProgramPicker from '$lib/components/ProgramPicker.svelte';
+	import { locale, setLocale, t } from '#lib/i18n/index.js';
+	import { translateTerm } from '#lib/utils/term.js';
+	import { useMobile } from '#lib/utils/useMediaQuery.svelte.js';
+	import type { ProgramMeta } from '#lib/types/index.js';
+	import TooltipContent from '#lib/components/ui/TooltipContent.svelte';
+	import ProgramPicker from '#lib/components/ProgramPicker.svelte';
 
 	let {
 		terms = [],
@@ -37,6 +37,11 @@
 
 	const termItems = $derived(
 		terms.map((term) => ({ value: term, label: translateTerm(term, $t) }))
+	);
+
+	// Select triggers have the combobox role, which doesn't take its name from content.
+	const termLabel = $derived(
+		currentTerm ? translateTerm(currentTerm, $t) : $t('savedSchedules.term')
 	);
 
 	const languageItems = $derived([
@@ -224,10 +229,8 @@
 						onValueChange={handleTermChange}
 						disabled={terms.length === 0}
 					>
-						<Select.Trigger class="term-trigger">
-							<span class="term-value"
-								>{currentTerm ? translateTerm(currentTerm, $t) : $t('savedSchedules.term')}</span
-							>
+						<Select.Trigger class="term-trigger" aria-label={termLabel}>
+							<span class="term-value">{termLabel}</span>
 							<ChevronDown class="shrink-0" size={20} />
 						</Select.Trigger>
 						<Select.Content class="select-content term-content" align="center" sideOffset={4}>

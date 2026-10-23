@@ -1,15 +1,15 @@
 <script lang="ts">
-	import AppHeader from '$lib/components/AppHeader.svelte';
-	import CourseSelector from '$lib/components/CourseSelector.svelte';
-	import { t } from '$lib/i18n';
-	import { listTerms, loadCatalog } from '$lib';
-	import type { BlockedHour, CatalogData, ScheduleData, SavedSchedule } from '$lib/types';
-	import { dismissWelcomeModal, shouldShowWelcomeModal } from '$lib/storage/welcome';
-	import { getLatestTerm } from '$lib/utils/term';
-	import { devWarn } from '$lib/utils/logger';
-	import { parseStoredJson, storeJson, validateLastGenerated } from '$lib/utils/storage';
-	import { getLastGeneratedKey, getTermKey } from '$lib/storage/keys';
-	import { watch } from '$lib/utils/reactivity.svelte';
+	import AppHeader from '#lib/components/AppHeader.svelte';
+	import CourseSelector from '#lib/components/CourseSelector.svelte';
+	import { t } from '#lib/i18n/index.js';
+	import { listTerms, loadCatalog } from '#lib';
+	import type { BlockedHour, CatalogData, ScheduleData, SavedSchedule } from '#lib/types/index.js';
+	import { dismissWelcomeModal, shouldShowWelcomeModal } from '#lib/storage/welcome.js';
+	import { getLatestTerm } from '#lib/utils/term.js';
+	import { devWarn } from '#lib/utils/logger.js';
+	import { parseStoredJson, storeJson, validateLastGenerated } from '#lib/utils/storage.js';
+	import { getLastGeneratedKey, getTermKey } from '#lib/storage/keys.js';
+	import { watch } from '#lib/utils/reactivity.svelte.js';
 	import { onMount } from 'svelte';
 
 	let terms = $state<string[]>([]);
@@ -252,7 +252,7 @@
 <!-- Lazy-loaded: the welcome modal isn't needed for first paint (and never loads
      for returning visitors who dismissed it), keeping it out of the entry bundle. -->
 {#if showWelcomeModal}
-	{#await import('$lib/components/WelcomeModal.svelte') then { default: WelcomeModal }}
+	{#await import('#lib/components/WelcomeModal.svelte') then { default: WelcomeModal }}
 		<WelcomeModal
 			open={showWelcomeModal}
 			dontShowAgain={dontShowWelcomeAgain}

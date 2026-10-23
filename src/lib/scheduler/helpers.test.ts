@@ -10,7 +10,7 @@ import {
 	getYearFromTerm
 } from './helpers';
 import { createSession, mockCourseData } from './test-utils';
-import type { BlockedHour, CourseEntry } from '$lib/types';
+import type { BlockedHour, CourseEntry } from '#lib/types/index.js';
 
 describe('Scheduler Helpers', () => {
 	describe('timeToMinutes', () => {

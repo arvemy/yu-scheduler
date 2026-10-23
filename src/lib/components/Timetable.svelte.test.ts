@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/svelte';
 import Timetable from './Timetable.svelte';
-import type { BlockedHour, Schedule } from '$lib/types';
+import type { BlockedHour, Schedule } from '#lib/types/index.js';
 
 const schedule: Schedule = {
 	sections: [

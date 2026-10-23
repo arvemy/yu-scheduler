@@ -17,12 +17,12 @@
 		TriangleAlert,
 		X
 	} from '@lucide/svelte';
-	import { watch, useDebounce } from '$lib/utils/reactivity.svelte';
+	import { watch, useDebounce } from '#lib/utils/reactivity.svelte.js';
 	import { dragHandleZone, dragHandle, TRIGGERS } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
 	import { toast } from 'svelte-sonner';
-	import { locale, t } from '$lib/i18n';
-	import { DAYS_OF_WEEK, TIME_SLOTS, generateSchedule, getCourses, getSections } from '$lib';
+	import { locale, t } from '#lib/i18n/index.js';
+	import { DAYS_OF_WEEK, TIME_SLOTS, generateSchedule, getCourses, getSections } from '#lib';
 	import type {
 		BlockedHour,
 		CatalogData,
@@ -30,27 +30,27 @@
 		CourseMeta,
 		SavedSchedule,
 		ScheduleData
-	} from '$lib/types';
-	import Timetable from '$lib/components/Timetable.svelte';
-	import BottomActionBar from '$lib/components/BottomActionBar.svelte';
-	import { downloadScheduleAsImage } from '$lib/utils/downloadSchedule';
+	} from '#lib/types/index.js';
+	import Timetable from '#lib/components/Timetable.svelte';
+	import BottomActionBar from '#lib/components/BottomActionBar.svelte';
+	import { downloadScheduleAsImage } from '#lib/utils/downloadSchedule.js';
 	import { onDestroy, onMount, tick } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { useMobile } from '$lib/utils/useMediaQuery.svelte';
-	import { devWarn } from '$lib/utils/logger';
-	import { translateWarnings } from '$lib/utils/warnings';
-	import { normalizeForSearch } from '$lib/utils/search';
-	import { computeAktsTotals } from '$lib/utils/akts';
-	import { SWIPE_THRESHOLD_PX } from '$lib/config/ui';
-	import TooltipContent from '$lib/components/ui/TooltipContent.svelte';
+	import { useMobile } from '#lib/utils/useMediaQuery.svelte.js';
+	import { devWarn } from '#lib/utils/logger.js';
+	import { translateWarnings } from '#lib/utils/warnings.js';
+	import { normalizeForSearch } from '#lib/utils/search.js';
+	import { computeAktsTotals } from '#lib/utils/akts.js';
+	import { SWIPE_THRESHOLD_PX } from '#lib/config/ui.js';
+	import TooltipContent from '#lib/components/ui/TooltipContent.svelte';
 	import {
 		parseStoredJson,
 		storeJson,
 		validateSelectedCourses,
 		validateBlockedHours,
 		validateSectionChoices
-	} from '$lib/utils/storage';
-	import { getTermKey } from '$lib/storage/keys';
+	} from '#lib/utils/storage.js';
+	import { getTermKey } from '#lib/storage/keys.js';
 
 	type CancelablePromise<T> = Promise<T> & { cancel: () => void };
 
@@ -1523,7 +1523,7 @@
 		<!-- Dialogs are lazy-loaded (and mounted only while open) so their code stays
 	     out of the entry bundle until the user actually opens one. -->
 		{#if scheduleData && saveDialogOpen}
-			{#await import('$lib/components/SaveScheduleDialog.svelte') then { default: SaveScheduleDialog }}
+			{#await import('#lib/components/SaveScheduleDialog.svelte') then { default: SaveScheduleDialog }}
 				<SaveScheduleDialog
 					open={saveDialogOpen}
 					onClose={() => (saveDialogOpen = false)}
@@ -1541,7 +1541,7 @@
 		{/if}
 
 		{#if loadDialogOpen}
-			{#await import('$lib/components/SavedSchedulesDialog.svelte') then { default: SavedSchedulesDialog }}
+			{#await import('#lib/components/SavedSchedulesDialog.svelte') then { default: SavedSchedulesDialog }}
 				<SavedSchedulesDialog
 					open={loadDialogOpen}
 					onClose={() => (loadDialogOpen = false)}

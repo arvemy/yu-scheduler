@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { ScheduleData } from '$lib/types';
+import type { ScheduleData } from '#lib/types/index.js';
 import { STORAGE_KEYS } from './keys';
 import {
 	checkStorageAvailability,

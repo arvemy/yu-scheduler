@@ -13,18 +13,18 @@
 		Trash2,
 		X
 	} from '@lucide/svelte';
-	import { watch } from '$lib/utils/reactivity.svelte';
-	import { t } from '$lib/i18n';
-	import type { SavedSchedule } from '$lib/types';
+	import { watch } from '#lib/utils/reactivity.svelte.js';
+	import { t } from '#lib/i18n/index.js';
+	import type { SavedSchedule } from '#lib/types/index.js';
 	import {
 		clearAllSavedSchedules,
 		deleteSavedSchedule,
 		getSavedSchedules,
 		getStorageUsage,
 		renameSavedSchedule
-	} from '$lib/storage/savedSchedules';
-	import { translateTerm } from '$lib/utils/term';
-	import TooltipContent from '$lib/components/ui/TooltipContent.svelte';
+	} from '#lib/storage/savedSchedules.js';
+	import { translateTerm } from '#lib/utils/term.js';
+	import TooltipContent from '#lib/components/ui/TooltipContent.svelte';
 
 	let {
 		open = false,

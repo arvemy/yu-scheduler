@@ -1,5 +1,5 @@
 import { devWarn } from './logger';
-import type { BlockedHour, SavedSchedule, ScheduleData } from '$lib/types';
+import type { BlockedHour, SavedSchedule, ScheduleData } from '#lib/types/index.js';
 
 /**
  * Schema validation result.

@@ -1,4 +1,4 @@
-import type { CourseMeta } from '$lib/types';
+import type { CourseMeta } from '#lib/types/index.js';
 
 export interface AktsTotals {
 	/**
