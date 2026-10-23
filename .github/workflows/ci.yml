@@ -11,10 +11,37 @@ concurrency:
 
 permissions:
   contents: read
+  # dorny/paths-filter lists PR files through the API.
+  pull-requests: read
 
 jobs:
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    outputs:
+      web: ${{ steps.filter.outputs.web }}
+      data-pipeline: ${{ steps.filter.outputs.data-pipeline }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          # A file matches a filter only if it matches every pattern, so the
+          # negation excludes the pipeline. Anything else (README, configs,
+          # static/data output) still runs the web jobs: Prettier checks it all.
+          predicate-quantifier: every
+          filters: |
+            web:
+              - '**'
+              - '!data-pipeline/**'
+            data-pipeline:
+              - 'data-pipeline/**'
+              - '.github/workflows/ci.yml'
+
   web:
     name: Web (lint, check, unit tests, build)
+    needs: changes
+    if: needs.changes.outputs.web == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -32,6 +59,8 @@ jobs:
 
   e2e:
     name: Web (Playwright e2e)
+    needs: changes
+    if: needs.changes.outputs.web == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -53,6 +82,8 @@ jobs:
 
   data-pipeline:
     name: Data pipeline (pytest)
+    needs: changes
+    if: needs.changes.outputs.data-pipeline == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
