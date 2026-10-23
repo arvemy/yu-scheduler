@@ -21,6 +21,7 @@ jobs:
     outputs:
       web: ${{ steps.filter.outputs.web }}
       data-pipeline: ${{ steps.filter.outputs.data-pipeline }}
+      workflow: ${{ steps.filter.outputs.workflow }}
     steps:
       - uses: actions/checkout@v7
       - uses: dorny/paths-filter@v4
@@ -29,6 +30,7 @@ jobs:
           # A file matches a filter only if it matches every pattern, so the
           # negation excludes the pipeline. Anything else (README, configs,
           # static/data output) still runs the web jobs: Prettier checks it all.
+          # Alternatives therefore need separate filters, combined in `if:`.
           predicate-quantifier: every
           filters: |
             web:
@@ -36,6 +38,7 @@ jobs:
               - '!data-pipeline/**'
             data-pipeline:
               - 'data-pipeline/**'
+            workflow:
               - '.github/workflows/ci.yml'
 
   web:
@@ -83,7 +86,7 @@ jobs:
   data-pipeline:
     name: Data pipeline (pytest)
     needs: changes
-    if: needs.changes.outputs.data-pipeline == 'true'
+    if: needs.changes.outputs.data-pipeline == 'true' || needs.changes.outputs.workflow == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
