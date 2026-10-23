@@ -93,7 +93,8 @@ jobs:
         working-directory: data-pipeline
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v10
+      # setup-uv publishes no floating major tags, so pin the exact release.
+      - uses: astral-sh/setup-uv@v10.3.2
         with:
           enable-cache: true
           cache-dependency-glob: data-pipeline/uv.lock
