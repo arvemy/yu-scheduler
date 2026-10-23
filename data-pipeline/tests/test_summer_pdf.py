@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from yu_data import cli
 from yu_data.schedules.summer_pdf import parse_pdf_text
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -52,3 +53,26 @@ def test_timed_row_with_unparsed_day_rejected_not_untimed():
     assert untimed == []
     assert len(unknown) == 1
     assert "ARCH 1020" in unknown[0]
+
+
+def test_output_outside_manifest_dir_rejected(tmp_path):
+    terms = tmp_path / "terms"
+    terms.mkdir()
+    manifest = terms / "index.json"
+    output = tmp_path / "elsewhere" / "preview.json"
+
+    rc = cli.main(
+        [
+            "parse-summer-pdf",
+            str(tmp_path / "missing.pdf"),
+            "-o",
+            str(output),
+            "--manifest",
+            str(manifest),
+        ]
+    )
+
+    # Rejected before the PDF is even read, so nothing is written.
+    assert rc == 2
+    assert not output.exists()
+    assert not manifest.exists()

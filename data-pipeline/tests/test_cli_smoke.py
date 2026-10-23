@@ -67,6 +67,21 @@ def test_crawl_builds_catalog_and_report():
     assert len(excluded) == 1
 
 
+def test_crawl_warns_on_curriculum_year_mismatch():
+    # The fixture's selected curriculum is labelled 2025-2026.
+    _catalog, report = crawl(
+        FakeClient(), academic_year="2025-2026", limit_per_degree=1, log=lambda _m: None
+    )
+    assert not any("does not match" in w for w in report["parse_warnings"])
+
+    _catalog, report = crawl(
+        FakeClient(), academic_year="2026-2027", limit_per_degree=1, log=lambda _m: None
+    )
+    mismatches = [w for w in report["parse_warnings"] if "does not match" in w]
+    assert len(mismatches) == 1
+    assert "'2026-2027'" in mismatches[0]
+
+
 class EmptyCurriculumClient(FakeClient):
     """Like FakeClient but every curriculum page parses to zero rows."""
 

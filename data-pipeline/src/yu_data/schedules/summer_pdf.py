@@ -226,6 +226,19 @@ def update_manifest(path: Path, term: str, output_path: Path) -> None:
 
 
 def run(args: argparse.Namespace) -> int:
+    # The manifest stores only the file name and the app resolves it next to
+    # index.json, so registering an output written anywhere else would point the
+    # app at a file that does not exist.
+    if not args.no_manifest and (
+        args.output.resolve().parent != args.manifest.resolve().parent
+    ):
+        print(
+            f"Output {args.output} is not in the manifest directory "
+            f"{args.manifest.parent}; pass --no-manifest or write it there.",
+            file=sys.stderr,
+        )
+        return 2
+
     text = extract_text(args.pdf)
     courses, untimed_courses, unknown_lines = parse_pdf_text(
         text, include_untimed=not args.skip_untimed

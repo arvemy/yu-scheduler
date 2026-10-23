@@ -87,6 +87,28 @@ def _fetch_curriculum(
     return parse_curriculum(html)
 
 
+def _check_curriculum_year(
+    program_id: str,
+    en: Curriculum,
+    tr: Curriculum,
+    academic_year: str,
+    warnings: list[str],
+) -> None:
+    """Warn when OBS's selected curriculum is not labelled with ``academic_year``.
+
+    The crawler always reads the curriculum OBS currently selects; it cannot ask
+    for a given year. A stale ``--academic-year`` (or a program still on an older
+    curriculum) would otherwise be exported under the requested year silently.
+    """
+    canonical = en if en.rows else tr
+    label = canonical.selected_label
+    if label is not None and academic_year not in label:
+        warnings.append(
+            f"{program_id}: selected curriculum {label!r} does not match "
+            f"academic year {academic_year!r}"
+        )
+
+
 def _build_program(
     program: ProgramRef,
     en: Curriculum,
@@ -260,6 +282,7 @@ def crawl(
         tr = _fetch_curriculum(
             client, program.cur_sunit, "tr", report["parse_warnings"], program.id
         )
+        _check_curriculum_year(program.id, en, tr, academic_year, report["parse_warnings"])
         entry = _build_program(program, en, tr, courses, report, conflict_codes)
         if entry is not None:
             program_entries.append(entry)
