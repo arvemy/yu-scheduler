@@ -1,4 +1,4 @@
-# yu-data
+# yu-data (data pipeline)
 
 Crawlers and parsers for Yaşar University academic data.
 
@@ -11,9 +11,9 @@ Two things live here:
 2. **Summer-school PDF parser** — converts `YAZ-OKULU-ACILACAK-DERSLER-*.pdf`
    into YuScheduler term JSON (migrated from the original standalone script).
 
-## Connected Scheduler Project
+## Relationship to YuScheduler
 
-`yu-data` feeds the companion [YuScheduler](https://github.com/arvemy/yu-scheduler) web app. The two repositories are connected: this project crawls, parses, and exports normalized Yaşar University academic data, while YuScheduler consumes that data for course search and schedule generation.
+This directory lives inside the [YuScheduler](../README.md) repository and feeds its web app: it crawls, parses, and exports normalized Yaşar University academic data into the scheduler's `static/data/`. All commands below are run from this `data-pipeline/` directory.
 
 ## Setup
 
@@ -32,12 +32,12 @@ uv run yu-data crawl-obs --academic-year 2025-2026
 # Quick dry run: one program per degree
 uv run yu-data crawl-obs --limit-per-degree 1
 
-# Parse the summer-school PDF (writes term JSON; --no-manifest keeps yu-scheduler untouched)
+# Parse the summer-school PDF (writes term JSON; --no-manifest leaves ../static/data/terms/index.json untouched)
 uv run yu-data parse-summer-pdf data/raw/YAZ-OKULU-ACILACAK-DERSLER-2025-2026.pdf \
     --no-manifest -o /tmp/2025-2026_summer.json
 
 # Slim dist/catalog/<year>.json into the scheduler's static data
-# (writes ../yu-scheduler/static/data/catalog/<year>.json by default)
+# (writes ../static/data/catalog/<year>.json by default)
 uv run yu-data export-catalog --academic-year 2025-2026
 ```
 
@@ -66,13 +66,13 @@ report.
 `export-catalog` then projects the catalog onto the slim schema YuScheduler
 consumes — `courses{}` (bilingual `title`, `akts`, `obs` links) and `programs[]`
 (`id`, `degree`, bilingual `name`/`faculty`, and the flat list of member
-`courses`) — written to `../yu-scheduler/static/data/catalog/<year>.json`.
+`courses`) — written to `../static/data/catalog/<year>.json`.
 
 ## Layout
 
 ```
 src/yu_data/
-  cli.py                 # `yu-data` entrypoint (crawl-obs, parse-summer-pdf)
+  cli.py                 # `yu-data` entrypoint (crawl-obs, parse-summer-pdf, export-catalog)
   obs/                   # OBS Bologna crawler (client, programs, curriculum, catalog)
   schedules/summer_pdf.py
 data/raw/                # source PDFs

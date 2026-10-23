@@ -5,8 +5,8 @@ The full ``dist/catalog/<year>.json`` is ~7 MB and curriculum-centric. The
 scheduler only needs, per course, a bilingual title + AKTS + an OBS link, and,
 per program, the set of course codes that belong to it (so the picker can be
 filtered to one program). This module produces that slim view and writes it
-straight into ``../yu-scheduler/static/data/catalog/<year>.json`` (mirroring how
-``schedules/summer_pdf.py`` writes term JSON into the scheduler repo).
+straight into the scheduler's ``static/data/catalog/<year>.json`` (mirroring how
+``schedules/summer_pdf.py`` writes term JSON into ``static/data/terms/``).
 """
 
 from __future__ import annotations
@@ -161,7 +161,7 @@ def configure_parser(parser: argparse.ArgumentParser) -> None:
         default=None,
         help=(
             "Slim catalog output path "
-            "(default: ../yu-scheduler/static/data/catalog/<year>.json)."
+            "(default: ../static/data/catalog/<year>.json)."
         ),
     )
 
@@ -170,13 +170,10 @@ def run(args: argparse.Namespace) -> int:
     year = args.academic_year
     # Anchor defaults to the working directory, not __file__: after a wheel
     # install __file__ lives under site-packages. Run from the repo root, the
-    # cwd is the project root and the sibling yu-scheduler resolves as documented.
+    # cwd is data-pipeline/ and its parent is the scheduler repo root.
     cwd = Path.cwd()
     catalog_path = args.catalog or cwd / "dist" / "catalog" / f"{year}.json"
-    output = (
-        args.output
-        or cwd.parent / "yu-scheduler" / "static/data/catalog" / f"{year}.json"
-    )
+    output = args.output or cwd.parent / "static/data/catalog" / f"{year}.json"
 
     if not catalog_path.is_file():
         raise FileNotFoundError(

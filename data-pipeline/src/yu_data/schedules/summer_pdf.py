@@ -62,10 +62,12 @@ def configure_parser(parser: argparse.ArgumentParser) -> None:
     # install __file__ lives under site-packages (which does not ship data/raw),
     # so project-root-relative defaults would point at a nonexistent PDF inside
     # the venv and write the term JSON next to it. Run from the repo root the
-    # cwd is the project root, so these resolve exactly as documented.
+    # cwd is the project root, so these resolve exactly as documented. The
+    # pipeline lives in the scheduler repo's data-pipeline/ directory, so the
+    # scheduler root is the parent of the working directory.
     cwd = Path.cwd()
     default_pdf = cwd / "data/raw/YAZ-OKULU-ACILACAK-DERSLER-2025-2026.pdf"
-    scheduler_dir = cwd.parent / "yu-scheduler"
+    scheduler_dir = cwd.parent
     default_output = scheduler_dir / "static/data/terms/2025-2026_summer.json"
     default_manifest = scheduler_dir / "static/data/terms/index.json"
     parser.add_argument(

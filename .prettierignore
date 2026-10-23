@@ -10,3 +10,6 @@ coverage
 
 # Static assets
 static
+
+# Python data pipeline (has its own tooling)
+data-pipeline
