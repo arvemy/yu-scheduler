@@ -1,0 +1,28 @@
+[project]
+name = "yu-data"
+version = "0.1.0"
+description = "Crawlers and parsers for Yaşar University academic data (OBS Bologna catalog + schedules)."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.27",
+    "beautifulsoup4>=4.12",
+]
+
+[project.scripts]
+yu-data = "yu_data.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/yu_data"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
