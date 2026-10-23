@@ -8,6 +8,7 @@ code (the OBS ``curCourse`` id is only available from the detail pages).
 
 from __future__ import annotations
 
+import re
 import sys
 from datetime import datetime, timezone
 from typing import Callable, Iterable
@@ -94,17 +95,21 @@ def _check_curriculum_year(
     academic_year: str,
     warnings: list[str],
 ) -> None:
-    """Warn when OBS's selected curriculum is not labelled with ``academic_year``.
+    """Warn when OBS's selected curriculum is newer than ``academic_year``.
 
-    The crawler always reads the curriculum OBS currently selects; it cannot ask
-    for a given year. A stale ``--academic-year`` (or a program still on an older
-    curriculum) would otherwise be exported under the requested year silently.
+    The crawler always reads the curriculum OBS currently selects (its newest);
+    it cannot ask for a given year. An older curriculum is normal, since one stays
+    in force for several years ("2024 (2024 ADALET MÜFREDATI ...)" in 2026-2027).
+    A curriculum that starts after ``academic_year`` means the requested year is
+    stale and the data would be exported under the wrong year.
     """
     canonical = en if en.rows else tr
     label = canonical.selected_label
-    if label is not None and academic_year not in label:
+    label_year = re.match(r"\s*(\d{4})", label or "")
+    start_year = re.match(r"(\d{4})", academic_year)
+    if label_year and start_year and int(label_year[1]) > int(start_year[1]):
         warnings.append(
-            f"{program_id}: selected curriculum {label!r} does not match "
+            f"{program_id}: selected curriculum {label!r} is newer than "
             f"academic year {academic_year!r}"
         )
 

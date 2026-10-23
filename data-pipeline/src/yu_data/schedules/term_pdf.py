@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Convert the 2025-2026 summer school PDF into YuScheduler term JSON."""
+"""Convert a term's "AÇILACAK DERS LİSTESİ" PDF into YuScheduler term JSON.
+
+The registrar publishes the same layout every term (fall, spring and summer
+school): section, course code, title, day, start and end time.
+"""
 
 from __future__ import annotations
 
@@ -13,8 +17,6 @@ from collections import OrderedDict
 from pathlib import Path
 from typing import Any
 
-
-DEFAULT_TERM = "2025-2026 Summer"
 
 TURKISH_DAYS = (
     "Pazartesi",
@@ -35,11 +37,15 @@ DAY_TO_SCHEDULER = {
     "Pazar": "PAZAR",
 }
 
+# Some codes carry a variant suffix (``AIE 5599-2``, ``INRL 5033-2``): a separate
+# offering with its own sections, so the suffix stays part of the course code.
 TIMED_ROW_RE = re.compile(
     rf"^\s*(?P<section>\S+)\s+"
     rf"(?P<prefix>[A-ZÇĞİÖŞÜ]{{2,}})\s+"
-    rf"(?P<number>\d{{4}})\s+"
-    rf"(?P<title>.*?)\s+"
+    rf"(?P<number>\d{{4}}(?:-\d+)?)\s+"
+    # A long title can run into the day column with no space ("SUÇLARCuma").
+    # Day names are title-case while titles are upper-case, so this stays exact.
+    rf"(?P<title>.*?)\s*"
     rf"(?P<day>{'|'.join(TURKISH_DAYS)})\s+"
     rf"(?P<start>\d{{2}}:\d{{2}})\s+"
     rf"(?P<end>\d{{2}}:\d{{2}})\s*$"
@@ -47,53 +53,58 @@ TIMED_ROW_RE = re.compile(
 UNTIMED_ROW_RE = re.compile(
     r"^\s*(?P<section>\S+)\s+"
     r"(?P<prefix>[A-ZÇĞİÖŞÜ]{2,})\s+"
-    r"(?P<number>\d{4})\s+"
+    r"(?P<number>\d{4}(?:-\d+)?)\s+"
     r"(?P<title>.+?)\s*$"
 )
 TIME_RE = re.compile(r"^\d{2}:\d{2}$")
 # A trailing clock time signals a timed row whose day/time columns slipped past
 # TIMED_ROW_RE (e.g. an ASCII day spelling), not a genuinely untimed course.
 TRAILING_TIME_RE = re.compile(r"\d{1,2}:\d{2}\s*$")
+PAGE_HEADER_RE = re.compile(r"^\d{4}-\d{4} AKADEMİK YILI")
+TERM_RE = re.compile(r"^\d{4}-\d{4} (Fall|Spring|Summer)$")
+
+
+def term_file_name(term: str) -> str:
+    """``"2026-2027 Fall"`` -> ``"2026-2027_fall.json"`` (the manifest's naming)."""
+    year, season = term.split(" ")
+    return f"{year}_{season.lower()}.json"
+
+
+def _term(value: str) -> str:
+    if not TERM_RE.match(value):
+        raise argparse.ArgumentTypeError(
+            f"expected '<YYYY-YYYY> Fall|Spring|Summer', got {value!r}"
+        )
+    return value
 
 
 def configure_parser(parser: argparse.ArgumentParser) -> None:
-    """Register the parse-summer-pdf arguments on ``parser``."""
+    """Register the parse-term-pdf arguments on ``parser``."""
     # Anchor defaults to the working directory, not __file__: after a wheel
-    # install __file__ lives under site-packages (which does not ship data/raw),
-    # so project-root-relative defaults would point at a nonexistent PDF inside
-    # the venv and write the term JSON next to it. Run from the repo root the
-    # cwd is the project root, so these resolve exactly as documented. The
-    # pipeline lives in the scheduler repo's data-pipeline/ directory, so the
-    # scheduler root is the parent of the working directory.
-    cwd = Path.cwd()
-    default_pdf = cwd / "data/raw/YAZ-OKULU-ACILACAK-DERSLER-2025-2026.pdf"
-    scheduler_dir = cwd.parent
-    default_output = scheduler_dir / "static/data/terms/2025-2026_summer.json"
-    default_manifest = scheduler_dir / "static/data/terms/index.json"
+    # install __file__ lives under site-packages. The pipeline lives in the
+    # scheduler repo's data-pipeline/ directory, so run from there the scheduler
+    # root is the parent of the working directory.
+    terms_dir = Path.cwd().parent / "static/data/terms"
+    default_manifest = terms_dir / "index.json"
+    parser.add_argument("pdf", type=Path, help="Term course-list PDF to parse.")
     parser.add_argument(
-        "pdf",
-        nargs="?",
-        type=Path,
-        default=default_pdf,
-        help=f"PDF to parse (default: {default_pdf})",
+        "--term",
+        type=_term,
+        required=True,
+        help="Manifest term label, e.g. '2026-2027 Fall'.",
     )
     parser.add_argument(
         "-o",
         "--output",
         type=Path,
-        default=default_output,
-        help=f"JSON output path (default: {default_output})",
+        default=None,
+        help=f"JSON output path (default: {terms_dir}/<year>_<season>.json)",
     )
     parser.add_argument(
         "--manifest",
         type=Path,
         default=default_manifest,
         help=f"Term manifest to update (default: {default_manifest})",
-    )
-    parser.add_argument(
-        "--term",
-        default=DEFAULT_TERM,
-        help=f"Manifest term label (default: {DEFAULT_TERM!r})",
     )
     parser.add_argument(
         "--no-manifest",
@@ -127,7 +138,7 @@ def is_ignorable_line(line: str) -> bool:
     stripped = line.strip()
     return (
         not stripped
-        or stripped.startswith("2025-2026 AKADEMİK YILI")
+        or PAGE_HEADER_RE.match(stripped) is not None
         or stripped.startswith("ŞUBE")
         or stripped.startswith("DERS KODU")
     )
@@ -193,6 +204,33 @@ def parse_pdf_text(
     return courses, untimed_courses, unknown_lines
 
 
+def drop_redundant_placeholders(
+    courses: OrderedDict[str, list[dict[str, str | None]]],
+) -> list[str]:
+    """Drop null-time rows from sections that also have timed sessions.
+
+    The PDF sometimes lists an extra unscheduled hour next to a section's timed
+    ones. YuScheduler only offers sections whose sessions are all timed, so that
+    placeholder would make an otherwise schedulable section unusable. Returns a
+    "<code> section <n>" entry for each section that lost a placeholder.
+    """
+    dropped: list[str] = []
+    for code, sessions in courses.items():
+        timed_sections = {s["Section"] for s in sessions if s["Day"] is not None}
+        mixed = {
+            s["Section"]
+            for s in sessions
+            if s["Day"] is None and s["Section"] in timed_sections
+        }
+        if not mixed:
+            continue
+        sessions[:] = [
+            s for s in sessions if s["Day"] is not None or s["Section"] not in mixed
+        ]
+        dropped.extend(f"{code} section {section}" for section in sorted(mixed))
+    return dropped
+
+
 def write_json(path: Path, data: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
@@ -226,6 +264,9 @@ def update_manifest(path: Path, term: str, output_path: Path) -> None:
 
 
 def run(args: argparse.Namespace) -> int:
+    if args.output is None:
+        args.output = args.manifest.parent / term_file_name(args.term)
+
     # The manifest stores only the file name and the app resolves it next to
     # index.json, so registering an output written anywhere else would point the
     # app at a file that does not exist.
@@ -256,12 +297,15 @@ def run(args: argparse.Namespace) -> int:
         print("No timed course rows were parsed; JSON was not written.", file=sys.stderr)
         return 1
 
+    dropped_placeholders = drop_redundant_placeholders(courses)
     write_json(args.output, courses)
     if not args.no_manifest:
         update_manifest(args.manifest, args.term, args.output)
 
-    row_count = sum(len(sessions) for sessions in courses.values())
-    untimed_count = len(untimed_courses) if not args.skip_untimed else 0
+    # Count what was written: dropped placeholders are no longer in ``courses``.
+    rows = [session for sessions in courses.values() for session in sessions]
+    row_count = len(rows)
+    untimed_count = sum(1 for session in rows if session["Day"] is None)
     timed_count = row_count - untimed_count
     print(
         f"Wrote {len(courses)} courses and {row_count} rows "
@@ -269,6 +313,13 @@ def run(args: argparse.Namespace) -> int:
     )
     if not args.no_manifest:
         print(f"Updated manifest {args.manifest} with {args.term!r}")
+    if dropped_placeholders:
+        print(
+            f"Dropped untimed placeholders from {len(dropped_placeholders)} "
+            "sections that also have timed sessions:"
+        )
+        for entry in dropped_placeholders:
+            print(f"  - {entry}")
     if untimed_courses and args.skip_untimed:
         print(f"Skipped {len(untimed_courses)} untimed courses:")
         for course in untimed_courses:
@@ -281,7 +332,7 @@ def run(args: argparse.Namespace) -> int:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description=(
-            "Parse YAZ-OKULU-ACILACAK-DERSLER-2025-2026.pdf and write "
+            "Parse a term's course-list PDF and write "
             "YuScheduler-compatible term data."
         )
     )

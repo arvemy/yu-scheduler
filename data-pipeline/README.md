@@ -8,8 +8,9 @@ Two things live here:
    associate / bachelor / master program from the OBS Bologna information system
    (<https://obs.yasar.edu.tr/oibs/bologna/>) and emits one canonical, bilingual
    (TR + EN) catalog JSON plus a diagnostics report.
-2. **Summer-school PDF parser** — converts `YAZ-OKULU-ACILACAK-DERSLER-*.pdf`
-   into YuScheduler term JSON (migrated from the original standalone script).
+2. **Term course-list PDF parser** — converts the registrar's "AÇILACAK DERS
+   LİSTESİ" PDF for any term (fall, spring or summer school, e.g.
+   `2026-2027-GUZ-DONEMI-ACILAN-DERSLER.pdf`) into YuScheduler term JSON.
 
 ## Relationship to YuScheduler
 
@@ -21,24 +22,25 @@ This directory lives inside the [YuScheduler](../README.md) repository and feeds
 uv sync
 ```
 
-The summer-PDF parser additionally needs `pdftotext` (poppler-utils) on `PATH`.
+The term-PDF parser additionally needs `pdftotext` (poppler-utils) on `PATH`.
 
 ## Usage
 
 ```bash
-# Crawl OBS and write dist/catalog/2025-2026.json + dist/reports/2025-2026-crawl-report.json
-uv run yu-data crawl-obs --academic-year 2025-2026
+# Crawl OBS and write dist/catalog/2026-2027.json + dist/reports/2026-2027-crawl-report.json
+uv run yu-data crawl-obs --academic-year 2026-2027
 
 # Quick dry run: one program per degree
 uv run yu-data crawl-obs --limit-per-degree 1
 
-# Parse the summer-school PDF (writes term JSON; --no-manifest leaves ../static/data/terms/index.json untouched)
-uv run yu-data parse-summer-pdf data/raw/YAZ-OKULU-ACILACAK-DERSLER-2025-2026.pdf \
-    --no-manifest -o /tmp/2025-2026_summer.json
+# Parse a term PDF into ../static/data/terms/2026-2027_fall.json and add it to
+# the top of ../static/data/terms/index.json (--no-manifest -o <path> for a preview)
+uv run yu-data parse-term-pdf data/raw/2026-2027-GUZ-DONEMI-ACILAN-DERSLER.pdf \
+    --term "2026-2027 Fall"
 
 # Slim dist/catalog/<year>.json into the scheduler's static data
 # (writes ../static/data/catalog/<year>.json by default)
-uv run yu-data export-catalog --academic-year 2025-2026
+uv run yu-data export-catalog --academic-year 2026-2027
 ```
 
 ## Crawl scope (v1)
@@ -72,9 +74,9 @@ consumes — `courses{}` (bilingual `title`, `akts`, `obs` links) and `programs[
 
 ```
 src/yu_data/
-  cli.py                 # `yu-data` entrypoint (crawl-obs, parse-summer-pdf, export-catalog)
+  cli.py                 # `yu-data` entrypoint (crawl-obs, parse-term-pdf, export-catalog)
   obs/                   # OBS Bologna crawler (client, programs, curriculum, catalog)
-  schedules/summer_pdf.py
+  schedules/term_pdf.py
 data/raw/                # source PDFs
 dist/                    # generated catalog + reports (gitignored)
 tests/fixtures/          # saved OBS HTML + a PDF-text fixture
