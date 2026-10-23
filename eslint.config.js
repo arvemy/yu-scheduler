@@ -9,7 +9,15 @@ const svelteConfig = (await loadConfig('./', { traverse: false }))?.config;
 
 export default ts.config(
 	{
-		ignores: ['.svelte-kit/', '.wrangler/', 'build/', 'dist/', 'coverage/', 'node_modules/']
+		ignores: [
+			'.svelte-kit/',
+			'.wrangler/',
+			'build/',
+			'dist/',
+			'coverage/',
+			'node_modules/',
+			'data-pipeline/'
+		]
 	},
 	js.configs.recommended,
 	...ts.configs.recommended,

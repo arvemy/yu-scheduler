@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  # dorny/paths-filter lists PR files through the API.
+  pull-requests: read
+
+jobs:
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    outputs:
+      web: ${{ steps.filter.outputs.web }}
+      data-pipeline: ${{ steps.filter.outputs.data-pipeline }}
+      workflow: ${{ steps.filter.outputs.workflow }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          # A file matches a filter only if it matches every pattern, so the
+          # negation excludes the pipeline. Anything else (README, configs,
+          # static/data output) still runs the web jobs: Prettier checks it all.
+          # Alternatives therefore need separate filters, combined in `if:`.
+          predicate-quantifier: every
+          filters: |
+            web:
+              - '**'
+              - '!data-pipeline/**'
+            data-pipeline:
+              - 'data-pipeline/**'
+            workflow:
+              - '.github/workflows/ci.yml'
+
+  web:
+    name: Web (lint, check, unit tests, build)
+    needs: changes
+    if: needs.changes.outputs.web == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # Reads the pnpm version from package.json's packageManager field.
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm check
+      - run: pnpm test
+      - run: pnpm build
+
+  e2e:
+    name: Web (Playwright e2e)
+    needs: changes
+    if: needs.changes.outputs.web == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      # playwright.config.ts builds and serves the app itself (webServer).
+      - run: pnpm test:e2e
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-test-results
+          path: test-results/
+          retention-days: 7
+
+  data-pipeline:
+    name: Data pipeline (pytest)
+    needs: changes
+    if: needs.changes.outputs.data-pipeline == 'true' || needs.changes.outputs.workflow == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: data-pipeline
+    steps:
+      - uses: actions/checkout@v7
+      # setup-uv publishes no floating major tags, so pin the exact release.
+      - uses: astral-sh/setup-uv@v10.3.2
+        with:
+          enable-cache: true
+          cache-dependency-glob: data-pipeline/uv.lock
+      - run: uv sync --locked
+      - run: uv run pytest

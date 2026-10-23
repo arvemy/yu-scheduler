@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+
+</title><meta http-equiv="x-ua-compatible" content="ie=edge" /><meta name="viewport" content="width=device-width, initial-scale=1" /><link href="../proliz_boots4/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+.panel-title > a, .panel-title > small, .panel-title > .small, .panel-title > small > a, .panel-title > .small > a {font-size: 8pt;}
+.panel-title {height:25px;margin:5px;vertical-align:middle;}
+.list-group-item{font-size: 8pt;}
+.panel-collapse>.list-group .list-group-item text-sm:first-child {border-top-right-radius: 0;border-top-left-radius: 0;}
+.panel-collapse>.list-group .list-group-item text-sm {border-width: 1px 0;}
+.panel-collapse>.list-group {margin-bottom: 0;}
+.panel-collapse .list-group-item text-sm {border-radius:0;}
+.panel-collapse .list-group .list-group {margin: 0;margin-top: 10px;}
+.panel-collapse .list-group-item text-sm li.list-group-item text-sm {margin: 0 -15px;border-top: 1px solid #ddd !important;border-bottom: 0;padding-left: 30px;}
+.panel-collapse .list-group-item text-sm li.list-group-item text-sm:last-child {padding-bottom: 0;}
+.panel-collapse div.list-group div.list-group{margin: 0;}
+.panel-collapse div.list-group .list-group a.list-group-item text-sm {border-top: 1px solid #ddd !important;border-bottom: 0;padding-left: 30px;}
+.panel-collapse .list-group-item text-sm li.list-group-item text-sm {border-top: 1px solid #DDD !important;}
+</style>
+<script>
+function expand_all(){$('.collapse').each(function(){    $(this).addClass('show');});$('.accordion-btn').each(function(){    $(this).attr('aria-expanded','true');});}
+function collapse_all() { $('.collapse').each(function () { $(this).removeClass('show'); }); $('.accordion-btn').each(function () { $(this).attr('aria-expanded', 'false'); }); }
+</script>
+    <script type="text/javascript">var gClickedItem; function myOnFrameClick(itemLink) {var ul = document.getElementById('proMenu');document.getElementById('lblMenuBuf').style.visibility = 'hidden'; document.getElementById('IFRAME1').src = itemLink; if (isMobile()) { $('[data-bs-toggle="push-menu"]').pushMenu('toggle'); } window.top.Swal.fire({allowEscapeKey: false,allowOutsideClick: false,onOpen: () => {window.top.swal.showLoading();}});}</script>
+<link href="../App_Themes/oibs20/oibs20.css" type="text/css" rel="stylesheet" /><link rel="stylesheet" type="text/css" href="/oibs/proliz_boots4/jquery-ui/jquery-ui.min.css"></link><link rel="stylesheet" type="text/css" href="/oibs/proliz_boots4/fontawesome/css/all.min.css"></link><link rel="stylesheet" type="text/css" href="/oibs/proliz_boots4/select2/css/select2.min.css"></link></head>
+<body>
+    <form method="post" action="./unitSelection.aspx?type=lis&amp;lang=tr" id="form1">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+
+
+<script src="/oibs/proliz_boots4/jquery/jquery-3.7.1.min.js" type="text/javascript"></script>
+<script src="/oibs/proliz_boots4/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="/oibs/proliz_boots4/sweetalert2/sweetalert.min.js" type="text/javascript"></script>
+<script src="/oibs/proliz_boots4/select2/js/select2.min.js" type="text/javascript"></script>
+<script src="/oibs/utils/ModalPopupWindow_v24_min.js" type="text/javascript"></script><script type="text/javascript">var baseUrl = '/oibs/';var modalWin = new CreateModalPopUpObject();</script>
+<script type="text/javascript">
+//<![CDATA[
+if(window.top.document.getElementById('hidTimerBase')){ window.top.extendTime();}//]]>
+</script>
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="84BD8371" />
+        <div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        
+    &nbsp;<a onclick="expand_all();" id="btnExpAll" title="Tümünü Genişlet" class="btn btn-default btn-xs" href="javascript:__doPostBack(&#39;btnExpAll&#39;,&#39;&#39;)" style="display:inline-block;"><font face="Open Sans" color="#5B636A" size="2"><i style="padding-left:3px;font-size:16px" class="fal fa-expand-arrows-alt text-success"></i></font></a>
+&nbsp;<a onclick="collapse_all();" id="btnColAll" title="Tümünü Daralt" class="btn btn-default btn-xs" href="javascript:__doPostBack(&#39;btnColAll&#39;,&#39;&#39;)" style="display:inline-block;"><font face="Open Sans" color="#5B636A" size="2"><i style="padding-left:3px;font-size:16px" class="fal fa-compress-arrows-alt text-danger"></i></font></a>
+    </div>
+            <span id="lblMenuBuf" style="display:inline-block;"><font face="Open Sans" color="#3A3A3A" size="1">
+<div class="panel-group" id="accordion">
+               <div class="panel panel-default">
+                  <div class="panel-heading">
+                     <h5 class="panel-title">
+                     <a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#x5"><span class="far fa-plus-square text-info">
+                     </span>HUKUK FAKÜLTESİ</a> <a href="facAbout.aspx?lang=tr&curOp=facAbout&curUnit=5"><span style="font-size:14px" class="fal fa-info-circle text-info"></span></a>
+                     </h5></div>
+                     <div id="x5" class="panel-collapse "><ul class="list-group">
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=5&curSunit=401116">HUKUK %30 İNG</a></li>
+</ul></div></div>
+               <div class="panel panel-default">
+                  <div class="panel-heading">
+                     <h5 class="panel-title">
+                     <a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#x4"><span class="far fa-plus-square text-info">
+                     </span>İLETİŞİM FAKÜLTESİ</a> <a href="facAbout.aspx?lang=tr&curOp=facAbout&curUnit=4"><span style="font-size:14px" class="fal fa-info-circle text-info"></span></a>
+                     </h5></div>
+                     <div id="x4" class="panel-collapse "><ul class="list-group">
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=4&curSunit=43">GÖRSEL İLETİŞİM TASARIMI</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=4&curSunit=41">HALKLA İLİŞKİLER VE REKLAMCILIK</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=4&curSunit=42">RADYO, TELEVİZYON VE SİNEMA</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=4&curSunit=401174">YENİ MEDYA VE İLETİŞİM</a></li>
+</ul></div></div>
+               <div class="panel panel-default">
+                  <div class="panel-heading">
+                     <h5 class="panel-title">
+                     <a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#x9"><span class="far fa-plus-square text-info">
+                     </span>İNSAN VE TOPLUM BİLİMLERİ FAKÜLTESİ</a> <a href="facAbout.aspx?lang=tr&curOp=facAbout&curUnit=9"><span style="font-size:14px" class="fal fa-info-circle text-info"></span></a>
+                     </h5></div>
+                     <div id="x9" class="panel-collapse "><ul class="list-group">
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=9&curSunit=401143">İNGİLİZ DİLİ VE EDEBİYATI</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=9&curSunit=401255">İNGİLİZCE MÜTERCİM VE TERCÜMANLIK</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=9&curSunit=401145">PSİKOLOJİ</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=9&curSunit=401146">ULUSLARARASI İLİŞKİLER</a></li>
+</ul></div></div>
+               <div class="panel panel-default">
+                  <div class="panel-heading">
+                     <h5 class="panel-title">
+                     <a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#x22"><span class="far fa-plus-square text-info">
+                     </span>İŞLETME FAKÜLTESİ</a> <a href="facAbout.aspx?lang=tr&curOp=facAbout&curUnit=22"><span style="font-size:14px" class="fal fa-info-circle text-info"></span></a>
+                     </h5></div>
+                     <div id="x22" class="panel-collapse "><ul class="list-group">
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=22&curSunit=401147">EKONOMİ</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=22&curSunit=401148">İŞLETME</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=22&curSunit=401150">LOJİSTİK YÖNETİMİ</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=22&curSunit=401257">ULUSLARARASI TİCARET VE FİNANSMAN</a></li>
+</ul></div></div>
+               <div class="panel panel-default">
+                  <div class="panel-heading">
+                     <h5 class="panel-title">
+                     <a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#x8"><span class="far fa-plus-square text-info">
+                     </span>MİMARLIK FAKÜLTESİ</a> <a href="facAbout.aspx?lang=tr&curOp=facAbout&curUnit=8"><span style="font-size:14px" class="fal fa-info-circle text-info"></span></a>
+                     </h5></div>
+                     <div id="x8" class="panel-collapse "><ul class="list-group">
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=8&curSunit=83">İÇ MİMARLIK ve ÇEVRE TASARIMI</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=8&curSunit=84">MİMARLIK</a></li>
+</ul></div></div>
+               <div class="panel panel-default">
+                  <div class="panel-heading">
+                     <h5 class="panel-title">
+                     <a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#x7"><span class="far fa-plus-square text-info">
+                     </span>MÜHENDİSLİK FAKÜLTESİ</a> <a href="facAbout.aspx?lang=tr&curOp=facAbout&curUnit=7"><span style="font-size:14px" class="fal fa-info-circle text-info"></span></a>
+                     </h5></div>
+                     <div id="x7" class="panel-collapse "><ul class="list-group">
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=7&curSunit=71">BİLGİSAYAR MÜHENDİSLİĞİ</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=7&curSunit=75">ELEKTRİK-ELEKTRONİK MÜHENDİSLİĞİ</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=7&curSunit=72">ENDÜSTRİ MÜHENDİSLİĞİ</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=7&curSunit=77">ENERJİ SİSTEMLERİ MÜHENDİSLİĞİ</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=7&curSunit=401151">İNŞAAT MÜHENDİSLİĞİ</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=7&curSunit=401166">MAKİNE MÜHENDİSLİĞİ</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=7&curSunit=401167">(UOLP ECAM-LYON) ELEKTRİK-ELEKTRONİK MÜHENDİSLİĞİ</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=7&curSunit=76">YAZILIM MÜHENDİSLİĞİ</a></li>
+</ul></div></div>
+               <div class="panel panel-default">
+                  <div class="panel-heading">
+                     <h5 class="panel-title">
+                     <a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#x6"><span class="far fa-plus-square text-info">
+                     </span>SANAT VE TASARIM FAKÜLTESİ</a> <a href="facAbout.aspx?lang=tr&curOp=facAbout&curUnit=6"><span style="font-size:14px" class="fal fa-info-circle text-info"></span></a>
+                     </h5></div>
+                     <div id="x6" class="panel-collapse "><ul class="list-group">
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=6&curSunit=401127">ANİMASYON %30 İNG</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=6&curSunit=401173">ÇİZGİ FİLM VE ANİMASYON %30 İNG</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=6&curSunit=401133">ENDÜSTRİYEL TASARIM %30 İNG</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=6&curSunit=401142">FİLM TASARIMI %30 İNG</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=6&curSunit=401134">GRAFİK TASARIMI %30 İNG</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=6&curSunit=401135">MÜZİK %30 İNG</a></li>
+</ul></div></div>
+               <div class="panel panel-default">
+                  <div class="panel-heading">
+                     <h5 class="panel-title">
+                     <a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#x12"><span class="far fa-plus-square text-info">
+                     </span>TARIM BİLİMLERİ VE TEKNOLOJİLERİ FAKÜLTESİ</a> <a href="facAbout.aspx?lang=tr&curOp=facAbout&curUnit=12"><span style="font-size:14px" class="fal fa-info-circle text-info"></span></a>
+                     </h5></div>
+                     <div id="x12" class="panel-collapse "><ul class="list-group">
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=12&curSunit=401263">TARIM EKONOMİSİ</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=12&curSunit=401264">TARIM MAKİNELERİ VE TEKNOLOJİLERİ MÜHENDİSLİĞİ</a></li>
+</ul></div></div>
+               <div class="panel panel-default">
+                  <div class="panel-heading">
+                     <h5 class="panel-title">
+                     <a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#x11"><span class="far fa-plus-square text-info">
+                     </span>UYGULAMALI BİLİMLER YÜKSEKOKULU</a> <a href="facAbout.aspx?lang=tr&curOp=facAbout&curUnit=11"><span style="font-size:14px" class="fal fa-info-circle text-info"></span></a>
+                     </h5></div>
+                     <div id="x11" class="panel-collapse "><ul class="list-group">
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=11&curSunit=401155">GASTRONOMİ VE MUTFAK SANATLARI</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=11&curSunit=401165">TURİZM REHBERLİĞİ</a></li>
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=11&curSunit=401157">YÖNETİM BİLİŞİM SİSTEMLERİ</a></li>
+</ul></div></div>
+               <div class="panel panel-default">
+                  <div class="panel-heading">
+                     <h5 class="panel-title">
+                     <a data-bs-toggle="collapse" data-bs-parent="#accordion" href="#x98"><span class="far fa-plus-square text-info">
+                     </span>ÜNİVERSİTE SEÇMELİ DERSLERİ</a> <a href="facAbout.aspx?lang=tr&curOp=facAbout&curUnit=98"><span style="font-size:14px" class="fal fa-info-circle text-info"></span></a>
+                     </h5></div>
+                     <div id="x98" class="panel-collapse "><ul class="list-group">
+<li class="list-group-item"><span class="fal fa-archive text-success"></span><a target="_parent" href="index.aspx?lang=tr&curOp=showPac&curUnit=98&curSunit=401109">SEÇMELİ DERSLER</a></li>
+</ul></div></div>
+</div>
+</font></span>
+    <br />
+    <br />
+    <span id="lblUrl"><i><font face="Open Sans" color="#3A3A3A" size="1">https://obs.yasar.edu.tr/oibs/bologna/unitSelection.aspx?type=lis&lang=tr</font></i></span>
+</div>	
+        </div>
+    </form>
+<script src="../proliz_boots4/jquery/jquery-3.7.1.min.js"></script>
+<script src="../proliz_boots4/jquery-ui/jquery-ui.min.js"></script>
+<script src="../proliz_boots4/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../proliz_boots4/adminlte/js/adminlte.min.js"></script>
+</body>
+</html>
