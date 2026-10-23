@@ -112,12 +112,12 @@ pnpm exec wrangler dev    # run the build on the Workers runtime (workerd)
 
 ## Project Structure
 
-- `src/lib/scheduler`: Core logic for the scheduling engine, conflict detection, term/course API, and the worker client.
+- `src/lib/scheduler`: Core logic for the scheduling engine, conflict detection, term/course API, the worker client, and course-selection helpers (`selection.ts`: OR groups, generation requests, per-term persistence).
 - `src/lib/workers`: The Web Worker that runs schedule generation off the main thread.
 - `src/lib/components`: Reusable UI components.
-- `src/lib/i18n`: Custom, typed i18n store. `locales/en.ts` is the source of truth; `locales/tr.ts` is checked against it (`satisfies Messages`) so locales can't drift.
+- `src/lib/i18n`: Custom, typed i18n built on Svelte runes (`t(...)` re-renders on locale change). `locales/en.ts` is the source of truth; `locales/tr.ts` is checked against it (`satisfies Messages`) so locales can't drift.
 - `src/lib/storage`: Local storage management and schema validation for user preferences.
-- `src/lib/utils`: Helpers, including `reactivity.svelte.ts` (native Svelte 5 `watch`/`useDebounce`) and `useMediaQuery.svelte.ts`.
+- `src/lib/utils`: Helpers, including `reactivity.svelte.ts` (native Svelte 5 `watch`/`useDebounce`) and `breakpoints.ts` (shared media queries).
 - `src/test`: Test mocks (`$app/*` stubs) and shared test type declarations.
 - `src/routes`: Application pages and routing logic (the app runs as a client-rendered SPA — `ssr = false`).
 

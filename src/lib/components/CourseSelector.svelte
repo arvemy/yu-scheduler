@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { MediaQuery } from 'svelte/reactivity';
 	import { Button, Popover, Tooltip } from 'bits-ui';
 	import {
 		ChevronDown,
@@ -18,15 +19,14 @@
 		X
 	} from '@lucide/svelte';
 	import { watch, useDebounce } from '#lib/utils/reactivity.svelte.js';
-	import { dragHandleZone, dragHandle, TRIGGERS } from 'svelte-dnd-action';
+	import { dragHandleZone, dragHandle } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
 	import { toast } from 'svelte-sonner';
-	import { locale, t } from '#lib/i18n/index.js';
+	import { i18n, t } from '#lib/i18n/index.js';
 	import { DAYS_OF_WEEK, TIME_SLOTS, generateSchedule, getCourses, getSections } from '#lib';
 	import type {
 		BlockedHour,
 		CatalogData,
-		CourseEntry,
 		CourseMeta,
 		SavedSchedule,
 		ScheduleData
@@ -34,22 +34,26 @@
 	import Timetable from '#lib/components/Timetable.svelte';
 	import BottomActionBar from '#lib/components/BottomActionBar.svelte';
 	import { downloadScheduleAsImage } from '#lib/utils/downloadSchedule.js';
-	import { onDestroy, onMount, tick } from 'svelte';
+	import { onDestroy, tick, untrack } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { useMobile } from '#lib/utils/useMediaQuery.svelte.js';
+	import { MEDIA_QUERIES } from '#lib/utils/breakpoints.js';
 	import { devWarn } from '#lib/utils/logger.js';
 	import { translateWarnings } from '#lib/utils/warnings.js';
 	import { normalizeForSearch } from '#lib/utils/search.js';
 	import { computeAktsTotals } from '#lib/utils/akts.js';
 	import { SWIPE_THRESHOLD_PX } from '#lib/config/ui.js';
 	import TooltipContent from '#lib/components/ui/TooltipContent.svelte';
+	import { storeJson } from '#lib/utils/storage.js';
 	import {
-		parseStoredJson,
-		storeJson,
-		validateSelectedCourses,
-		validateBlockedHours,
-		validateSectionChoices
-	} from '#lib/utils/storage.js';
+		buildGenerateRequest,
+		loadTermSelection,
+		normalizeCode,
+		orConnectionsFromGroups,
+		sectionChoicesFromSchedule,
+		selectionKey,
+		type OrConnections,
+		type SectionChoices
+	} from '#lib/scheduler/selection.js';
 	import { getTermKey } from '#lib/storage/keys.js';
 
 	type CancelablePromise<T> = Promise<T> & { cancel: () => void };
@@ -80,12 +84,6 @@
 
 	// --- Catalog enrichment (titles / AKTS / OBS links) + program filtering ---
 
-	// Catalog course codes occasionally carry doubled internal whitespace (e.g.
-	// "MOTP  2337"), while the term data — and therefore every code we look up — uses
-	// a single space ("MOTP 2337"). Collapse runs of whitespace so catalog metadata
-	// lookups and program-membership tests line up with the term codes.
-	const normalizeCode = (code: string): string => code.replace(/\s+/g, ' ').trim();
-
 	const courseMeta = $derived.by<Record<string, CourseMeta>>(() => {
 		const source = catalog?.courses;
 		if (!source) return {};
@@ -98,12 +96,12 @@
 
 	const courseTitle = (code: string): string => {
 		const title = courseMeta[code]?.title;
-		return title?.[$locale] ?? title?.en ?? '';
+		return title?.[i18n.locale] ?? title?.en ?? '';
 	};
 
 	const obsUrl = (code: string): string | null => {
 		const obs = courseMeta[code]?.obs;
-		return obs?.[$locale] ?? obs?.en ?? null;
+		return obs?.[i18n.locale] ?? obs?.en ?? null;
 	};
 
 	// Set of course codes in the selected program, or null when no program is
@@ -142,22 +140,22 @@
 
 		if (partial) {
 			return {
-				text: $t('courseSelector.totalAktsPartial', { count: min }),
-				title: $t('courseSelector.totalAktsPartialTooltip')
+				text: t('courseSelector.totalAktsPartial', { count: min }),
+				title: t('courseSelector.totalAktsPartialTooltip')
 			};
 		}
 
 		if (totals.length === 1) {
-			return { text: $t('courseSelector.totalAkts', { count: min }) };
+			return { text: t('courseSelector.totalAkts', { count: min }) };
 		}
 
 		const count =
 			totals.length <= AKTS_LIST_LIMIT
-				? totals.join(` ${$t('courseSelector.aktsOr')} `)
+				? totals.join(` ${t('courseSelector.aktsOr')} `)
 				: `${min}–${max}`;
 		return {
-			text: $t('courseSelector.totalAkts', { count }),
-			title: $t('courseSelector.totalAktsAlternativesTooltip')
+			text: t('courseSelector.totalAkts', { count }),
+			title: t('courseSelector.totalAktsAlternativesTooltip')
 		};
 	});
 
@@ -167,18 +165,21 @@
 		normalizeForSearch(course).includes(needle) ||
 		normalizeForSearch(courseTitle(course)).includes(needle);
 
-	let courses = $state<Record<string, string[]>>({});
-	let sections = $state<Record<string, string[]>>({});
-	let sectionChoices = $state<Record<string, string | null>>({});
+	// API responses are only ever replaced, never mutated, so skip deep proxying.
+	let courses = $state.raw<Record<string, string[]>>({});
+	let sections = $state.raw<Record<string, string[]>>({});
+	let sectionChoices = $state<SectionChoices>({});
 	/**
 	 * OR connections between adjacent courses.
 	 * Key is course name, value is true if this course is OR-connected to the next course in selectedCourses.
 	 */
-	let orConnections = $state<Record<string, boolean>>({});
+	let orConnections = $state<OrConnections>({});
 
 	// Drag-and-drop reordering of selected course chips. svelte-dnd-action requires
-	// items to be objects with a unique `id`, so we keep a local mirror of
-	// `selectedCourses` (the string[] source of truth).
+	// items to be objects with a unique `id`, so we derive a local model from
+	// `selectedCourses` (the string[] source of truth). It is a writable derived:
+	// drag events reorder it directly, and it re-derives whenever `selectedCourses`
+	// changes (add/remove/clear/load, or a drop committing the new order).
 	//
 	// `id` is the DnD identity; `course` is what we render/finalize from. They are
 	// kept separate because while a pointer drag is in flight svelte-dnd-action
@@ -187,19 +188,13 @@
 	// chip lose its label/section/OR lookups mid-drag.
 	const flipDurationMs = 150;
 	type DndItem = { id: string; course: string };
-	let dndItems = $state<DndItem[]>([]);
-	let dragging = $state(false); // true between the first `consider` and `finalize`
+	let dndItems = $derived<DndItem[]>(selectedCourses.map((course) => ({ id: course, course })));
 
 	let loading = $state(true);
 	let submitting = $state(false);
 	let searchInput = $state('');
 	let coursesError = $state('');
 	let sectionsError = $state('');
-
-	// Track if initial restoration is complete (to avoid regenerating on load)
-	let isInitialized = $state(false);
-	// Prevent auto-generation during programmatic state updates (e.g. loading saved schedule)
-	let suppressAutoGenerate = $state(false);
 
 	let saveDialogOpen = $state(false);
 	let loadDialogOpen = $state(false);
@@ -243,9 +238,9 @@
 	// Track which group popover is open
 	let openGroup = $state<string | null>(null);
 
-	// Mobile detection using shared composable
-	const mobile = useMobile();
-	const isMobile = $derived(mobile.isMobile);
+	// Mobile detection (md breakpoint: < 768px)
+	const mobile = new MediaQuery(MEDIA_QUERIES.md);
+	const isMobile = $derived(mobile.current);
 
 	let mobileTab = $state<'courses' | 'schedule'>('courses');
 
@@ -278,25 +273,20 @@
 		generationEpoch += 1;
 		cancelActiveGeneration();
 		triggerScheduleGeneration.cancel();
+		clearTimeout(transitionTimer);
 	});
 
-	onMount(() => {
-		const onPointerDown = (event: PointerEvent) => {
-			if (!searchBoxEl) return;
-			if (event.target instanceof Node && searchBoxEl.contains(event.target)) return;
-			searchDropdownOpen = false;
-			searchHighlightIndex = -1;
-		};
-
-		document.addEventListener('pointerdown', onPointerDown);
-		return () => {
-			document.removeEventListener('pointerdown', onPointerDown);
-		};
-	});
+	// Close the search dropdown on any pointer press outside the search box.
+	const onDocumentPointerDown = (event: PointerEvent) => {
+		if (!searchBoxEl) return;
+		if (event.target instanceof Node && searchBoxEl.contains(event.target)) return;
+		searchDropdownOpen = false;
+		searchHighlightIndex = -1;
+	};
 
 	// Touch swipe for schedule navigation
-	let touchStartX = $state<number | null>(null);
-	let touchEndX = $state<number | null>(null);
+	let touchStartX: number | null = null;
+	let touchEndX: number | null = null;
 
 	const onTouchStart = (e: TouchEvent) => {
 		// Timetable uses swipe gestures on mobile (day navigation)
@@ -318,92 +308,56 @@
 		const delta = touchStartX - touchEndX;
 		if (Math.abs(delta) < SWIPE_THRESHOLD_PX) return;
 
-		if (delta > 0 && activeScheduleIndex < scheduleData.schedules.length - 1) {
-			// Swipe left - next schedule
-			activeScheduleIndex = activeScheduleIndex + 1;
-		} else if (delta < 0 && activeScheduleIndex > 0) {
-			// Swipe right - previous schedule
-			activeScheduleIndex = activeScheduleIndex - 1;
-		}
+		// Swipe left - next schedule; swipe right - previous schedule
+		goToSchedule(scheduleIndex + (delta > 0 ? 1 : -1));
 	};
 
 	// Schedule transition state
 	let transitioning = $state(false);
-	let lastScheduleIndex = $state(0);
+	let transitionTimer: ReturnType<typeof setTimeout> | undefined;
 
-	let showWarnings = $state(false);
-
-	const selectionKey = (
-		termValue: string | null,
-		coursesValue: string[],
-		hoursValue: BlockedHour[]
-	) => {
-		const coursesKey = [...coursesValue].sort().join('|');
-		const hoursKey = [...hoursValue]
-			.map((h) => `${h.day}|${h.slot}`)
-			.sort()
-			.join('|');
-		return `${termValue ?? 'none'}::${coursesKey}::${hoursKey}`;
+	// Switch to another generated schedule, playing the transition animation.
+	const goToSchedule = (index: number) => {
+		const next = Math.min(Math.max(index, 0), Math.max(0, scheduleCount - 1));
+		if (next === scheduleIndex) return;
+		activeScheduleIndex = next;
+		transitioning = true;
+		clearTimeout(transitionTimer);
+		transitionTimer = setTimeout(() => {
+			transitioning = false;
+		}, 260);
 	};
 
-	const currentSelectionKey = $derived(selectionKey(term, selectedCourses, blockedHours));
+	const currentSelectionKey = $derived(
+		selectionKey(term, selectedCourses, blockedHours, sectionChoices, orConnections)
+	);
 
+	// Key of the selection that produced `scheduleData`. Set wherever a schedule
+	// arrives: a finished generation, a loaded saved schedule, or (below) a schedule
+	// the parent restored from storage before this instance mounted.
 	let lastGeneratedSelectionKey = $state<string | null>(null);
 
 	const hasResultForSelection = $derived(
 		Boolean(scheduleData) && hasGenerated && lastGeneratedSelectionKey === currentSelectionKey
 	);
 
-	watch(
-		() => [hasGenerated, scheduleData] as const,
-		([generated, data]) => {
-			if (!generated || !data) {
-				lastGeneratedSelectionKey = null;
-				return;
-			}
-
-			lastGeneratedSelectionKey = currentSelectionKey;
-		}
-	);
-
 	const warningList = $derived(
 		scheduleData
-			? translateWarnings(scheduleData.warnings || [], scheduleData.warning_codes || [], $t)
+			? translateWarnings(scheduleData.warnings || [], scheduleData.warning_codes || [], t)
 			: []
 	);
 
 	const totalWarningCount = $derived(warningList.length);
 
+	// Expanded by default only when nothing could be scheduled. Re-derived for each
+	// new result (not on locale changes), and the toggle button overrides it.
+	let showWarnings = $derived.by(() => {
+		const noSchedules = (scheduleData?.schedules?.length ?? 0) === 0;
+		return noSchedules && untrack(() => warningList.length) > 0;
+	});
+
 	const warningsExpanded = $derived(totalWarningCount <= 1 || showWarnings);
 	const warningPreviewText = $derived(warningList[0] ?? '');
-
-	watch(
-		() => [warningList.length, scheduleData?.schedules?.length ?? 0] as const,
-		([warningCount, scheduleCount]) => {
-			const noSchedules = scheduleCount === 0;
-			if (warningCount === 0 && !noSchedules) {
-				showWarnings = false;
-				return;
-			}
-
-			if (noSchedules && warningCount > 0) {
-				showWarnings = true;
-			}
-		}
-	);
-
-	watch(
-		() => activeScheduleIndex,
-		(index) => {
-			if (index === lastScheduleIndex) return;
-			transitioning = true;
-			const timeout = setTimeout(() => {
-				transitioning = false;
-			}, 260);
-			lastScheduleIndex = index;
-			return () => clearTimeout(timeout);
-		}
-	);
 
 	const loadCourses = async (termValue: string) => {
 		try {
@@ -412,7 +366,7 @@
 			coursesError = '';
 		} catch (err) {
 			devWarn('Failed to load courses', err);
-			coursesError = err instanceof Error ? err.message : $t('courseSelector.failedToLoad');
+			coursesError = err instanceof Error ? err.message : t('courseSelector.failedToLoad');
 		} finally {
 			loading = false;
 		}
@@ -427,112 +381,48 @@
 			sectionsError =
 				err instanceof Error
 					? err.message
-					: $t('errors.failedToLoadSections', { error: 'sections' });
+					: t('errors.failedToLoadSections', { error: 'sections' });
 			sections = {};
 		}
 	};
 
+	// Restore this term's persisted selection. Values the parent already restored
+	// (from the last generated schedule) take precedence over the per-field copies.
 	const restoreFromStorage = (termValue: string) => {
-		// Restore selected courses with validation
-		if (selectedCourses.length === 0) {
-			const coursesResult = parseStoredJson(
-				getTermKey(termValue, 'selectedCourses'),
-				validateSelectedCourses
-			);
-			if (coursesResult.success && coursesResult.data) {
-				selectedCourses = coursesResult.data;
-			}
+		const stored = loadTermSelection(termValue);
+		if (selectedCourses.length === 0 && stored.selectedCourses) {
+			selectedCourses = stored.selectedCourses;
 		}
-
-		// Restore blocked hours with validation
-		if (blockedHours.length === 0) {
-			const blockedResult = parseStoredJson(
-				getTermKey(termValue, 'blockedHours'),
-				validateBlockedHours
-			);
-			if (blockedResult.success && blockedResult.data) {
-				blockedHours = blockedResult.data;
-			}
+		if (blockedHours.length === 0 && stored.blockedHours) {
+			blockedHours = stored.blockedHours;
 		}
-
-		// Restore section choices with validation
-		if (Object.keys(sectionChoices).length === 0) {
-			const choicesResult = parseStoredJson(
-				getTermKey(termValue, 'sectionChoices'),
-				validateSectionChoices
-			);
-			if (choicesResult.success && choicesResult.data) {
-				sectionChoices = choicesResult.data;
-			}
-		}
-
-		// Restore OR connections
-		if (Object.keys(orConnections).length === 0) {
-			try {
-				const stored = localStorage.getItem(getTermKey(termValue, 'orConnections'));
-				if (stored) {
-					const parsed = JSON.parse(stored);
-					if (typeof parsed === 'object' && parsed !== null) {
-						orConnections = parsed;
-					}
-				}
-			} catch (err) {
-				devWarn('Failed to restore OR connections', err);
-			}
-		}
-
-		// Restore active tab index
-		try {
-			const storedTab = localStorage.getItem(getTermKey(termValue, 'activeTab'));
-			if (storedTab !== null) {
-				const idx = parseInt(storedTab, 10);
-				if (!Number.isNaN(idx)) activeScheduleIndex = idx;
-			}
-		} catch (err) {
-			devWarn('Failed to restore active tab', err);
+		if (stored.sectionChoices) sectionChoices = stored.sectionChoices;
+		if (stored.orConnections) orConnections = stored.orConnections;
+		if (stored.activeScheduleIndex !== undefined) {
+			activeScheduleIndex = stored.activeScheduleIndex;
 		}
 	};
 
-	watch(
-		() => term,
-		(value) => {
-			generationEpoch += 1;
-			cancelActiveGeneration();
-			submitting = false;
-
-			if (!value) return;
-			// Reset initialization flag when term changes
-			isInitialized = false;
-			coursesError = '';
-			sectionsError = '';
-			sectionChoices = {};
-			void loadCourses(value);
-			void loadSections(value);
-			restoreFromStorage(value);
-			// Mark as initialized after a short delay to allow restoration to complete
-			setTimeout(() => {
-				isInitialized = true;
-			}, 100);
+	// The parent re-keys this component on `term`, so each instance serves a single
+	// term: load its data and restore its saved selection once, during init. The
+	// auto-generate watch below is lazy, so restored state doesn't trigger a run.
+	const initialize = () => {
+		if (!term) return;
+		void loadCourses(term);
+		void loadSections(term);
+		restoreFromStorage(term);
+		if (hasGenerated && scheduleData) {
+			// The parent restored this term's last generated schedule.
+			lastGeneratedSelectionKey = currentSelectionKey;
 		}
-	);
+	};
+	initialize();
 
 	watch(
 		() => [term, selectedCourses] as const,
 		([termValue, coursesValue]) => {
 			if (!termValue) return;
 			storeJson(getTermKey(termValue, 'selectedCourses'), coursesValue);
-		}
-	);
-
-	// Mirror the source-of-truth order into the local DnD model. This only fires
-	// when `selectedCourses` changes (add/remove/clear/load/term switch) — never
-	// mid-drag, since `consider` mutates `dndItems` not `selectedCourses`. The
-	// `dragging` guard is belt-and-suspenders against any other mid-drag writes.
-	watch(
-		() => selectedCourses,
-		(coursesValue) => {
-			if (dragging) return;
-			dndItems = coursesValue.map((course) => ({ id: course, course }));
 		}
 	);
 
@@ -572,23 +462,15 @@
 		}
 	);
 
-	watch(
-		() => [activeScheduleIndex, scheduleData?.schedules?.length] as const,
-		([indexValue, lengthValue]) => {
-			const maxIndex = Math.max(0, (lengthValue || 1) - 1);
-			if (indexValue > maxIndex) activeScheduleIndex = maxIndex;
-		}
-	);
-
 	// Debounced schedule generation function
 	const triggerScheduleGeneration = useDebounce(
 		(
 			epoch: number,
 			termValue: string,
 			coursesValue: string[],
-			choicesValue: Record<string, string | null>,
+			choicesValue: SectionChoices,
 			hoursValue: BlockedHour[],
-			orConnectionsValue: Record<string, boolean>
+			orConnectionsValue: OrConnections
 		) => {
 			if (epoch !== generationEpoch) return;
 
@@ -596,66 +478,10 @@
 			actionMessage = '';
 			actionTone = '';
 
-			// Build option groups from OR connections
-			// OR connections between adjacent courses create alternative schedules
-			const optionGroups: string[][] = [];
-
-			// Filter orConnections to only include valid adjacent course pairs
-			const validOrConnections: Record<string, boolean> = {};
-			for (let i = 0; i < coursesValue.length - 1; i++) {
-				const course = coursesValue[i];
-				if (orConnectionsValue[course]) {
-					validOrConnections[course] = true;
-				}
-			}
-
-			// Build option groups
-			// - Courses with OR to next: grouped together (Pick 1 of these)
-			// - Courses without OR: separate (Must pick this one)
-			let currentGroup: string[] = [];
-
-			for (let i = 0; i < coursesValue.length; i++) {
-				const course = coursesValue[i];
-				currentGroup.push(course);
-
-				const isOrConnected = validOrConnections[course];
-
-				if (!isOrConnected) {
-					// End of a group (either a single course or end of an OR chain)
-					if (currentGroup.length > 1) {
-						// Only add to optionGroups if it's an OR group (choice > 1)
-						// Single items are effectively mandatory, so we leave them out
-						// and they will be handled as baseCourses (must include)
-						optionGroups.push([...currentGroup]);
-					}
-					currentGroup = [];
-				}
-			}
-
-			// Courses NOT in any option group go into the regular courses array
-			const groupedCourses = new Set(optionGroups.flat());
-			const regularCourses = coursesValue.filter((c) => !groupedCourses.has(c));
-
-			const courseSectionArray: CourseEntry[] = regularCourses.map((course) => ({
-				course,
-				section: choicesValue[course] || null
-			}));
-
-			// Convert option groups to the API format
-			const validOptionGroups = optionGroups.map((group) => ({
-				options: group.map((course) => ({
-					course,
-					section: choicesValue[course] || null
-				}))
-			}));
-
 			cancelActiveGeneration();
-			const request = generateSchedule({
-				courses: courseSectionArray,
-				course_option_groups: validOptionGroups.length > 0 ? validOptionGroups : undefined,
-				blocked_hours: hoursValue,
-				term: termValue
-			}) as CancelablePromise<ScheduleData>;
+			const request = generateSchedule(
+				buildGenerateRequest(termValue, coursesValue, choicesValue, hoursValue, orConnectionsValue)
+			) as CancelablePromise<ScheduleData>;
 			activeGeneration = request;
 
 			request
@@ -663,6 +489,13 @@
 					if (epoch !== generationEpoch) return;
 
 					activeScheduleIndex = 0;
+					lastGeneratedSelectionKey = selectionKey(
+						termValue,
+						coursesValue,
+						hoursValue,
+						choicesValue,
+						orConnectionsValue
+					);
 					onSchedule?.(data, coursesValue);
 					actionMessage = '';
 					actionTone = '';
@@ -675,7 +508,7 @@
 					actionMessage =
 						err instanceof Error
 							? err.message
-							: $t('errors.failedToGenerateSchedule', { error: '' });
+							: t('errors.failedToGenerateSchedule', { error: '' });
 					actionTone = 'error';
 				})
 				.finally(() => {
@@ -694,11 +527,10 @@
 	watch(
 		() => [term, selectedCourses, sectionChoices, blockedHours, orConnections] as const,
 		([termValue, coursesValue, choicesValue, hoursValue, orConnectionsValue]) => {
-			if (suppressAutoGenerate) return;
-
 			generationEpoch += 1;
 			const epoch = generationEpoch;
 			cancelActiveGeneration();
+			triggerScheduleGeneration.cancel();
 
 			if (!termValue || coursesValue.length === 0) {
 				submitting = false;
@@ -718,8 +550,12 @@
 				return;
 			}
 
-			// Don't auto-generate until initial restoration is complete
-			if (!isInitialized) {
+			// The schedule on screen already matches this selection — e.g. a saved
+			// schedule was just loaded, or the user returned to the generated selection.
+			if (
+				lastGeneratedSelectionKey ===
+				selectionKey(termValue, coursesValue, hoursValue, choicesValue, orConnectionsValue)
+			) {
 				submitting = false;
 				return;
 			}
@@ -842,7 +678,7 @@
 			sectionChoices = Object.fromEntries(
 				Object.entries(sectionChoices).filter(([key]) => key !== course)
 			);
-			const newOrConnections: Record<string, boolean> = {};
+			const newOrConnections: OrConnections = {};
 			for (const [key, val] of Object.entries(orConnections)) {
 				if (key !== course && val) {
 					newOrConnections[key] = true;
@@ -856,21 +692,13 @@
 	};
 
 	// --- Drag-and-drop reordering of selected course chips ---
-	const handleDndConsider = (
-		event: CustomEvent<{ items: DndItem[]; info: { trigger: string } }>
-	) => {
+	const handleDndConsider = (event: CustomEvent<{ items: DndItem[] }>) => {
 		dndItems = event.detail.items;
-		// Keyboard drags end with a `consider` (DRAG_STOPPED) instead of a `finalize`
-		// (the order is already committed by the per-move finalize events). Clear
-		// `dragging` here too, otherwise the resync watch stays frozen and later
-		// add/remove/load/term changes would leave the chips stale.
-		dragging = event.detail.info.trigger !== TRIGGERS.DRAG_STOPPED;
 	};
 
 	const handleDndFinalize = (event: CustomEvent<{ items: DndItem[] }>) => {
 		dndItems = event.detail.items;
 		const next = event.detail.items.map((item) => item.course);
-		dragging = false;
 
 		// Commit to the source of truth (→ persistence + regeneration) only on drop,
 		// and only when the order actually changed.
@@ -892,39 +720,26 @@
 	};
 
 	const handleLoadSchedule = (saved: SavedSchedule) => {
-		suppressAutoGenerate = true;
 		activeScheduleIndex = saved.activeScheduleIndex ?? 0;
 		selectedCourses = saved.selectedCourses;
 		blockedHours = saved.blockedHours || [];
 
-		// Convert courseOptionGroups back to orConnections format
-		const newOrConnections: Record<string, boolean> = {};
-		if (saved.courseOptionGroups) {
-			for (const group of saved.courseOptionGroups) {
-				// In each group, all courses except the last are OR-connected to the next
-				for (let i = 0; i < group.length - 1; i++) {
-					newOrConnections[group[i]] = true;
-				}
-			}
-		}
-		orConnections = newOrConnections;
-
-		const newChoices: Record<string, string | null> = {};
-		const activeSchedule = saved.scheduleData.schedules[activeScheduleIndex];
-		activeSchedule?.sections.forEach((section) => {
-			newChoices[section.course] = section.section;
-		});
-		sectionChoices = newChoices;
+		orConnections = orConnectionsFromGroups(saved.courseOptionGroups);
+		sectionChoices = sectionChoicesFromSchedule(saved.scheduleData, activeScheduleIndex);
+		// Mark the loaded schedule as current so auto-generation doesn't replace it.
+		lastGeneratedSelectionKey = selectionKey(
+			term,
+			selectedCourses,
+			blockedHours,
+			sectionChoices,
+			orConnections
+		);
 
 		if (onLoadSavedSchedule) {
 			onLoadSavedSchedule(saved);
 		} else {
 			onSchedule?.(saved.scheduleData, saved.selectedCourses);
 		}
-
-		queueMicrotask(() => {
-			suppressAutoGenerate = false;
-		});
 	};
 
 	// Download handler
@@ -939,24 +754,24 @@
 			const ok = await downloadScheduleAsImage(
 				node,
 				captureScrollRef ?? scrollRef,
-				activeScheduleIndex,
+				scheduleIndex,
 				(error) => {
 					toast.error(error);
 				},
 				{
 					footer: {
 						term,
-						locale: $t('locale.code'),
+						locale: t('locale.code'),
 						showTimestamp: true,
 						labels: {
-							termLabel: $t('savedSchedules.term')
+							termLabel: t('savedSchedules.term')
 						}
 					}
 				}
 			);
 			// Only confirm on success — the helper reports failures via the error
 			// callback above and returns false, so we must not also toast success.
-			if (ok) toast.success($t('notifications.downloaded'));
+			if (ok) toast.success(t('notifications.downloaded'));
 		} catch {
 			// Error handled in callback
 		} finally {
@@ -972,12 +787,15 @@
 		hasGenerated && scheduleData && scheduleData.schedules && scheduleData.schedules.length > 0
 	);
 
-	// Current schedule for timetable
-	const currentSchedule = $derived(scheduleData?.schedules?.[activeScheduleIndex] ?? null);
 	// Guarded count: bits-ui evaluates the nav buttons' `disabled` getters during the
 	// reactive flush when `scheduleData` is cleared (e.g. on term switch), before the
 	// wrapping {#if} unmounts them — so read the length defensively.
 	const scheduleCount = $derived(scheduleData?.schedules?.length ?? 0);
+	// `activeScheduleIndex` can point past the end (e.g. a restored tab index from an
+	// older result), so read it through a clamp instead of correcting it in an effect.
+	const scheduleIndex = $derived(Math.min(activeScheduleIndex, Math.max(0, scheduleCount - 1)));
+	// Current schedule for timetable
+	const currentSchedule = $derived(scheduleData?.schedules?.[scheduleIndex] ?? null);
 	const timeSlots = $derived(
 		scheduleData?.time_slots?.length ? scheduleData.time_slots : TIME_SLOTS
 	);
@@ -985,6 +803,8 @@
 		scheduleData?.days_of_week?.length ? scheduleData.days_of_week : DAYS_OF_WEEK
 	);
 </script>
+
+<svelte:document onpointerdown={onDocumentPointerDown} />
 
 <Tooltip.Provider delayDuration={350} skipDelayDuration={100} ignoreNonKeyboardFocus>
 	<section class="course-selector">
@@ -999,7 +819,7 @@
 					tabindex={mobileTab === 'courses' ? 0 : -1}
 					onclick={() => setMobileTab('courses')}
 				>
-					{$t('savedSchedules.courses')}
+					{t('savedSchedules.courses')}
 				</button>
 				<button
 					id="mobile-tab-schedule"
@@ -1010,7 +830,7 @@
 					tabindex={mobileTab === 'schedule' ? 0 : -1}
 					onclick={() => setMobileTab('schedule')}
 				>
-					{$t('courseSelector.schedule')}
+					{t('courseSelector.schedule')}
 				</button>
 			</div>
 		{/if}
@@ -1029,8 +849,8 @@
 							id="course-search"
 							name="course-search"
 							type="text"
-							placeholder={$t('courseSelector.typeToSearch')}
-							aria-label={$t('courseSelector.typeToSearch')}
+							placeholder={t('courseSelector.typeToSearch')}
+							aria-label={t('courseSelector.typeToSearch')}
 							bind:value={searchInput}
 							role="combobox"
 							aria-autocomplete="list"
@@ -1055,7 +875,7 @@
 					{#if searchDropdownOpen && searchInput.trim().length > 0}
 						<div class="search-results" role="listbox" id="course-search-listbox">
 							{#if searchResults.length === 0}
-								<div class="search-empty">{$t('courseSelector.noResults')}</div>
+								<div class="search-empty">{t('courseSelector.noResults')}</div>
 							{:else}
 								{#each searchResults as result, index (`${result.course}|${result.group}`)}
 									{@const isSelected = selectedCourses.includes(result.course)}
@@ -1077,7 +897,7 @@
 										<span class="result-meta">
 											{#if courseMeta[result.course]?.akts != null}
 												<span class="result-akts"
-													>{courseMeta[result.course].akts} {$t('courseSelector.aktsLabel')}</span
+													>{courseMeta[result.course].akts} {t('courseSelector.aktsLabel')}</span
 												>
 											{/if}
 											<span class="result-group">{result.group}</span>
@@ -1110,7 +930,7 @@
 					{:else}
 						<div class="groups-toolbar">
 							<div class="groups-toolbar-header">
-								<h2 class="section-label">{$t('courseSelector.courseGroups')}</h2>
+								<h2 class="section-label">{t('courseSelector.courseGroups')}</h2>
 							</div>
 						</div>
 
@@ -1136,7 +956,7 @@
 											>
 												<Popover.Trigger
 													class="group-chip {isOpen ? 'active' : ''}"
-													aria-label={$t('courseSelector.showCourses', {
+													aria-label={t('courseSelector.showCourses', {
 														group: group.group
 													})}
 													aria-expanded={isOpen}
@@ -1187,7 +1007,7 @@
 							<div class="selected-section">
 								<div class="selected-header">
 									<h2 class="section-label">
-										{$t('courseSelector.selectedCourses')} ({selectedCourses.length}){#if aktsLabel}
+										{t('courseSelector.selectedCourses')} ({selectedCourses.length}){#if aktsLabel}
 											· <span class="akts-total" title={aktsLabel.title}>{aktsLabel.text}</span
 											>{/if}
 									</h2>
@@ -1195,12 +1015,12 @@
 										<Tooltip.Trigger
 											class="clear-all-btn"
 											onclick={() => (selectedCourses = [])}
-											aria-label={$t('tooltips.clearAll')}
+											aria-label={t('tooltips.clearAll')}
 										>
 											<X size={16} />
-											{$t('courseSelector.clearAll')}
+											{t('courseSelector.clearAll')}
 										</Tooltip.Trigger>
-										<TooltipContent label={$t('tooltips.clearAll')} />
+										<TooltipContent label={t('tooltips.clearAll')} />
 									</Tooltip.Root>
 								</div>
 								<div
@@ -1224,7 +1044,7 @@
 												<span
 													class="chip-drag-handle"
 													use:dragHandle
-													aria-label={$t('courseSelector.reorderCourse', { course })}
+													aria-label={t('courseSelector.reorderCourse', { course })}
 												>
 													<GripVertical size={14} aria-hidden="true" />
 												</span>
@@ -1235,7 +1055,7 @@
 													>
 												{/if}
 												{#if courseMeta[course]?.akts != null}
-													<span class="chip-akts" title={$t('courseSelector.aktsLabel')}
+													<span class="chip-akts" title={t('courseSelector.aktsLabel')}
 														>{courseMeta[course].akts}</span
 													>
 												{/if}
@@ -1244,7 +1064,7 @@
 													<select
 														class="chip-section-select"
 														name={`section-${course}`}
-														aria-label={$t('courseSelector.sectionSelectAriaLabel', { course })}
+														aria-label={t('courseSelector.sectionSelectAriaLabel', { course })}
 														value={sectionChoices[course] ?? ''}
 														onchange={(event) => {
 															const value = (event.currentTarget as HTMLSelectElement).value;
@@ -1264,7 +1084,7 @@
 															};
 														}}
 													>
-														<option value="">{$t('courseSelector.any')}</option>
+														<option value="">{t('courseSelector.any')}</option>
 														{#each courseSections as sectionId (sectionId)}
 															<option value={sectionId}>{sectionId}</option>
 														{/each}
@@ -1277,8 +1097,8 @@
 														href={obsUrl(course)}
 														target="_blank"
 														rel="noopener"
-														title={$t('courseSelector.viewOnObs')}
-														aria-label={$t('courseSelector.viewOnObs')}
+														title={t('courseSelector.viewOnObs')}
+														aria-label={t('courseSelector.viewOnObs')}
 													>
 														<ExternalLink size={13} aria-hidden="true" />
 													</a>
@@ -1288,7 +1108,7 @@
 													<Tooltip.Trigger
 														class="chip-remove group"
 														onclick={() => toggleCourse(course)}
-														aria-label={$t('courseSelector.removeCourse', { course })}
+														aria-label={t('courseSelector.removeCourse', { course })}
 													>
 														<X
 															class="shrink-0 opacity-70 transition-colors group-hover:text-error"
@@ -1296,7 +1116,7 @@
 															aria-hidden="true"
 														/>
 													</Tooltip.Trigger>
-													<TooltipContent label={$t('courseSelector.removeCourse', { course })} />
+													<TooltipContent label={t('courseSelector.removeCourse', { course })} />
 												</Tooltip.Root>
 											</div>
 
@@ -1317,17 +1137,17 @@
 															}
 														}}
 														aria-label={isOrConnected
-															? $t('courseSelector.connector.or')
-															: $t('courseSelector.connector.and')}
+															? t('courseSelector.connector.or')
+															: t('courseSelector.connector.and')}
 													>
 														{isOrConnected
-															? $t('courseSelector.connector.or')
-															: $t('courseSelector.connector.and')}
+															? t('courseSelector.connector.or')
+															: t('courseSelector.connector.and')}
 													</Tooltip.Trigger>
 													<TooltipContent
 														label={isOrConnected
-															? $t('courseSelector.connector.or')
-															: $t('courseSelector.connector.and')}
+															? t('courseSelector.connector.or')
+															: t('courseSelector.connector.and')}
 													/>
 												</Tooltip.Root>
 											{/if}
@@ -1344,7 +1164,7 @@
 					{#if submitting}
 						<div class="generating-indicator">
 							<LoaderCircle class="animate-spin" size={18} />
-							<span>{$t('courseSelector.generatingShort')}</span>
+							<span>{t('courseSelector.generatingShort')}</span>
 						</div>
 					{/if}
 					<Button.Root
@@ -1358,7 +1178,7 @@
 						{:else}
 							<Download size={18} />
 						{/if}
-						{isDownloading ? $t('courseSelector.downloadingImage') : $t('courseSelector.download')}
+						{isDownloading ? t('courseSelector.downloadingImage') : t('courseSelector.download')}
 					</Button.Root>
 					<Button.Root
 						class="btn btn-soft"
@@ -1367,7 +1187,7 @@
 						disabled={!canSave}
 					>
 						<Save size={18} />
-						{$t('savedSchedules.saveSchedule')}
+						{t('savedSchedules.saveSchedule')}
 					</Button.Root>
 					<Button.Root
 						class="btn btn-outlined"
@@ -1375,14 +1195,14 @@
 						onclick={() => (loadDialogOpen = true)}
 					>
 						<FolderOpen size={18} />
-						{$t('savedSchedules.loadSchedule')}
+						{t('savedSchedules.loadSchedule')}
 					</Button.Root>
 				</div>
 
 				{#if sectionsError}
 					<div class="alert warning">
 						<TriangleAlert size={20} />
-						<span>{$t('courseSelector.sectionsPartialWarning')}</span>
+						<span>{t('courseSelector.sectionsPartialWarning')}</span>
 					</div>
 				{/if}
 			</div>
@@ -1404,7 +1224,7 @@
 						<div class="warning-header">
 							<div class="warning-title">
 								<TriangleAlert size={20} />
-								<span>{totalWarningCount} {$t('courseSelector.warnings')}</span>
+								<span>{totalWarningCount} {t('courseSelector.warnings')}</span>
 							</div>
 							{#if totalWarningCount > 1}
 								<Button.Root
@@ -1413,8 +1233,8 @@
 									onclick={() => (showWarnings = !showWarnings)}
 								>
 									{showWarnings
-										? $t('courseSelector.hideWarnings')
-										: $t('courseSelector.showWarnings')}
+										? t('courseSelector.hideWarnings')
+										: t('courseSelector.showWarnings')}
 									<ChevronDown
 										size={18}
 										class="transition-transform {showWarnings ? 'rotate-180' : ''}"
@@ -1439,12 +1259,12 @@
 
 				<!-- Block Time Slots Hint -->
 				<div class="block-hint">
-					<span>{$t('timetable.clickToBlock')}</span>
+					<span>{t('timetable.clickToBlock')}</span>
 					<Tooltip.Root>
-						<Tooltip.Trigger class="info-btn" aria-label={$t('courseSelector.blockingTip.title')}>
+						<Tooltip.Trigger class="info-btn" aria-label={t('courseSelector.blockingTip.title')}>
 							<Info size={16} aria-hidden="true" />
 						</Tooltip.Trigger>
-						<TooltipContent label={$t('courseSelector.blockingTip.description')} />
+						<TooltipContent label={t('courseSelector.blockingTip.description')} />
 					</Tooltip.Root>
 				</div>
 
@@ -1455,33 +1275,32 @@
 							<Tooltip.Root>
 								<Tooltip.Trigger
 									class="nav-btn"
-									disabled={activeScheduleIndex === 0}
-									onclick={() => (activeScheduleIndex = Math.max(0, activeScheduleIndex - 1))}
-									aria-label={$t('pagination.previous')}
+									disabled={scheduleIndex === 0}
+									onclick={() => goToSchedule(scheduleIndex - 1)}
+									aria-label={t('pagination.previous')}
 								>
 									<ChevronLeft size={20} />
 								</Tooltip.Trigger>
-								<TooltipContent label={$t('pagination.previous')} />
+								<TooltipContent label={t('pagination.previous')} />
 							</Tooltip.Root>
 							<span class="schedule-counter">
-								{activeScheduleIndex + 1} / {scheduleCount}
+								{scheduleIndex + 1} / {scheduleCount}
 							</span>
 							<Tooltip.Root>
 								<Tooltip.Trigger
 									class="nav-btn"
-									disabled={activeScheduleIndex >= scheduleCount - 1}
-									onclick={() =>
-										(activeScheduleIndex = Math.min(scheduleCount - 1, activeScheduleIndex + 1))}
-									aria-label={$t('pagination.next')}
+									disabled={scheduleIndex >= scheduleCount - 1}
+									onclick={() => goToSchedule(scheduleIndex + 1)}
+									aria-label={t('pagination.next')}
 								>
 									<ChevronRight size={20} />
 								</Tooltip.Trigger>
-								<TooltipContent label={$t('pagination.next')} />
+								<TooltipContent label={t('pagination.next')} />
 							</Tooltip.Root>
 						</div>
 					{/if}
-					{#key activeScheduleIndex}
-						<div class="timetable-wrapper" class:transitioning in:fade={{ duration: 200 }}>
+					{#key scheduleIndex}
+						<div class={['timetable-wrapper', { transitioning }]} in:fade={{ duration: 200 }}>
 							<Timetable
 								schedule={currentSchedule}
 								{timeSlots}
@@ -1528,13 +1347,13 @@
 					open={saveDialogOpen}
 					onClose={() => (saveDialogOpen = false)}
 					onSaved={(saved) => {
-						toast.success($t('savedSchedules.scheduleWasSaved', { name: saved.name }));
+						toast.success(t('savedSchedules.scheduleWasSaved', { name: saved.name }));
 					}}
 					term={term || ''}
 					{selectedCourses}
 					{scheduleData}
 					{blockedHours}
-					{activeScheduleIndex}
+					activeScheduleIndex={scheduleIndex}
 					{orConnections}
 				/>
 			{/await}
@@ -1547,7 +1366,7 @@
 					onClose={() => (loadDialogOpen = false)}
 					onLoadSchedule={(saved) => {
 						handleLoadSchedule(saved);
-						toast.success($t('savedSchedules.scheduleWasLoaded', { name: saved.name }));
+						toast.success(t('savedSchedules.scheduleWasLoaded', { name: saved.name }));
 					}}
 					currentTerm={term}
 				/>

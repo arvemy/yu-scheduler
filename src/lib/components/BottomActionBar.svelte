@@ -35,7 +35,7 @@
 		<div
 			class="bottom-action-bar"
 			role="toolbar"
-			aria-label={$t('courseSelector.actions')}
+			aria-label={t('courseSelector.actions')}
 			transition:fade={{ duration: 200 }}
 		>
 			<div class="action-buttons" in:fly={{ y: 20, duration: 300, delay: 50 }}>
@@ -53,14 +53,14 @@
 						onclick={onGenerate}
 						disabled={!canGenerate || generating}
 						aria-label={generating
-							? $t('courseSelector.generatingSchedule')
-							: $t('courseSelector.generateSchedule')}
+							? t('courseSelector.generatingSchedule')
+							: t('courseSelector.generateSchedule')}
 					>
 						<Sparkles class="shrink-0" size={16} />
 						<span
 							>{generating
-								? $t('courseSelector.generatingShort')
-								: $t('courseSelector.generateShort')}</span
+								? t('courseSelector.generatingShort')
+								: t('courseSelector.generateShort')}</span
 						>
 					</button>
 				{/if}
@@ -72,8 +72,8 @@
 						onclick={onDownload}
 						disabled={!canDownload || downloading}
 						aria-label={downloading
-							? $t('courseSelector.downloadingImage')
-							: $t('courseSelector.download')}
+							? t('courseSelector.downloadingImage')
+							: t('courseSelector.download')}
 					>
 						{#if downloading}
 							<LoaderCircle class="animate-spin" size={16} />
@@ -83,8 +83,8 @@
 					</Tooltip.Trigger>
 					<TooltipContent
 						label={downloading
-							? $t('courseSelector.downloadingImage')
-							: $t('courseSelector.downloadImage')}
+							? t('courseSelector.downloadingImage')
+							: t('courseSelector.downloadImage')}
 					/>
 				</Tooltip.Root>
 
@@ -95,14 +95,14 @@
 							class="fab-btn outlined secondary"
 							onclick={onSave}
 							disabled={!canSave}
-							aria-label={$t('savedSchedules.saveSchedule')}
+							aria-label={t('savedSchedules.saveSchedule')}
 						>
 							<Save class="shrink-0" size={16} />
 						</Tooltip.Trigger>
 						<TooltipContent
 							label={canSave
-								? $t('savedSchedules.saveSchedule')
-								: $t('courseSelector.generateScheduleFirst')}
+								? t('savedSchedules.saveSchedule')
+								: t('courseSelector.generateScheduleFirst')}
 						/>
 					</Tooltip.Root>
 				{/if}
@@ -113,11 +113,11 @@
 						<Tooltip.Trigger
 							class="fab-btn outlined info"
 							onclick={onLoad}
-							aria-label={$t('savedSchedules.loadSchedule')}
+							aria-label={t('savedSchedules.loadSchedule')}
 						>
 							<FolderOpen class="shrink-0" size={16} />
 						</Tooltip.Trigger>
-						<TooltipContent label={$t('savedSchedules.loadSchedule')} />
+						<TooltipContent label={t('savedSchedules.loadSchedule')} />
 					</Tooltip.Root>
 				{/if}
 			</div>

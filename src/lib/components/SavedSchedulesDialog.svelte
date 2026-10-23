@@ -48,9 +48,9 @@
 	const resolveError = (err: unknown, fallbackKey: string) => {
 		if (err instanceof Error) {
 			const key = err.message;
-			if (key.startsWith('errors.') || key.startsWith('savedSchedules.')) return $t(key);
+			if (key.startsWith('errors.') || key.startsWith('savedSchedules.')) return t(key);
 		}
-		return $t(fallbackKey);
+		return t(fallbackKey);
 	};
 
 	const refresh = () => {
@@ -108,7 +108,7 @@
 	};
 
 	const clearAll = () => {
-		if (!window.confirm($t('savedSchedules.clearAllConfirm'))) return;
+		if (!window.confirm(t('savedSchedules.clearAllConfirm'))) return;
 		try {
 			clearAllSavedSchedules();
 			refresh();
@@ -133,26 +133,26 @@
 				<div class="dialog-header">
 					<Dialog.Title class="dialog-title">
 						<FolderOpen class="text-primary" size={24} />
-						{$t('savedSchedules.savedSchedules')}
+						{t('savedSchedules.savedSchedules')}
 					</Dialog.Title>
 					<Tooltip.Root>
 						<Dialog.Close>
 							{#snippet child({ props })}
-								<Tooltip.Trigger {...props} class="close-btn" aria-label={$t('common.close')}>
+								<Tooltip.Trigger {...props} class="close-btn" aria-label={t('common.close')}>
 									<X size={24} />
 								</Tooltip.Trigger>
 							{/snippet}
 						</Dialog.Close>
-						<TooltipContent label={$t('common.close')} />
+						<TooltipContent label={t('common.close')} />
 					</Tooltip.Root>
 				</div>
 
 				{#if currentTerm}
 					<p class="filter-info">
 						<ListFilter class="text-primary" size={16} />
-						{$t('savedSchedules.showingCurrentTerm', {
+						{t('savedSchedules.showingCurrentTerm', {
 							count: currentTermSchedules.length,
-							term: translateTerm(currentTerm, $t),
+							term: translateTerm(currentTerm, t),
 							hidden: hiddenCount
 						})}
 					</p>
@@ -173,8 +173,8 @@
 				{:else if currentTermSchedules.length === 0}
 					<div class="empty-state">
 						<FolderPlus class="mb-2 text-ink-muted opacity-50" size={48} />
-						<h4>{$t('savedSchedules.noSavedSchedules')}</h4>
-						<p>{$t('savedSchedules.noSavedSchedulesDesc')}</p>
+						<h4>{t('savedSchedules.noSavedSchedules')}</h4>
+						<p>{t('savedSchedules.noSavedSchedulesDesc')}</p>
 					</div>
 				{:else}
 					<div class="schedule-list">
@@ -194,11 +194,11 @@
 									<div class="schedule-meta">
 										<span class="meta-item">
 											<Calendar size={14} />
-											{translateTerm(schedule.term, $t)}
+											{translateTerm(schedule.term, t)}
 										</span>
 										<span class="meta-item">
 											<Clock size={14} />
-											{new Date(schedule.savedAt).toLocaleDateString($t('locale.code'))}
+											{new Date(schedule.savedAt).toLocaleDateString(t('locale.code'))}
 										</span>
 									</div>
 								</div>
@@ -209,10 +209,10 @@
 											onclick={() => submitRename(schedule)}
 										>
 											<Check size={16} />
-											{$t('common.save')}
+											{t('common.save')}
 										</Button.Root>
 										<Button.Root class="btn btn-ghost btn-sm" onclick={() => (editingId = null)}>
-											{$t('common.cancel')}
+											{t('common.cancel')}
 										</Button.Root>
 									{:else}
 										<Button.Root
@@ -220,30 +220,30 @@
 											onclick={() => onLoadSchedule?.(schedule)}
 										>
 											<FolderOpen size={16} />
-											{$t('savedSchedules.loadSchedule')}
+											{t('savedSchedules.loadSchedule')}
 										</Button.Root>
 										<Tooltip.Root>
 											<Tooltip.Trigger
 												class="btn btn-ghost btn-sm"
 												onclick={() => startRename(schedule)}
-												aria-label={`${$t('savedSchedules.renameSchedule')} ${schedule.name}`}
+												aria-label={`${t('savedSchedules.renameSchedule')} ${schedule.name}`}
 											>
 												<Pencil size={16} />
 											</Tooltip.Trigger>
 											<TooltipContent
-												label={`${$t('savedSchedules.renameSchedule')} ${schedule.name}`}
+												label={`${t('savedSchedules.renameSchedule')} ${schedule.name}`}
 											/>
 										</Tooltip.Root>
 										<Tooltip.Root>
 											<Tooltip.Trigger
 												class="btn btn-ghost btn-sm"
 												onclick={() => removeSchedule(schedule)}
-												aria-label={`${$t('savedSchedules.deleteSchedule')} ${schedule.name}`}
+												aria-label={`${t('savedSchedules.deleteSchedule')} ${schedule.name}`}
 											>
 												<Trash2 size={16} />
 											</Tooltip.Trigger>
 											<TooltipContent
-												label={`${$t('savedSchedules.deleteSchedule')} ${schedule.name}`}
+												label={`${t('savedSchedules.deleteSchedule')} ${schedule.name}`}
 											/>
 										</Tooltip.Root>
 									{/if}
@@ -256,12 +256,12 @@
 				<div class="dialog-footer">
 					<div class="storage-info">
 						<HardDrive size={16} />
-						<span>{$t('savedSchedules.storageUsage')}: {formatBytes(storageUsage)}</span>
+						<span>{t('savedSchedules.storageUsage')}: {formatBytes(storageUsage)}</span>
 					</div>
 					{#if schedules.length > 0}
 						<Button.Root class="btn btn-ghost" onclick={clearAll}>
 							<Trash2 size={18} />
-							{$t('savedSchedules.clearAll')}
+							{t('savedSchedules.clearAll')}
 						</Button.Root>
 					{/if}
 				</div>

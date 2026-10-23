@@ -35,43 +35,43 @@
 				<div class="dialog-header">
 					<Dialog.Title class="dialog-title">
 						<GraduationCap class="size-7 text-primary max-[600px]:size-6" />
-						{$t('welcome.title')}
+						{t('welcome.title')}
 					</Dialog.Title>
 					<Tooltip.Root>
 						<Dialog.Close>
 							{#snippet child({ props })}
-								<Tooltip.Trigger {...props} class="close-btn" aria-label={$t('common.close')}>
+								<Tooltip.Trigger {...props} class="close-btn" aria-label={t('common.close')}>
 									<X size={24} />
 								</Tooltip.Trigger>
 							{/snippet}
 						</Dialog.Close>
-						<TooltipContent label={$t('common.close')} />
+						<TooltipContent label={t('common.close')} />
 					</Tooltip.Root>
 				</div>
 
-				<p class="lead">{$t('welcome.description')}</p>
+				<p class="lead">{t('welcome.description')}</p>
 
 				<div class="features-section">
 					<h2 class="section-heading">
 						<Lightbulb class="text-primary" size={20} />
-						{$t('welcome.features')}
+						{t('welcome.features')}
 					</h2>
 					<ul>
 						<li>
 							<Check class="shrink-0 text-success" size={16} />
-							{$t('welcome.feature1')}
+							{t('welcome.feature1')}
 						</li>
 						<li>
 							<Check class="shrink-0 text-success" size={16} />
-							{$t('welcome.feature2')}
+							{t('welcome.feature2')}
 						</li>
 						<li>
 							<Check class="shrink-0 text-success" size={16} />
-							{$t('welcome.feature3')}
+							{t('welcome.feature3')}
 						</li>
 						<li>
 							<Check class="shrink-0 text-success" size={16} />
-							{$t('welcome.feature4')}
+							{t('welcome.feature4')}
 						</li>
 					</ul>
 				</div>
@@ -80,28 +80,28 @@
 				<div class="updates-section">
 					<h2 class="section-heading">
 						<Info class="text-primary" size={20} />
-						{$t('welcome.updates.title')}
+						{t('welcome.updates.title')}
 					</h2>
-					<p class="updates-term">{$t('welcome.updates.term')}</p>
+					<p class="updates-term">{t('welcome.updates.term')}</p>
 					<ul>
 						<li>
 							<CircleCheck class="shrink-0 text-success" size={14} />
-							{$t('welcome.updates.items.termCoursesAdded')}
+							{t('welcome.updates.items.termCoursesAdded')}
 						</li>
 					</ul>
-					<p class="updates-date">{$t('welcome.updates.addedOn')}</p>
+					<p class="updates-date">{t('welcome.updates.addedOn')}</p>
 				</div>
 
 				<!-- Data source -->
 				<div class="data-source-section">
 					<h2 class="section-heading">
 						<Database class="text-primary" size={20} />
-						{$t('welcome.dataSource.title')}
+						{t('welcome.dataSource.title')}
 					</h2>
 					<!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted, developer-authored i18n string -->
-					<p class="data-source-text">{@html $t('welcome.dataSource.body')}</p>
+					<p class="data-source-text">{@html t('welcome.dataSource.body')}</p>
 					<!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted, developer-authored i18n string -->
-					<p class="data-source-text data-source-verify">{@html $t('welcome.dataSource.verify')}</p>
+					<p class="data-source-text data-source-verify">{@html t('welcome.dataSource.verify')}</p>
 				</div>
 
 				<div class="notice-panel">
@@ -110,9 +110,9 @@
 					</div>
 					<div class="notice-content">
 						<!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted, developer-authored i18n string -->
-						<p class="notice-text font-semibold">{@html $t('welcome.importantNotice')}</p>
-						<p class="notice-text">{$t('welcome.disclaimer')}</p>
-						<p class="notice-subtext">{$t('welcome.privacyNote')}</p>
+						<p class="notice-text font-semibold">{@html t('welcome.importantNotice')}</p>
+						<p class="notice-text">{t('welcome.disclaimer')}</p>
+						<p class="notice-subtext">{t('welcome.privacyNote')}</p>
 					</div>
 				</div>
 
@@ -123,14 +123,14 @@
 						class="checkbox-root"
 					>
 						{#snippet children({ checked })}
-							<span class="checkbox-box" class:checked>
+							<span class={['checkbox-box', { checked }]}>
 								{#if checked}
 									<Check size={16} />
 								{/if}
 							</span>
 						{/snippet}
 					</Checkbox.Root>
-					<span>{$t('welcome.dontShowAgain')}</span>
+					<span>{t('welcome.dontShowAgain')}</span>
 				</label>
 
 				<div class="modal-footer">
@@ -140,7 +140,7 @@
 					<div class="dialog-actions">
 						<Button.Root class="btn btn-primary" onclick={onClose}>
 							<ChevronRight size={18} />
-							{$t('welcome.getStarted')}
+							{t('welcome.getStarted')}
 						</Button.Root>
 					</div>
 				</div>

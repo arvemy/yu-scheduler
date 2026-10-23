@@ -1,9 +1,10 @@
 <script lang="ts">
+	import { MediaQuery } from 'svelte/reactivity';
 	import { DropdownMenu, Select, Tooltip } from 'bits-ui';
 	import { ChevronDown, EllipsisVertical, Info, Languages, User } from '@lucide/svelte';
-	import { locale, setLocale, t } from '#lib/i18n/index.js';
+	import { i18n, setLocale, t } from '#lib/i18n/index.js';
 	import { translateTerm } from '#lib/utils/term.js';
-	import { useMobile } from '#lib/utils/useMediaQuery.svelte.js';
+	import { MEDIA_QUERIES } from '#lib/utils/breakpoints.js';
 	import type { ProgramMeta } from '#lib/types/index.js';
 	import TooltipContent from '#lib/components/ui/TooltipContent.svelte';
 	import ProgramPicker from '#lib/components/ProgramPicker.svelte';
@@ -32,21 +33,19 @@
 		portfolioUrl?: string;
 	} = $props();
 
-	const mobile = useMobile();
-	const isMobile = $derived(mobile.isMobile);
+	const mobile = new MediaQuery(MEDIA_QUERIES.md);
+	const isMobile = $derived(mobile.current);
 
-	const termItems = $derived(
-		terms.map((term) => ({ value: term, label: translateTerm(term, $t) }))
-	);
+	const termItems = $derived(terms.map((term) => ({ value: term, label: translateTerm(term, t) })));
 
 	// Select triggers have the combobox role, which doesn't take its name from content.
 	const termLabel = $derived(
-		currentTerm ? translateTerm(currentTerm, $t) : $t('savedSchedules.term')
+		currentTerm ? translateTerm(currentTerm, t) : t('savedSchedules.term')
 	);
 
 	const languageItems = $derived([
-		{ value: 'en', label: $t('language.english') },
-		{ value: 'tr', label: $t('language.turkish') }
+		{ value: 'en', label: t('language.english') },
+		{ value: 'tr', label: t('language.turkish') }
 	]);
 
 	const handleTermChange = (value: string) => {
@@ -73,39 +72,39 @@
 			{#if isMobile}
 				<!-- Mobile: overflow menu -->
 				<DropdownMenu.Root>
-					<DropdownMenu.Trigger class="btn btn-icon" aria-label={$t('nav.more')}>
+					<DropdownMenu.Trigger class="btn btn-icon" aria-label={t('nav.more')}>
 						<EllipsisVertical size={20} />
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Portal>
 						<DropdownMenu.Content class="menu" sideOffset={8} align="end">
 							<DropdownMenu.Item class="menu-item" onSelect={() => openExternal(portfolioUrl)}>
 								<User size={18} />
-								{$t('nav.portfolio')}
+								{t('nav.portfolio')}
 							</DropdownMenu.Item>
 							<DropdownMenu.Item
 								class="menu-item"
 								onSelect={() => openExternal('https://github.com/arvemy/yu-scheduler')}
 							>
 								<img class="menu-brand-icon" src="/github.svg" alt="" aria-hidden="true" />
-								{$t('nav.github')}
+								{t('nav.github')}
 							</DropdownMenu.Item>
 							<DropdownMenu.Item
 								class="menu-item"
 								onSelect={() => openExternal('https://linkedin.com/in/2123ardakorkmaz')}
 							>
 								<img class="menu-brand-icon" src="/linkedin.svg" alt="" aria-hidden="true" />
-								{$t('nav.linkedin')}
+								{t('nav.linkedin')}
 							</DropdownMenu.Item>
 							<DropdownMenu.Separator class="menu-sep" />
 							<DropdownMenu.Item class="menu-item" onSelect={onOpenWelcome}>
 								<Info size={18} />
-								{$t('nav.showWelcome')}
+								{t('nav.showWelcome')}
 							</DropdownMenu.Item>
 							<DropdownMenu.Separator class="menu-sep" />
-							<div class="menu-section-title">{$t('language.switchLanguage')}</div>
+							<div class="menu-section-title">{t('language.switchLanguage')}</div>
 							{#each languageItems as item (item.value)}
 								<DropdownMenu.Item
-									class="menu-item {$locale === item.value ? 'selected' : ''}"
+									class="menu-item {i18n.locale === item.value ? 'selected' : ''}"
 									onSelect={() => handleLanguageChange(item.value)}
 								>
 									<Languages size={18} />
@@ -121,24 +120,24 @@
 					<Tooltip.Trigger
 						class="btn btn-icon"
 						onclick={onOpenWelcome}
-						aria-label={$t('nav.showWelcome')}
+						aria-label={t('nav.showWelcome')}
 					>
 						<Info size={20} />
 					</Tooltip.Trigger>
-					<TooltipContent label={$t('tooltips.about')} />
+					<TooltipContent label={t('tooltips.about')} />
 				</Tooltip.Root>
 				<Select.Root
 					type="single"
 					items={languageItems}
-					value={$locale}
+					value={i18n.locale}
 					onValueChange={handleLanguageChange}
 				>
 					<Select.Trigger
 						class="btn btn-icon lang-trigger"
-						aria-label={`${$t('language.switchLanguage')} (${$locale === 'en' ? 'EN' : 'TR'})`}
+						aria-label={`${t('language.switchLanguage')} (${i18n.locale === 'en' ? 'EN' : 'TR'})`}
 					>
 						<Languages size={18} />
-						<span class="lang-code">{$locale === 'en' ? 'EN' : 'TR'}</span>
+						<span class="lang-code">{i18n.locale === 'en' ? 'EN' : 'TR'}</span>
 					</Select.Trigger>
 					<Select.Content class="select-content" align="end" sideOffset={4}>
 						<Select.Viewport class="select-viewport">
@@ -167,13 +166,13 @@
 									target="_blank"
 									rel="noopener"
 									class="social-btn"
-									aria-label={$t('nav.portfolio')}
+									aria-label={t('nav.portfolio')}
 								>
 									<User size={20} />
 								</a>
 							{/snippet}
 						</Tooltip.Trigger>
-						<TooltipContent label={$t('tooltips.portfolio')} />
+						<TooltipContent label={t('tooltips.portfolio')} />
 					</Tooltip.Root>
 					<Tooltip.Root>
 						<Tooltip.Trigger>
@@ -184,13 +183,13 @@
 									target="_blank"
 									rel="noopener"
 									class="social-btn"
-									aria-label={$t('nav.github')}
+									aria-label={t('nav.github')}
 								>
 									<img class="brand-icon" src="/github.svg" alt="" aria-hidden="true" />
 								</a>
 							{/snippet}
 						</Tooltip.Trigger>
-						<TooltipContent label={$t('tooltips.github')} />
+						<TooltipContent label={t('tooltips.github')} />
 					</Tooltip.Root>
 					<Tooltip.Root>
 						<Tooltip.Trigger>
@@ -201,26 +200,26 @@
 									target="_blank"
 									rel="noopener"
 									class="social-btn"
-									aria-label={$t('nav.linkedin')}
+									aria-label={t('nav.linkedin')}
 								>
 									<img class="brand-icon" src="/linkedin.svg" alt="" aria-hidden="true" />
 								</a>
 							{/snippet}
 						</Tooltip.Trigger>
-						<TooltipContent label={$t('tooltips.linkedin')} />
+						<TooltipContent label={t('tooltips.linkedin')} />
 					</Tooltip.Root>
 				{/if}
 			</div>
 
 			<!-- App title -->
-			<h1 class="app-title">{$t('app.title')}</h1>
+			<h1 class="app-title">{t('app.title')}</h1>
 
 			<!-- Term selector -->
 			<div class="term-selector-wrapper">
 				{#if termsLoading}
 					<div class="skeleton-term"></div>
 				{:else if termsError}
-					<p class="error-text">{$t('courseSelector.failedToLoadTerms')}</p>
+					<p class="error-text">{t('courseSelector.failedToLoadTerms')}</p>
 				{:else}
 					<Select.Root
 						type="single"

@@ -2,7 +2,7 @@
 	import { Popover } from 'bits-ui';
 	import { Check, ChevronDown, ChevronRight, GraduationCap, Search } from '@lucide/svelte';
 	import { SvelteSet } from 'svelte/reactivity';
-	import { locale, t } from '#lib/i18n/index.js';
+	import { i18n, t } from '#lib/i18n/index.js';
 	import { normalizeForSearch } from '#lib/utils/search.js';
 	import type { ProgramMeta } from '#lib/types/index.js';
 
@@ -27,22 +27,22 @@
 	const DEGREE_ORDER = ['associate', 'bachelor', 'master'];
 
 	const programName = (program: ProgramMeta): string =>
-		program.name?.[$locale] ?? program.name?.en ?? program.id;
+		program.name?.[i18n.locale] ?? program.name?.en ?? program.id;
 
 	const facultyName = (program: ProgramMeta): string =>
-		program.faculty?.[$locale] ?? program.faculty?.en ?? '';
+		program.faculty?.[i18n.locale] ?? program.faculty?.en ?? '';
 
 	const degreeLabel = (degree: string): string => {
-		const label = $t(`degree.${degree}`);
-		// $t returns the key unchanged when there is no translation; fall back to
+		const label = t(`degree.${degree}`);
+		// t returns the key unchanged when there is no translation; fall back to
 		// the raw degree string so an unknown level still reads sensibly.
 		return label === `degree.${degree}` ? degree : label;
 	};
 
 	const currentLabel = $derived.by(() => {
-		if (!currentProgram) return $t('program.all');
+		if (!currentProgram) return t('program.all');
 		const match = programs.find((program) => program.id === currentProgram);
-		return match ? programName(match) : $t('program.all');
+		return match ? programName(match) : t('program.all');
 	});
 
 	type ProgramRow = { id: string; label: string };
@@ -88,10 +88,10 @@
 		const result: DegreeGroup[] = [];
 		for (const degree of orderedDegrees) {
 			const faculties = Object.values(byDegree[degree]).sort((a, b) =>
-				a.label.localeCompare(b.label, $locale)
+				a.label.localeCompare(b.label, i18n.locale)
 			);
 			for (const faculty of faculties) {
-				faculty.programs.sort((a, b) => a.label.localeCompare(b.label, $locale));
+				faculty.programs.sort((a, b) => a.label.localeCompare(b.label, i18n.locale));
 			}
 			result.push({ degree, label: degreeLabel(degree), faculties });
 		}
@@ -121,7 +121,7 @@
 </script>
 
 <Popover.Root {open} onOpenChange={handleOpenChange}>
-	<Popover.Trigger class="term-trigger program-trigger" aria-label={$t('program.ariaLabel')}>
+	<Popover.Trigger class="term-trigger program-trigger" aria-label={t('program.ariaLabel')}>
 		<span class="term-value">{currentLabel}</span>
 		<ChevronDown class="shrink-0" size={18} aria-hidden="true" />
 	</Popover.Trigger>
@@ -131,8 +131,8 @@
 				<Search class="pointer-events-none absolute left-3 text-ink-muted" size={18} />
 				<input
 					type="text"
-					placeholder={$t('program.searchPlaceholder')}
-					aria-label={$t('program.searchPlaceholder')}
+					placeholder={t('program.searchPlaceholder')}
+					aria-label={t('program.searchPlaceholder')}
 					bind:value={query}
 					{@attach (node: HTMLInputElement) => {
 						// Focus after bits-ui's open auto-focus settles on the content wrapper,
@@ -143,7 +143,7 @@
 				/>
 			</div>
 
-			<div class="picker-list" role="listbox" aria-label={$t('program.ariaLabel')}>
+			<div class="picker-list" role="listbox" aria-label={t('program.ariaLabel')}>
 				<button
 					type="button"
 					class="picker-all {currentProgram == null ? 'selected' : ''}"
@@ -151,14 +151,14 @@
 					aria-selected={currentProgram == null}
 					onclick={() => choose(null)}
 				>
-					<span>{$t('program.all')}</span>
+					<span>{t('program.all')}</span>
 					{#if currentProgram == null}
 						<Check size={16} aria-hidden="true" />
 					{/if}
 				</button>
 
 				{#if groups.length === 0}
-					<div class="picker-empty">{$t('program.noResults')}</div>
+					<div class="picker-empty">{t('program.noResults')}</div>
 				{:else}
 					{#each groups as degreeGroup (degreeGroup.degree)}
 						{@const expanded = isExpanded(degreeGroup.degree)}

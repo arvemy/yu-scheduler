@@ -13,7 +13,6 @@ test('selects a mocked course, generates a schedule, and restores it after reloa
 
 	await expect(page.getByRole('heading', { name: 'YU Scheduler' })).toBeVisible();
 	await expect(page.getByRole('button', { name: /Show courses in group MATH/ })).toBeVisible();
-	await page.waitForTimeout(150);
 	const search = page.getByRole('combobox', { name: 'Type to search courses' });
 	await search.fill('math');
 	await page.getByRole('option', { name: /MATH 101/ }).click();

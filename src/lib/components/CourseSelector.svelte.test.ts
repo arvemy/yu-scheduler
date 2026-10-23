@@ -102,7 +102,6 @@ describe('CourseSelector', () => {
 
 		const search = await screen.findByRole('combobox', { name: 'Type to search courses' });
 		await waitFor(() => expect(getCourses).toHaveBeenCalledWith(TERM));
-		await new Promise((resolve) => setTimeout(resolve, 130));
 		await user.type(search, 'math');
 		await user.click(await screen.findByRole('option', { name: /MATH 101/ }));
 

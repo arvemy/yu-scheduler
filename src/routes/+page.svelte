@@ -9,7 +9,6 @@
 	import { devWarn } from '#lib/utils/logger.js';
 	import { parseStoredJson, storeJson, validateLastGenerated } from '#lib/utils/storage.js';
 	import { getLastGeneratedKey, getTermKey } from '#lib/storage/keys.js';
-	import { watch } from '#lib/utils/reactivity.svelte.js';
 	import { onMount } from 'svelte';
 
 	let terms = $state<string[]>([]);
@@ -17,29 +16,24 @@
 	let termsLoading = $state(true);
 	let termsError = $state(false);
 
-	let scheduleData = $state<ScheduleData | null>(null);
+	// Generated results and the catalog are only ever replaced, never mutated.
+	let scheduleData = $state.raw<ScheduleData | null>(null);
 	let selectedCourses = $state<string[]>([]);
 	let blockedHours = $state<BlockedHour[]>([]);
 	let hasGenerated = $state(false);
 	let activeScheduleIndex = $state(0);
 
 	const emptyCatalog: CatalogData = { academic_year: '', courses: {}, programs: [] };
-	let catalog = $state<CatalogData>(emptyCatalog);
+	let catalog = $state.raw<CatalogData>(emptyCatalog);
 	let currentProgram = $state<string | null>(null);
-	// Suppresses the program-persist watch while a term switch resets and then
-	// restores currentProgram, so the transient reset doesn't wipe the saved value.
-	// Plain (non-reactive) on purpose: toggling it must not re-fire the watch.
-	let suppressProgramPersist = false;
 
 	let showWelcomeModal = $state(false);
 	let dontShowWelcomeAgain = $state(false);
 
-	const documentTitle = $derived(`${$t('app.title')} - ${$t('app.subtitle')}`);
-	const documentLang = $derived($t('locale.code'));
+	const documentTitle = $derived(`${t('app.title')} - ${t('app.subtitle')}`);
+	const documentLang = $derived(t('locale.code'));
 
 	$effect(() => {
-		if (typeof document === 'undefined') return;
-		document.title = documentTitle;
 		document.documentElement.lang = documentLang;
 	});
 
@@ -50,8 +44,7 @@
 			const data = await listTerms();
 			terms = data;
 			if (data.length > 0) {
-				const latest = getLatestTerm(data) ?? data[0];
-				currentTerm = latest;
+				switchTerm(getLatestTerm(data) ?? data[0]);
 			}
 		} catch (err) {
 			devWarn('Failed to load terms', err);
@@ -67,11 +60,23 @@
 	});
 
 	const handleChangeTerm = (term: string) => {
-		currentTerm = term;
+		if (term !== currentTerm) switchTerm(term);
 	};
 
+	// Persist the program filter per term. Only user changes are saved here; the
+	// per-term restore in `loadCatalogForTerm` sets `currentProgram` directly.
 	const handleChangeProgram = (program: string | null) => {
 		currentProgram = program;
+		if (!currentTerm) return;
+		try {
+			if (program) {
+				localStorage.setItem(getTermKey(currentTerm, 'selectedProgram'), program);
+			} else {
+				localStorage.removeItem(getTermKey(currentTerm, 'selectedProgram'));
+			}
+		} catch (err) {
+			devWarn('Failed to persist program', err);
+		}
 	};
 
 	// Load the slim catalog for a term's academic year and restore that term's
@@ -101,11 +106,41 @@
 			devWarn('Failed to restore program', err);
 		}
 		currentProgram = restored;
-		// Re-enable persistence after the restore has been applied; the stale guard
-		// above means only the current term's load reaches here.
-		queueMicrotask(() => {
-			suppressProgramPersist = false;
-		});
+	};
+
+	// Switch to `term`: reset per-term state, restore its last generated schedule,
+	// and load its catalog. CourseSelector is keyed on the term, so it remounts and
+	// restores its own per-term state after this runs.
+	const switchTerm = (term: string) => {
+		currentTerm = term;
+		scheduleData = null;
+		selectedCourses = [];
+		hasGenerated = false;
+		blockedHours = [];
+		activeScheduleIndex = 0;
+		currentProgram = null;
+		catalog = emptyCatalog;
+		void loadCatalogForTerm(term);
+
+		// Restore last generated schedule with validation
+		const result = parseStoredJson(getLastGeneratedKey(term), validateLastGenerated);
+
+		if (result.success && result.data) {
+			const saved = result.data;
+			if (Array.isArray(saved.selectedCourses)) {
+				selectedCourses = saved.selectedCourses;
+			}
+			if (saved.scheduleData?.schedules) {
+				scheduleData = saved.scheduleData;
+				hasGenerated = true;
+			}
+			if (Array.isArray(saved.blockedHours)) {
+				blockedHours = saved.blockedHours;
+			}
+			if (typeof saved.activeScheduleIndex === 'number') {
+				activeScheduleIndex = saved.activeScheduleIndex;
+			}
+		}
 	};
 
 	const handleSchedule = (data: ScheduleData, courses: string[]) => {
@@ -142,7 +177,7 @@
 
 	const handleLoadSavedSchedule = (saved: SavedSchedule) => {
 		if (saved.term !== currentTerm) {
-			currentTerm = saved.term;
+			switchTerm(saved.term);
 		}
 		scheduleData = saved.scheduleData;
 		selectedCourses = saved.selectedCourses;
@@ -151,63 +186,6 @@
 		activeScheduleIndex = saved.activeScheduleIndex ?? 0;
 	};
 
-	watch(
-		() => currentTerm,
-		(term) => {
-			if (!term) return;
-
-			scheduleData = null;
-			selectedCourses = [];
-			hasGenerated = false;
-			blockedHours = [];
-			activeScheduleIndex = 0;
-			// Reset synchronously so the persist watch never writes the previous term's
-			// program under the new term key. Suppress persistence across the reset +
-			// async restore so the transient null doesn't delete the saved value.
-			suppressProgramPersist = true;
-			currentProgram = null;
-			catalog = emptyCatalog;
-			void loadCatalogForTerm(term);
-
-			// Restore last generated schedule with validation
-			const result = parseStoredJson(getLastGeneratedKey(term), validateLastGenerated);
-
-			if (result.success && result.data) {
-				const saved = result.data;
-				if (Array.isArray(saved.selectedCourses)) {
-					selectedCourses = saved.selectedCourses;
-				}
-				if (saved.scheduleData?.schedules) {
-					scheduleData = saved.scheduleData;
-					hasGenerated = true;
-				}
-				if (Array.isArray(saved.blockedHours)) {
-					blockedHours = saved.blockedHours;
-				}
-				if (typeof saved.activeScheduleIndex === 'number') {
-					activeScheduleIndex = saved.activeScheduleIndex;
-				}
-			}
-		}
-	);
-
-	// Persist the program filter per term.
-	watch(
-		() => [currentTerm, currentProgram] as const,
-		([term, program]) => {
-			if (!term || suppressProgramPersist) return;
-			try {
-				if (program) {
-					localStorage.setItem(getTermKey(term, 'selectedProgram'), program);
-				} else {
-					localStorage.removeItem(getTermKey(term, 'selectedProgram'));
-				}
-			} catch (err) {
-				devWarn('Failed to persist program', err);
-			}
-		}
-	);
-
 	const handleWelcomeClose = () => {
 		showWelcomeModal = false;
 		if (dontShowWelcomeAgain) {
@@ -215,6 +193,10 @@
 		}
 	};
 </script>
+
+<svelte:head>
+	<title>{documentTitle}</title>
+</svelte:head>
 
 <div class="mx-auto max-w-[1200px] px-4 py-6 max-[720px]:px-2 max-[720px]:py-4">
 	<section class="rounded-lg bg-surface p-6 shadow-md max-[720px]:p-4">
@@ -233,18 +215,20 @@
 		<div class="my-6 h-px bg-border max-[720px]:my-4"></div>
 
 		<main class="flex flex-col gap-6">
-			<CourseSelector
-				term={currentTerm}
-				{catalog}
-				selectedProgram={currentProgram}
-				bind:selectedCourses
-				bind:blockedHours
-				{scheduleData}
-				{hasGenerated}
-				bind:activeScheduleIndex
-				onSchedule={handleSchedule}
-				onLoadSavedSchedule={handleLoadSavedSchedule}
-			/>
+			{#key currentTerm}
+				<CourseSelector
+					term={currentTerm}
+					{catalog}
+					selectedProgram={currentProgram}
+					bind:selectedCourses
+					bind:blockedHours
+					{scheduleData}
+					{hasGenerated}
+					bind:activeScheduleIndex
+					onSchedule={handleSchedule}
+					onLoadSavedSchedule={handleLoadSavedSchedule}
+				/>
+			{/key}
 		</main>
 	</section>
 </div>

@@ -6,6 +6,7 @@
 	import type { BlockedHour, ScheduleData } from '#lib/types/index.js';
 	import { checkStorageAvailability, saveSchedule } from '#lib/storage/savedSchedules.js';
 	import { translateTerm } from '#lib/utils/term.js';
+	import { buildOptionGroups, type OrConnections } from '#lib/scheduler/selection.js';
 	import TooltipContent from '#lib/components/ui/TooltipContent.svelte';
 
 	let {
@@ -27,7 +28,7 @@
 		scheduleData: ScheduleData;
 		blockedHours: BlockedHour[];
 		activeScheduleIndex: number;
-		orConnections?: Record<string, boolean>;
+		orConnections?: OrConnections;
 	} = $props();
 
 	let name = $state('');
@@ -39,37 +40,22 @@
 		() => open,
 		(value) => {
 			if (!value) return;
-			const locale = $t('locale.code');
-			name = `${$t('savedSchedules.schedule')} ${new Date().toLocaleDateString(locale)}`;
+			const locale = t('locale.code');
+			name = `${t('savedSchedules.schedule')} ${new Date().toLocaleDateString(locale)}`;
 			error = '';
 			const storage = checkStorageAvailability();
-			storageError = storage.available ? '' : $t(storage.error || 'errors.storageNotAvailable');
+			storageError = storage.available ? '' : t(storage.error || 'errors.storageNotAvailable');
 		}
 	);
 
 	const handleSave = () => {
 		if (!name.trim()) {
-			error = $t('savedSchedules.nameRequired');
+			error = t('savedSchedules.nameRequired');
 			return;
 		}
 		saving = true;
 		try {
-			// Convert orConnections to courseOptionGroups format for storage
-			const courseOptionGroups: string[][] = [];
-			let currentGroup: string[] = [];
-
-			for (let i = 0; i < selectedCourses.length; i++) {
-				const course = selectedCourses[i];
-				currentGroup.push(course);
-
-				// If this course is NOT OR-connected to the next, close the group
-				if (!orConnections[course] || i === selectedCourses.length - 1) {
-					if (currentGroup.length >= 2) {
-						courseOptionGroups.push([...currentGroup]);
-					}
-					currentGroup = [];
-				}
-			}
+			const courseOptionGroups = buildOptionGroups(selectedCourses, orConnections);
 
 			const saved = saveSchedule(
 				name,
@@ -83,7 +69,7 @@
 			onSaved?.(saved);
 			onClose?.();
 		} catch (err) {
-			error = err instanceof Error ? err.message : $t('savedSchedules.saveFailed');
+			error = err instanceof Error ? err.message : t('savedSchedules.saveFailed');
 		} finally {
 			saving = false;
 		}
@@ -98,50 +84,50 @@
 				<div class="dialog-header">
 					<Dialog.Title class="dialog-title">
 						<Save class="text-primary" size={24} />
-						{$t('savedSchedules.saveSchedule')}
+						{t('savedSchedules.saveSchedule')}
 					</Dialog.Title>
 					<Tooltip.Root>
 						<Dialog.Close>
 							{#snippet child({ props })}
-								<Tooltip.Trigger {...props} class="close-btn" aria-label={$t('common.close')}>
+								<Tooltip.Trigger {...props} class="close-btn" aria-label={t('common.close')}>
 									<X size={24} />
 								</Tooltip.Trigger>
 							{/snippet}
 						</Dialog.Close>
-						<TooltipContent label={$t('common.close')} />
+						<TooltipContent label={t('common.close')} />
 					</Tooltip.Root>
 				</div>
 
 				{#if storageError}
 					<div class="alert error">
 						<CircleAlert size={20} />
-						<span>{$t('savedSchedules.storageError')}: {storageError}</span>
+						<span>{t('savedSchedules.storageError')}: {storageError}</span>
 					</div>
 				{/if}
 
 				<label class="field">
-					<span class="field-label">{$t('savedSchedules.scheduleName')}</span>
-					<input type="text" bind:value={name} placeholder={$t('savedSchedules.scheduleName')} />
+					<span class="field-label">{t('savedSchedules.scheduleName')}</span>
+					<input type="text" bind:value={name} placeholder={t('savedSchedules.scheduleName')} />
 				</label>
 
 				<div class="details-card">
 					<h4>
 						<Info class="text-primary" size={18} />
-						{$t('savedSchedules.scheduleDetails')}
+						{t('savedSchedules.scheduleDetails')}
 					</h4>
 					<div class="details-grid">
 						<div class="detail-item">
-							<span class="detail-label">{$t('savedSchedules.term')}</span>
-							<span class="detail-value">{translateTerm(term, $t)}</span>
+							<span class="detail-label">{t('savedSchedules.term')}</span>
+							<span class="detail-value">{translateTerm(term, t)}</span>
 						</div>
 						<div class="detail-item">
-							<span class="detail-label">{$t('savedSchedules.courses')}</span>
+							<span class="detail-label">{t('savedSchedules.courses')}</span>
 							<span class="detail-value"
-								>{selectedCourses.length} {$t('savedSchedules.coursesSelected')}</span
+								>{selectedCourses.length} {t('savedSchedules.coursesSelected')}</span
 							>
 						</div>
 						<div class="detail-item">
-							<span class="detail-label">{$t('courseSelector.schedule')}</span>
+							<span class="detail-label">{t('courseSelector.schedule')}</span>
 							<span class="detail-value">#{activeScheduleIndex + 1}</span>
 						</div>
 					</div>
@@ -155,10 +141,10 @@
 				{/if}
 
 				<div class="dialog-actions">
-					<Button.Root class="btn btn-ghost" onclick={onClose}>{$t('common.cancel')}</Button.Root>
+					<Button.Root class="btn btn-ghost" onclick={onClose}>{t('common.cancel')}</Button.Root>
 					<Button.Root class="btn btn-primary" disabled={saving} onclick={handleSave}>
 						<Save size={18} />
-						{saving ? $t('savedSchedules.saving') : $t('savedSchedules.save')}
+						{saving ? t('savedSchedules.saving') : t('savedSchedules.save')}
 					</Button.Root>
 				</div>
 			</Dialog.Content>

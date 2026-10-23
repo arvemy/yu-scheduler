@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { get } from 'svelte/store';
 import { translateWarning, translateWarnings } from './warnings';
 import { setLocale, t as tStore } from '#lib/i18n/index.js';
 import type { Translator } from '#lib/i18n/index.js';
@@ -15,7 +14,7 @@ describe('translateWarning', () => {
 	let t: Translator;
 	beforeEach(() => {
 		setLocale('en');
-		t = get(tStore);
+		t = tStore;
 	});
 
 	it('translates a known code with params', () => {
@@ -34,19 +33,19 @@ describe('translateWarning', () => {
 
 	it('translates the all-courses no-data headline', () => {
 		expect(translateWarning(warn('ALL_COURSES_NO_DATA'), t)).toBe(
-			get(tStore)('errors.allCoursesNoData')
+			tStore('errors.allCoursesNoData')
 		);
 	});
 
 	it('translates the all-courses blocked headline', () => {
 		expect(translateWarning(warn('ALL_COURSES_BLOCKED'), t)).toBe(
-			get(tStore)('errors.allCoursesBlocked')
+			tStore('errors.allCoursesBlocked')
 		);
 	});
 
 	it('translates a stale-section option as unavailable rather than a conflict', () => {
 		const result = translateWarning(warn('OPTION_NOT_SCHEDULABLE', { course: 'PHYS 101' }), t);
-		expect(result).toBe(get(tStore)('errors.optionNotSchedulable', { course: 'PHYS 101' }));
+		expect(result).toBe(tStore('errors.optionNotSchedulable', { course: 'PHYS 101' }));
 		expect(result).toContain('PHYS 101');
 	});
 
@@ -59,7 +58,7 @@ describe('translateWarnings', () => {
 	let t: Translator;
 	beforeEach(() => {
 		setLocale('en');
-		t = get(tStore);
+		t = tStore;
 	});
 
 	it('de-duplicates identical translated warnings', () => {
@@ -96,7 +95,7 @@ describe('translateWarnings', () => {
 			warn('NO_VALID_SCHEDULE_CONFLICTS')
 		];
 		const result = translateWarnings([], codes, t);
-		const generic = get(tStore)('errors.noValidScheduleConflicts');
+		const generic = tStore('errors.noValidScheduleConflicts');
 		expect(result).not.toContain(generic);
 	});
 

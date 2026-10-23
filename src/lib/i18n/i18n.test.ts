@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { get } from 'svelte/store';
-import { locale, t, setLocale, messages, type Locale } from './index';
+import { i18n, t, setLocale, messages, type Locale } from './index';
 import { STORAGE_KEYS } from '#lib/storage/keys.js';
 
 /** Collect the set of dot-notation leaf paths of a nested message object. */
@@ -17,40 +16,38 @@ const leafPaths = (obj: Record<string, unknown>, prefix = ''): string[] => {
 	return paths.sort();
 };
 
-describe('i18n store', () => {
+describe('i18n', () => {
 	beforeEach(() => {
 		localStorage.clear();
 		setLocale('en');
 	});
 
 	it('translates keys for the active locale', () => {
-		expect(get(t)('app.subtitle')).toBe('Course Planner');
+		expect(t('app.subtitle')).toBe('Course Planner');
 		setLocale('tr');
-		expect(get(t)('app.subtitle')).toBe('Ders Planlayıcı');
+		expect(t('app.subtitle')).toBe('Ders Planlayıcı');
 	});
 
 	it('substitutes {{params}} placeholders', () => {
-		expect(get(t)('courseSelector.removeCourse', { course: 'MATH 101' })).toBe(
-			'Remove course MATH 101'
-		);
+		expect(t('courseSelector.removeCourse', { course: 'MATH 101' })).toBe('Remove course MATH 101');
 	});
 
 	it('resolves plural forms by count', () => {
-		expect(get(t)('courseSelector.schedulesFound', { count: 1 })).toBe('1 Valid Schedule Found');
-		expect(get(t)('courseSelector.schedulesFound', { count: 3 })).toBe('3 Valid Schedules Found');
+		expect(t('courseSelector.schedulesFound', { count: 1 })).toBe('1 Valid Schedule Found');
+		expect(t('courseSelector.schedulesFound', { count: 3 })).toBe('3 Valid Schedules Found');
 	});
 
 	it('returns the key itself when nothing matches', () => {
-		expect(get(t)('does.not.exist')).toBe('does.not.exist');
+		expect(t('does.not.exist')).toBe('does.not.exist');
 	});
 
 	it('reads nested keys', () => {
-		expect(get(t)('courseSelector.connector.or')).toBe('OR');
+		expect(t('courseSelector.connector.or')).toBe('OR');
 	});
 
-	it('updates the locale store and persists the choice', () => {
+	it('updates the locale and persists the choice', () => {
 		setLocale('tr');
-		expect(get(locale)).toBe('tr');
+		expect(i18n.locale).toBe('tr');
 		expect(localStorage.getItem(STORAGE_KEYS.LOCALE)).toBe('tr');
 		expect(document.documentElement.lang).toBe('tr');
 	});

@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { SvelteMap } from 'svelte/reactivity';
+	import { MediaQuery, SvelteMap } from 'svelte/reactivity';
 	import { Tooltip } from 'bits-ui';
 	import { ChevronDown, ChevronLeft, ChevronRight, Clock, Lock } from '@lucide/svelte';
 	import type { BlockedHour, Schedule, SessionData } from '#lib/types/index.js';
@@ -8,7 +7,7 @@
 	import { SWIPE_THRESHOLD_PX } from '#lib/config/ui.js';
 	import { rangesOverlap, slotStringToRange } from '#lib/utils/time.js';
 	import { colorForCourse } from '#lib/utils/colors.js';
-	import { useMobile } from '#lib/utils/useMediaQuery.svelte.js';
+	import { MEDIA_QUERIES } from '#lib/utils/breakpoints.js';
 	import TooltipContent from '#lib/components/ui/TooltipContent.svelte';
 
 	let {
@@ -29,12 +28,9 @@
 		scrollRef?: HTMLElement | null;
 	} = $props();
 
-	// Track if component has mounted (to prevent hydration mismatch)
-	let mounted = $state(false);
-
-	// Mobile detection using shared composable (md breakpoint: < 768px)
-	const mobile = useMobile();
-	const isMobile = $derived(mobile.isMobile);
+	// Mobile detection (md breakpoint: < 768px)
+	const mobile = new MediaQuery(MEDIA_QUERIES.md);
+	const isMobile = $derived(mobile.current);
 
 	// Mobile day navigation
 	let activeDayIndex = $state(0);
@@ -57,10 +53,10 @@
 		activeDayIndex = Math.min(len - 1, clampedDayIndex + 1);
 	};
 
-	let touchStartX = $state<number | null>(null);
-	let touchStartY = $state<number | null>(null);
-	let touchEndX = $state<number | null>(null);
-	let touchEndY = $state<number | null>(null);
+	let touchStartX: number | null = null;
+	let touchStartY: number | null = null;
+	let touchEndX: number | null = null;
+	let touchEndY: number | null = null;
 
 	const onDayTouchStart = (e: TouchEvent) => {
 		touchEndX = null;
@@ -98,10 +94,6 @@
 		if (dx < 0) nextDay();
 		else prevDay();
 	};
-
-	onMount(() => {
-		mounted = true;
-	});
 
 	// Track expanded groups (for session grouping)
 	let expandedGroups = $state<Record<string, boolean>>({});
@@ -217,7 +209,7 @@
 						.map((s) => [s.section, s.Classroom].filter(Boolean).join(' '))
 						.filter(Boolean)
 						.join(', ');
-					const optionsLabel = `${g.count} ${$t('timetable.sectionOptions', { count: g.count })}`;
+					const optionsLabel = `${g.count} ${t('timetable.sectionOptions', { count: g.count })}`;
 					return `${g.course} (*), ${time}, ${optionsLabel}${options ? `: ${options}` : ''}`;
 				}
 				const section = g.sections[0] ?? '';
@@ -291,10 +283,7 @@
 
 <Tooltip.Provider delayDuration={350} skipDelayDuration={100} ignoreNonKeyboardFocus>
 	<div class="timetable-container">
-		{#if !mounted}
-			<!-- SSR/Loading skeleton - matches expected height to prevent CLS -->
-			<div class="timetable-skeleton"></div>
-		{:else if !isMobile || downloadMode}
+		{#if !isMobile || downloadMode}
 			<!-- Desktop: Table view -->
 			<div class="timetable-scroll" {@attach bindScrollRef}>
 				<table class="timetable">
@@ -302,7 +291,7 @@
 						<tr>
 							<th class="time-header">
 								<Clock class="mx-auto mb-1 block" size={18} />
-								<span>{$t('timetable.time')}</span>
+								<span>{t('timetable.time')}</span>
 							</th>
 							{#each daysOfWeek as day (day)}
 								<Tooltip.Root>
@@ -310,19 +299,18 @@
 										{#snippet child({ props })}
 											<th
 												{...props}
-												class="day-header"
-												class:blocked={isDayBlocked(day)}
+												class={['day-header', { blocked: isDayBlocked(day) }]}
 												onclick={() => toggleDay(day)}
 												onkeydown={(event) => onActivate(event, () => toggleDay(day))}
 												role="button"
 												tabindex="0"
 												aria-pressed={isDayBlocked(day)}
 											>
-												{$t(`timetable.days.${day}`)}
+												{t(`timetable.days.${day}`)}
 											</th>
 										{/snippet}
 									</Tooltip.Trigger>
-									<TooltipContent label={$t('tooltips.blockUnblockDay')} />
+									<TooltipContent label={t('tooltips.blockUnblockDay')} />
 								</Tooltip.Root>
 							{/each}
 						</tr>
@@ -336,9 +324,10 @@
 										{#snippet child({ props })}
 											<th
 												{...props}
-												class="slot-header"
-												class:blocked={isSlotBlocked(slot)}
-												class:expanded={rowExpanded}
+												class={[
+													'slot-header',
+													{ blocked: isSlotBlocked(slot), expanded: rowExpanded }
+												]}
 												onclick={() => toggleSlot(slot)}
 												onkeydown={(event) => onActivate(event, () => toggleSlot(slot))}
 												role="button"
@@ -352,21 +341,19 @@
 											</th>
 										{/snippet}
 									</Tooltip.Trigger>
-									<TooltipContent label={$t('courseSelector.blockUnblockHour')} />
+									<TooltipContent label={t('courseSelector.blockUnblockHour')} />
 								</Tooltip.Root>
 								{#each daysOfWeek as day (day)}
 									{@const cellExpanded = isAnyExpandedInCell(day, slot)}
 									{@const blocked = isBlocked(day, slot)}
 									{@const groups = groupSessions(day, slot, grid[day][slot])}
 									{@const cellSummary = describeCellSessions(groups)}
-									{@const blockCellLabel = $t('courseSelector.blockUnblockCell', {
-										day: $t(`timetable.days.${day}`),
+									{@const blockCellLabel = t('courseSelector.blockUnblockCell', {
+										day: t(`timetable.days.${day}`),
 										slot
 									})}
 									<td
-										class="cell"
-										class:blocked
-										class:expanded={cellExpanded}
+										class={['cell', { blocked, expanded: cellExpanded }]}
 										onclick={() => toggleCell(day, slot)}
 										onkeydown={(event) => onActivate(event, () => toggleCell(day, slot))}
 										role="button"
@@ -374,7 +361,7 @@
 										aria-label={cellSummary ? `${cellSummary}. ${blockCellLabel}` : blockCellLabel}
 										aria-pressed={blocked}
 									>
-										<div class="cell-content" class:blocked>
+										<div class={['cell-content', { blocked }]}>
 											{#if blocked && groups.length === 0}
 												<div class="blocked-indicator">
 													<Lock size={20} />
@@ -385,8 +372,7 @@
 												{@const isGrouped = g.count > 1}
 												<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 												<div
-													class="session-card"
-													class:clickable={isGrouped}
+													class={['session-card', { clickable: isGrouped }]}
 													style="background-color: {colorForCourse(g.course)}"
 													onclick={(e) => {
 														if (isGrouped) {
@@ -418,9 +404,7 @@
 																		toggleGroup(g.key);
 																	}}
 																	aria-expanded={expanded}
-																	aria-label={expanded
-																		? $t('common.collapse')
-																		: $t('common.expand')}
+																	aria-label={expanded ? t('common.collapse') : t('common.expand')}
 																>
 																	<ChevronDown
 																		size={16}
@@ -429,7 +413,7 @@
 																	/>
 																</Tooltip.Trigger>
 																<TooltipContent
-																	label={expanded ? $t('common.collapse') : $t('common.expand')}
+																	label={expanded ? t('common.collapse') : t('common.expand')}
 																/>
 															</Tooltip.Root>
 														{/if}
@@ -443,7 +427,7 @@
 													{/if}
 													{#if isGrouped}
 														<span class="section-count" aria-hidden="true"
-															>{g.count} {$t('timetable.sectionOptions', { count: g.count })}</span
+															>{g.count} {t('timetable.sectionOptions', { count: g.count })}</span
 														>
 													{/if}
 													{#if isGrouped && expanded}
@@ -470,7 +454,7 @@
 			<div
 				class="mobile-view"
 				role="group"
-				aria-label={$t('courseSelector.schedule')}
+				aria-label={t('courseSelector.schedule')}
 				ontouchstart={onDayTouchStart}
 				ontouchmove={onDayTouchMove}
 				ontouchend={onDayTouchEnd}
@@ -479,17 +463,17 @@
 					<div class="mobile-empty">-</div>
 				{:else}
 					<div class="day-card">
-						<div class="day-nav-bar" class:blocked={isDayBlocked(activeDay)}>
+						<div class={['day-nav-bar', { blocked: isDayBlocked(activeDay) }]}>
 							<Tooltip.Root>
 								<Tooltip.Trigger
 									class="day-nav-btn"
 									disabled={clampedDayIndex === 0}
 									onclick={prevDay}
-									aria-label={$t('pagination.previous')}
+									aria-label={t('pagination.previous')}
 								>
 									<ChevronLeft size={20} aria-hidden="true" />
 								</Tooltip.Trigger>
-								<TooltipContent label={$t('pagination.previous')} />
+								<TooltipContent label={t('pagination.previous')} />
 							</Tooltip.Root>
 							<!-- No aria-label: the accessible name is the visible content
 						     (day + position + "Block/Unblock all"), so it matches what a
@@ -500,13 +484,13 @@
 								onclick={() => toggleDay(activeDay)}
 								aria-pressed={isDayBlocked(activeDay)}
 							>
-								<span class="day-nav-title">{$t(`timetable.days.${activeDay}`)}</span>
+								<span class="day-nav-title">{t(`timetable.days.${activeDay}`)}</span>
 								<span class="day-nav-meta">
 									<span class="day-nav-count">{clampedDayIndex + 1} / {daysOfWeek.length}</span>
 									<span class="day-action">
 										{isDayBlocked(activeDay)
-											? $t('courseSelector.unblockDay')
-											: $t('courseSelector.blockDay')}
+											? t('courseSelector.unblockDay')
+											: t('courseSelector.blockDay')}
 									</span>
 								</span>
 							</button>
@@ -515,11 +499,11 @@
 									class="day-nav-btn"
 									disabled={clampedDayIndex >= daysOfWeek.length - 1}
 									onclick={nextDay}
-									aria-label={$t('pagination.next')}
+									aria-label={t('pagination.next')}
 								>
 									<ChevronRight size={20} aria-hidden="true" />
 								</Tooltip.Trigger>
-								<TooltipContent label={$t('pagination.next')} />
+								<TooltipContent label={t('pagination.next')} />
 							</Tooltip.Root>
 						</div>
 						<div class="day-slots">
@@ -527,8 +511,7 @@
 								{@const blocked = isBlocked(activeDay, slot)}
 								{@const groups = groupSessions(activeDay, slot, grid[activeDay][slot])}
 								<button
-									class="slot-row"
-									class:blocked
+									class={['slot-row', { blocked }]}
 									onclick={() => toggleCell(activeDay, slot)}
 									aria-pressed={blocked}
 								>
@@ -587,23 +570,6 @@
 	}
 
 	/* Skeleton for SSR/loading state */
-	.timetable-skeleton {
-		min-height: var(--timetable-min-height, 600px);
-		background: linear-gradient(90deg, var(--bg) 25%, var(--border-light) 50%, var(--bg) 75%);
-		background-size: 200% 100%;
-		border-radius: var(--radius-md);
-		animation: shimmer 1.5s infinite;
-	}
-
-	@keyframes shimmer {
-		0% {
-			background-position: 200% 0;
-		}
-		100% {
-			background-position: -200% 0;
-		}
-	}
-
 	/* Desktop Table Styles */
 	.timetable-scroll {
 		overflow-x: auto;
